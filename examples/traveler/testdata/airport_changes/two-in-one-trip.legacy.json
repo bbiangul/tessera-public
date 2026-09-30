@@ -1,0 +1,50 @@
+{
+ "affectedFlights": 1,
+ "airportChanges": [
+  {
+   "arrivalTime": "2026-10-12T09:15:00",
+   "departureTime": "2026-10-12T11:00:00",
+   "flightToken": "x",
+   "fromAirport": "GRU",
+   "layoverMinutes": 105,
+   "legIndex": 0,
+   "segmentIndex": 0,
+   "toAirport": "CGH"
+  },
+  {
+   "arrivalTime": "2026-10-12T12:00:00",
+   "departureTime": "2026-10-12T20:00:00",
+   "flightToken": "x",
+   "fromAirport": "SDU",
+   "layoverMinutes": 480,
+   "legIndex": 1,
+   "segmentIndex": 0,
+   "toAirport": "GIG"
+  },
+  {
+   "arrivalTime": "2026-10-20T17:00:00",
+   "departureTime": "2026-10-20T19:30:00",
+   "flightToken": "x",
+   "fromAirport": "GIG",
+   "layoverMinutes": 150,
+   "legIndex": 0,
+   "segmentIndex": 1,
+   "toAirport": "SDU"
+  }
+ ],
+ "totalChanges": 3,
+ "uniquePairs": [
+  {
+   "from": "GIG",
+   "to": "SDU"
+  },
+  {
+   "from": "GRU",
+   "to": "CGH"
+  },
+  {
+   "from": "SDU",
+   "to": "GIG"
+  }
+ ]
+}

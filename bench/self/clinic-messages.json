@@ -1,0 +1,14 @@
+[
+ {"id": "p-what", "caller": "patient", "message": "oi, o que você consegue fazer por mim?"},
+ {"id": "p-block", "caller": "patient", "message": "consigo bloquear a agenda do Dr. Bruno na sexta por aqui?"},
+ {"id": "p-who-decides", "caller": "patient", "message": "se eu pedir um desconto, quem decide?"},
+ {"id": "p-report", "caller": "patient", "message": "dá pra ver o relatório de descontos da semana?"},
+ {"id": "d-what", "caller": "dentist", "message": "o que você faz pra mim?"},
+ {"id": "d-discount", "caller": "dentist", "message": "consigo pedir desconto pra um paciente por aqui?"},
+ {"id": "d-block-approval", "caller": "dentist", "message": "se eu bloquear um dia da agenda precisa de aprovação?"},
+ {"id": "d-dayoff", "caller": "dentist", "message": "e folga, como funciona pedir?"},
+ {"id": "o-what", "caller": "owner", "message": "o que você faz?"},
+ {"id": "o-block", "caller": "owner", "message": "posso bloquear a agenda de um dentista?"},
+ {"id": "o-report", "caller": "owner", "message": "consigo ver os descontos da semana?"},
+ {"id": "o-approve", "caller": "owner", "message": "você aprova descontos pra mim?"}
+]

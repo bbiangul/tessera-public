@@ -1,0 +1,310 @@
+{
+ "now": "2026-09-29T10:00:00-03:00",
+ "note": "agency-007. Written 2026-09-29 before the pending-branch fixes are built. 'test' (16) is sealed. At most two dev tuning rounds. The simulated team (team-001) answers what no persona scripts; the team's world is bench/agency/world/team-facts.md.",
+ "dev": [
+  {
+   "id": "q01-reserva-com-duvida",
+   "caller": {
+    "userId": "q01"
+   },
+   "goal": "Reservar o voo mais barato de São Paulo para Recife, ida 4/12 volta 9/12, para você e seu marido. Quando o agente pedir os dados, você ainda não os tem: diga isso e pergunte se o preço é por pessoa ou total.",
+   "style": "Atenta.",
+   "knows": {
+    "seu nome": "Paula Regina Nunes",
+    "sua data de nascimento": "03/03/1990",
+    "e-mail": "paula.nunes@example.com"
+   }
+  },
+  {
+   "id": "q02-bebe-voo",
+   "caller": {
+    "userId": "q02"
+   },
+   "goal": "Viajar com o bebê de 10 meses de Curitiba para Salvador, 8 a 13 de janeiro, você e sua esposa: quanto o bebê paga e ver os voos.",
+   "style": "Pai de primeira viagem.",
+   "knows": {
+    "idade do bebê": "10 meses"
+   }
+  },
+  {
+   "id": "q03-cafe-e-reserva",
+   "caller": {
+    "userId": "q03"
+   },
+   "goal": "Hotel em Recife de 12 a 15 de dezembro para o casal, saber se tem café da manhã e reservar o mais barato.",
+   "style": "Prática.",
+   "knows": {
+    "seu nome": "Helena Souza Prado",
+    "sua data de nascimento": "21/07/1986",
+    "nome do marido": "Marcelo Prado",
+    "nascimento do marido": "30/11/1984",
+    "e-mail": "helena.prado@example.com"
+   }
+  },
+  {
+   "id": "q04-remarcar-e-mala",
+   "caller": {
+    "userId": "q04"
+   },
+   "goal": "Remarcar a volta da viagem para Salvador que você comprou na agência para um dia depois e perguntar quanto custa incluir uma mala; confirmar.",
+   "style": "Educado.",
+   "knows": {
+    "reserva": "viagem para Salvador comprada na agência"
+   }
+  },
+  {
+   "id": "q05-pet-latam",
+   "caller": {
+    "userId": "q05"
+   },
+   "goal": "Saber se dá para levar o gato de 5 kg na cabine num voo da LATAM de São Paulo para Fortaleza em 10/1, só ida, e quanto custa; ver os voos.",
+   "style": "Carinhosa.",
+   "knows": {}
+  },
+  {
+   "id": "q06-menor-12",
+   "caller": {
+    "userId": "q06"
+   },
+   "goal": "Seu filho de 12 anos vai sozinho de Porto Alegre para São Paulo em 19/12, só ida: saber o que precisa e ver os voos.",
+   "style": "Mãe preocupada.",
+   "knows": {}
+  },
+  {
+   "id": "q07-transfer",
+   "caller": {
+    "userId": "q07"
+   },
+   "goal": "Cotar voo e hotel para Maceió, saindo de São Paulo, 3 a 7 de fevereiro, para 2, e perguntar se a agência tem transfer e quanto custa.",
+   "style": "Animado.",
+   "knows": {}
+  },
+  {
+   "id": "q08-pix-atrasado",
+   "caller": {
+    "userId": "q08"
+   },
+   "goal": "Avisar que pagou com Pix a reserva para Recife há 3 horas e ainda aparece aguardando; saber o que fazer.",
+   "style": "Preocupado.",
+   "knows": {
+    "reserva": "viagem para Recife reservada na agência"
+   }
+  },
+  {
+   "id": "q09-lisboa-seguro",
+   "caller": {
+    "userId": "q09"
+   },
+   "goal": "Ver voos de São Paulo para Lisboa de 3 a 13 de março, só você, e saber se o seguro viagem é obrigatório e quanto a agência cobra.",
+   "style": "Organizada.",
+   "knows": {}
+  },
+  {
+   "id": "q10-desconto",
+   "caller": {
+    "userId": "q10"
+   },
+   "goal": "Perguntar se tem desconto para pagar no Pix e cotar pacote para Natal saindo de São Paulo, 10 a 17 de janeiro, para 2.",
+   "style": "Negociador.",
+   "knows": {}
+  },
+  {
+   "id": "q11-dados-em-partes",
+   "caller": {
+    "userId": "q11"
+   },
+   "goal": "Reservar o pacote mais barato para Fortaleza saindo de São Paulo, 5 a 9 de dezembro, para você e sua irmã; mande seus dados, diga que os da irmã vêm depois, pergunte se a Azul inclui mala, e depois mande os dados dela.",
+   "style": "Organizada.",
+   "knows": {
+    "seu nome": "Renata Lopes Freitas",
+    "sua data de nascimento": "12/12/1992",
+    "nome da irmã": "Sabrina Lopes Freitas",
+    "nascimento da irmã": "05/05/1996",
+    "e-mail": "renata.freitas@example.com"
+   }
+  },
+  {
+   "id": "q12-cancelar-hotel",
+   "caller": {
+    "userId": "q12"
+   },
+   "goal": "Saber se o hotel Pousada do Morro em Natal tem cancelamento grátis e ver a hospedagem de 20 a 24 de novembro para o casal.",
+   "style": "Cauteloso.",
+   "knows": {}
+  }
+ ],
+ "test": [
+  {
+   "id": "s01-reserva-sem-dados",
+   "caller": {
+    "userId": "s01"
+   },
+   "goal": "Reservar o voo mais barato de Belo Horizonte para Salvador, ida 6/12 volta 10/12, para você e sua esposa. Quando pedirem os dados, diga que não tem agora e pergunte se a mala está inclusa.",
+   "style": "Tranquilo.",
+   "knows": {
+    "seu nome": "Lucas Pereira Gomes",
+    "sua data de nascimento": "08/08/1988",
+    "e-mail": "lucas.gomes@example.com"
+   }
+  },
+  {
+   "id": "s02-bebe-colo",
+   "caller": {
+    "userId": "s02"
+   },
+   "goal": "Viajar com a bebê de 1 ano do Rio de Janeiro para Natal, 12 a 17 de dezembro, você e seu marido: saber quanto a bebê paga e se o carrinho vai de graça, e ver os voos.",
+   "style": "Organizada.",
+   "knows": {
+    "idade da bebê": "1 ano"
+   }
+  },
+  {
+   "id": "s03-cafe-cancelamento",
+   "caller": {
+    "userId": "s03"
+   },
+   "goal": "Hotel em Salvador de 9 a 12 de janeiro para o casal, saber se o mais barato tem café da manhã e cancelamento grátis, e reservar.",
+   "style": "Detalhista.",
+   "knows": {
+    "seu nome": "Otávio Ramos Leite",
+    "sua data de nascimento": "25/02/1983",
+    "nome da esposa": "Clara Leite Ramos",
+    "nascimento da esposa": "14/09/1985",
+    "e-mail": "otavio.leite@example.com"
+   }
+  },
+  {
+   "id": "s04-remarcar-ida",
+   "caller": {
+    "userId": "s04"
+   },
+   "goal": "Remarcar a ida da viagem para Porto Alegre que você comprou na agência para dois dias depois, saber a diferença e confirmar.",
+   "style": "Formal.",
+   "knows": {
+    "reserva": "viagem para Porto Alegre comprada na agência"
+   }
+  },
+  {
+   "id": "s05-cachorro-gol",
+   "caller": {
+    "userId": "s05"
+   },
+   "goal": "Saber se o cachorro de 8 kg vai na cabine num voo da GOL de São Paulo para Maceió em 15/1, só ida, e quanto custa; ver os voos.",
+   "style": "Carinhoso.",
+   "knows": {}
+  },
+  {
+   "id": "s06-filha-10",
+   "caller": {
+    "userId": "s06"
+   },
+   "goal": "Sua filha de 10 anos vai sozinha de Recife para São Paulo em 20/12, só ida: saber o que precisa, se precisa do serviço de menor desacompanhado e quanto custa, e ver os voos.",
+   "style": "Mãe cuidadosa.",
+   "knows": {}
+  },
+  {
+   "id": "s07-transfer-rio",
+   "caller": {
+    "userId": "s07"
+   },
+   "goal": "Cotar voo e hotel para o Rio de Janeiro saindo de Curitiba, 14 a 17 de janeiro, para 2, e saber se tem transfer do aeroporto e o preço.",
+   "style": "Curioso.",
+   "knows": {}
+  },
+  {
+   "id": "s08-pix-ontem",
+   "caller": {
+    "userId": "s08"
+   },
+   "goal": "Avisar que pagou com Pix ontem a reserva para Natal e ainda aparece aguardando pagamento; saber o que fazer.",
+   "style": "Ansiosa.",
+   "knows": {
+    "reserva": "viagem para Natal reservada na agência"
+   }
+  },
+  {
+   "id": "s09-portugal-docs",
+   "caller": {
+    "userId": "s09"
+   },
+   "goal": "Saber que documentos precisa para entrar em Portugal e ver hotel em Lisboa de 10 a 14 de abril, só você.",
+   "style": "Formal.",
+   "knows": {}
+  },
+  {
+   "id": "s10-cupom-pix",
+   "caller": {
+    "userId": "s10"
+   },
+   "goal": "Perguntar se tem cupom de desconto e cotar pacote para Porto Seguro saindo de São Paulo, 20 a 25 de janeiro, para 2.",
+   "style": "Caçadora de promoções.",
+   "knows": {}
+  },
+  {
+   "id": "s11-dados-depois-mala",
+   "caller": {
+    "userId": "s11"
+   },
+   "goal": "Reservar o pacote mais barato para Maceió saindo do Rio de Janeiro, 8 a 12 de dezembro, para você e seu amigo; mande seus dados, diga que os do amigo vêm depois, pergunte se a mala está inclusa, e depois mande os dados dele.",
+   "style": "Prestativo.",
+   "knows": {
+    "seu nome": "Gustavo Henrique Brito",
+    "sua data de nascimento": "17/04/1991",
+    "nome do amigo": "Felipe Araújo Neves",
+    "nascimento do amigo": "22/10/1990",
+    "e-mail": "gustavo.brito@example.com"
+   }
+  },
+  {
+   "id": "s12-hotel-cancelamento",
+   "caller": {
+    "userId": "s12"
+   },
+   "goal": "Saber se o Hotel Iracema Praia em Fortaleza tem cancelamento grátis e ver a hospedagem de 3 a 6 de dezembro para o casal.",
+   "style": "Cauteloso.",
+   "knows": {}
+  },
+  {
+   "id": "s13-reenviar",
+   "caller": {
+    "userId": "s13"
+   },
+   "goal": "Pedir para reenviar o voucher do hotel da viagem para Maceió que não chegou.",
+   "style": "Educada.",
+   "knows": {
+    "reserva": "viagem para Maceió comprada na agência"
+   }
+  },
+  {
+   "id": "s14-passeio",
+   "caller": {
+    "userId": "s14"
+   },
+   "goal": "Cotar pacote para Natal saindo de Belo Horizonte, 6 a 10 de janeiro, para 2, e perguntar se a agência vende passeio de buggy e quanto custa.",
+   "style": "Aventureira.",
+   "knows": {}
+  },
+  {
+   "id": "s15-assento",
+   "caller": {
+    "userId": "s15"
+   },
+   "goal": "Reservar o voo mais barato de São Paulo para Florianópolis, ida 12/12 volta 15/12, só você, e pedir assento na janela antes de confirmar.",
+   "style": "Exigente.",
+   "knows": {
+    "seu nome": "Beatriz Castro Moura",
+    "sua data de nascimento": "09/06/1995",
+    "e-mail": "beatriz.moura@example.com"
+   }
+  },
+  {
+   "id": "s16-idoso-cadeira",
+   "caller": {
+    "userId": "s16"
+   },
+   "goal": "Sua mãe de 78 anos usa cadeira de rodas e vai com você de São Paulo para Recife, ida 10/12 volta 17/12: ver os voos e saber se tem assistência no aeroporto.",
+   "style": "Atencioso.",
+   "knows": {}
+  }
+ ]
+}

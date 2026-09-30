@@ -1,0 +1,75 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: self, namespace: clinica-bo }
+spec:
+  description: Messages about the agent itself, per audience (self-001); transcripts only, judged outside.
+  now: "2026-09-23T09:00:00-03:00"
+  sandboxes:
+    - plugin: clinic
+      script: clinic.sandbox.star
+      state:
+        info: { endereco: "Rua das Flores, 100", horario: "seg a sex, 8h às 18h", telefone: "(11) 3000-0000" }
+        schedules: { D1: ["seg 9h Ana", "seg 14h Caio", "sex 10h Bia"] }
+        discounts: []
+        blocks: []
+  scenarios:
+    - id: p-what
+      simulator: scripted
+      caller: { channel: whatsapp, role: patient, patientId: p1 }
+      turns:
+        - user: "oi, o que você consegue fazer por mim?"
+    - id: p-block
+      simulator: scripted
+      caller: { channel: whatsapp, role: patient, patientId: p1 }
+      turns:
+        - user: "consigo bloquear a agenda do Dr. Bruno na sexta por aqui?"
+    - id: p-who-decides
+      simulator: scripted
+      caller: { channel: whatsapp, role: patient, patientId: p1 }
+      turns:
+        - user: "se eu pedir um desconto, quem decide?"
+    - id: p-report
+      simulator: scripted
+      caller: { channel: whatsapp, role: patient, patientId: p1 }
+      turns:
+        - user: "dá pra ver o relatório de descontos da semana?"
+    - id: d-what
+      simulator: scripted
+      caller: { channel: whatsapp, member: bruno, roles: [dentista], attributes: { dentistId: D1 } }
+      turns:
+        - user: "o que você faz pra mim?"
+    - id: d-discount
+      simulator: scripted
+      caller: { channel: whatsapp, member: bruno, roles: [dentista], attributes: { dentistId: D1 } }
+      turns:
+        - user: "consigo pedir desconto pra um paciente por aqui?"
+    - id: d-block-approval
+      simulator: scripted
+      caller: { channel: whatsapp, member: bruno, roles: [dentista], attributes: { dentistId: D1 } }
+      turns:
+        - user: "se eu bloquear um dia da agenda precisa de aprovação?"
+    - id: d-dayoff
+      simulator: scripted
+      caller: { channel: whatsapp, member: bruno, roles: [dentista], attributes: { dentistId: D1 } }
+      turns:
+        - user: "e folga, como funciona pedir?"
+    - id: o-what
+      simulator: scripted
+      caller: { channel: whatsapp, member: dora, roles: [dono] }
+      turns:
+        - user: "o que você faz?"
+    - id: o-block
+      simulator: scripted
+      caller: { channel: whatsapp, member: dora, roles: [dono] }
+      turns:
+        - user: "posso bloquear a agenda de um dentista?"
+    - id: o-report
+      simulator: scripted
+      caller: { channel: whatsapp, member: dora, roles: [dono] }
+      turns:
+        - user: "consigo ver os descontos da semana?"
+    - id: o-approve
+      simulator: scripted
+      caller: { channel: whatsapp, member: dora, roles: [dono] }
+      turns:
+        - user: "você aprova descontos pra mim?"

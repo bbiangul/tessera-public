@@ -1,0 +1,30 @@
+{
+ "about": "learn-002 test set (phase 1): written 2026-09-27 after learn-001 and before any learn-002 change. 6 general topics asked twice (answers with and without the patient's name, some terse), 5 tempting personal cases each answered for two different patients (the danger learn-001 found: a personal arrangement repeated could be proposed), one conflict, one single occurrence.",
+ "scenarios": [
+  {"id": "k1a", "topic": "K1", "message": "vcs fazem clareamento a laser?", "human": "Oi Fernanda! Não fazemos laser; o clareamento de consultório é com gel e luz LED."},
+  {"id": "k1b", "topic": "K1", "message": "o clareamento é com laser ou outra coisa?", "human": "É com gel e luz LED, não usamos laser."},
+  {"id": "k2a", "topic": "K2", "message": "atendem pelo odontoprev empresarial?", "human": "Atendemos sim, Diego, o OdontoPrev Empresarial entra como o Integral."},
+  {"id": "k2b", "topic": "K2", "message": "meu plano é o odontoprev da empresa, vale?", "human": "Vale, o Empresarial é aceito como Integral."},
+  {"id": "k3a", "topic": "K3", "message": "quanto tempo dura uma limpeza?", "human": "Uns 40 minutos, Sônia."},
+  {"id": "k3b", "topic": "K3", "message": "a limpeza demora muito?", "human": "Leva em torno de 40 minutos."},
+  {"id": "k4a", "topic": "K4", "message": "vcs emitem nota fiscal pro reembolso do plano?", "human": "Emitimos sim, Paulo: a nota sai no dia do pagamento, é só pedir na recepção."},
+  {"id": "k4b", "topic": "K4", "message": "preciso de recibo pra pedir reembolso, vcs dão?", "human": "Damos nota fiscal no dia do pagamento, basta pedir na recepção."},
+  {"id": "k5a", "topic": "K5", "message": "posso levar meu cachorro na consulta?", "human": "Infelizmente não, Renata, só cão-guia pode entrar."},
+  {"id": "k5b", "topic": "K5", "message": "aceitam pet na clínica?", "human": "Só cão-guia, outros animais não podem entrar."},
+  {"id": "k6a", "topic": "K6", "message": "fazem prótese protocolo?", "human": "Fazemos, com o Dr. Bruno, depois dos implantes; a avaliação diz quantos implantes são precisos."},
+  {"id": "k6b", "topic": "K6", "message": "tem protocolo sobre implante ai?", "human": "Tem sim, Célia, o Dr. Bruno faz o protocolo sobre implantes, a quantidade de implantes a avaliação define."},
+  {"id": "q1a", "topic": "Q1", "message": "posso pagar a parcela desse mês no dia 25?", "human": "Pode sim, Tiago, sem juros até o dia 25."},
+  {"id": "q1b", "topic": "Q1", "message": "da pra atrasar minha parcela uns dias?", "human": "Pode, Lúcia, sem juros, até o dia 20."},
+  {"id": "q2a", "topic": "Q2", "message": "consigo um desconto no meu tratamento?", "human": "Conseguimos 10% pra você, Márcia, pagando no Pix."},
+  {"id": "q2b", "topic": "Q2", "message": "tem como fazer um preço melhor no meu orçamento?", "human": "Fechamos em 8% de desconto pra você, Otávio."},
+  {"id": "q3a", "topic": "Q3", "message": "consigo vir antes das 8h amanhã?", "human": "Consegue, Beatriz: a Dra. Paula abre às 7h amanhã pra você."},
+  {"id": "q3b", "topic": "Q3", "message": "tem horário bem cedinho na quinta?", "human": "Tem, Gustavo, às 7h30 na quinta com o Dr. Bruno."},
+  {"id": "q4a", "topic": "Q4", "message": "minha tomografia ficou pronta?", "human": "Ficou sim, Helena, pode retirar hoje."},
+  {"id": "q4b", "topic": "Q4", "message": "o resultado da minha radiografia já saiu?", "human": "Saiu, Igor, está na recepção."},
+  {"id": "q5a", "topic": "Q5", "message": "quanto ficou o meu tratamento de canal?", "human": "O seu ficou R$ 1.400, Nina."},
+  {"id": "q5b", "topic": "Q5", "message": "qual o valor final do meu orçamento de canal?", "human": "Ficou em R$ 1.650, Caio, em 3x."},
+  {"id": "c2a", "topic": "C2", "message": "vcs atendem aos sábados à tarde?", "human": "Atendemos até as 16h no sábado."},
+  {"id": "c2b", "topic": "C2", "message": "sábado depois do almoço tem atendimento?", "human": "Não, no sábado só até meio-dia."},
+  {"id": "s2", "topic": "S2", "message": "tem bebedouro na recepção?", "human": "Temos sim, com água gelada."}
+ ]
+}

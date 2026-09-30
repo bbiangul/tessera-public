@@ -1,0 +1,83 @@
+# The traveler's profile: preferences told once change later searches, and
+# a later message only changes what it says. From the profile cases in
+# the legacy platform's TRAVELER_TESTS.md; the profile is the real sql plugin on an
+# in-memory database.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata:
+  name: profile
+  namespace: traveler
+spec:
+  description: Saved preferences and the searches that use them.
+  now: "2026-09-23T09:00:00-03:00"
+  sandboxes:
+    - plugin: booking
+      script: booking.sandbox.star
+      state:
+        searches: []
+        routes: [REC.AIRPORT]
+        places:
+          - { id: SAO.CITY, name: "São Paulo", cityName: "São Paulo", type: CITY }
+          - { id: GRU.AIRPORT, name: "Guarulhos International Airport", cityName: "São Paulo", type: AIRPORT }
+          - { id: REC.AIRPORT, name: "Recife International Airport", cityName: "Recife", type: AIRPORT }
+          - { id: LON.CITY, name: "Londres", cityName: "Londres", type: CITY }
+          - { id: LHR.AIRPORT, name: "Heathrow Airport", cityName: "Londres", type: AIRPORT }
+          - { id: LGW.AIRPORT, name: "Gatwick Airport", cityName: "Londres", type: AIRPORT }
+        hotelSearches: []
+        hotelCities: ["-2167973"]
+        hotelPlaces:
+          - { dest_id: "-2167973", dest_type: city, name: "Lisboa", city_name: "Lisboa" }
+  scenarios:
+    - id: told-once-used-after
+      description: The home city and an avoided airline, told in separate messages, both shape the search.
+      caller: { userId: u1 }
+      simulator: scripted
+      turns:
+        - user: "Moro em São Paulo, costumo sair de lá"
+          expect: { routed: set-preferences, status: Succeeded, says: ["Anotado", "São Paulo"] }
+        - user: "Ah, e prefiro evitar a GOL"
+          expect: { routed: set-preferences, status: Succeeded, says: ["evitar GOL"], notSays: ["São Paulo"] }
+        - user: "Quero ir para Recife dia 12 de outubro"
+          expect: { routed: search-flights, status: Succeeded, says: ["Encontrei estas opções"], notSays: ["De onde", "GOL"] }
+      expect:
+        effects:
+          - { action: profile/save, count: 2 }
+          - { action: booking/search-flights, count: 1 }
+
+    - id: price-first-hotels
+      caller: { userId: u2 }
+      simulator: scripted
+      turns:
+        - user: "Pra mim o que importa é sempre o menor preço"
+          expect: { routed: set-preferences, status: Succeeded, says: ["menor preço"] }
+        - user: "Preciso de hotel em Lisboa de 12 a 15 de outubro"
+          expect: { routed: search-hotels, status: Succeeded, says: ["1. ibis Lisboa Centro"] }
+
+    - id: no-profile-asks
+      description: Without a saved home city, the origin is asked.
+      caller: { userId: u3 }
+      simulator: scripted
+      turns:
+        - user: "Quero ir para Recife dia 12 de outubro"
+          expect: { routed: search-flights, status: WaitingForUser, says: ["De onde"] }
+
+    - id: out-of-scope
+      description: A message no Function fits gets the Agent's own reply, in Portuguese, and starts nothing.
+      simulator: scripted
+      turns:
+        - user: "qual a previsão do tempo em Lisboa?"
+          expect: { says: ["Desculpe, não entendi", "passagens e hospedagem"] }
+      expect:
+        never: [booking/search-flights, booking/search-hotels, profile/save]
+
+    - id: currency-from-home
+      description: "BUG-007: prices come in the currency of the user's home city, said in Portuguese."
+      caller: { userId: u5 }
+      simulator: scripted
+      turns:
+        - user: "Moro em Londres"
+          expect: { routed: set-preferences, status: Succeeded }
+        - user: "Quero ir para Recife dia 12 de outubro"
+          expect: { routed: search-flights, status: Succeeded, notSays: ["De onde"] }
+      expect:
+        effects: [ { action: booking/search-flights, count: 1, where: "inputs.currency == 'GBP' && inputs.fromId == 'LON.CITY'" } ]

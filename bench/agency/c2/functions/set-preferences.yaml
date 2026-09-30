@@ -1,0 +1,77 @@
+# The traveler's profile, told in conversation (the legacy platform's
+# SetupTravelerProfile). Only what the message says changes; the searches
+# read the profile on every run.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: set-preferences
+  namespace: traveler
+spec:
+  description: Saves the user's lasting travel preferences for future searches.
+  selector:
+    intent: preferences
+    description: "O usuário conta como é ou como prefere viajar, para valer em todas as viagens: onde mora ou de onde costuma sair, o programa de fidelidade que tem e a categoria (Smiles, LATAM Pass...), companhias que não quer usar nunca, se prefere preço ou tempo, assento do meio, o que não tolera em hotel. Não é o pedido de uma viagem."
+  inputs:
+    homeCity:
+      type: string
+      description: the city the user usually flies from
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message says where the user usually departs from or lives" } }
+      onUnresolved: [ { fallback: { useNull: true } } ]
+    timeValue:
+      type: string
+      description: "what matters most when flying: price (cheapest, even if longer), time (fastest, even if it costs more) or balanced"
+      resolve:
+        - { id: said, extract: { instructions: "one of price, time, balanced; null unless the message says it" } }
+      onUnresolved: [ { fallback: { useNull: true } } ]
+    loyaltyProgram:
+      type: string
+      description: the airline loyalty program and status, as written (LATAM Pass Gold, Smiles Diamante)
+      resolve:
+        - { id: said, extract: {} }
+      onUnresolved: [ { fallback: { useNull: true } } ]
+    neverMiddleSeat:
+      type: bool
+      description: whether the user refuses middle seats
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message talks about the middle seat" } }
+      onUnresolved: [ { fallback: { useNull: true } } ]
+    avoidedAirlines:
+      type: string
+      description: airlines the user wants to avoid, comma separated
+      resolve:
+        - { id: said, extract: {} }
+      onUnresolved: [ { fallback: { useNull: true } } ]
+    hotelDealbreaker:
+      type: string
+      description: what ruins a hotel stay for the user (wifi ruim, barulho, banheiro, sem academia, cama ruim)
+      resolve:
+        - { id: said, extract: {} }
+      onUnresolved: [ { fallback: { useNull: true } } ]
+  preconditions:
+    - cel: >-
+        inputs.homeCity != null || inputs.timeValue != null || inputs.loyaltyProgram != null ||
+        inputs.neverMiddleSeat != null || inputs.avoidedAirlines != null || inputs.hotelDealbreaker != null
+      message: "Não entendi qual preferência anotar. Pode dizer, por exemplo, de onde costuma sair ou quais companhias prefere evitar?"
+    - cel: "inputs.timeValue == null || inputs.timeValue in ['price', 'time', 'balanced']"
+      message: "Você prefere o menor preço, chegar mais rápido ou um equilíbrio entre os dois?"
+  steps:
+    - id: save
+      act: profile/save
+      with:
+        user: "${ has(caller.userId) ? caller.userId : conversation.id }"
+        homeCity: "${ inputs.homeCity }"
+        timeValue: "${ inputs.timeValue }"
+        loyaltyProgram: "${ inputs.loyaltyProgram }"
+        neverMiddleSeat: "${ inputs.neverMiddleSeat }"
+        avoidedAirlines: "${ inputs.avoidedAirlines }"
+        hotelDealbreaker: "${ inputs.hotelDealbreaker }"
+        at: "${ event.time }"
+    - id: message
+      compute:
+        starlark:
+          script: ../scripts/profile.star
+          function: saved_message
+          with: { said: "${ inputs }" }
+  output:
+    template: "{{ steps.message.output }}"

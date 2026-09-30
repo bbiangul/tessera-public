@@ -1,0 +1,284 @@
+{
+  "apiVersion": "agents.tessera.dev/v1alpha1",
+  "kind": "EvalSuite",
+  "metadata": {
+    "name": "preference-final-replication",
+    "namespace": "clinica-bench"
+  },
+  "spec": {
+    "description": "Own synthetic conversations covering ownership, confirmation, correction, discovery, side questions and failure verification.",
+    "now": "2026-10-01T09:00:00-03:00",
+    "sandboxes": [
+      {
+        "plugin": "clinic",
+        "script": "clinic.sandbox.star",
+        "state": {
+          "appointments": [
+            {
+              "id": "a1",
+              "patientId": "p1",
+              "dentistId": "d1",
+              "slotId": "old",
+              "start": "2026-10-02T09:00:00-03:00",
+              "label": "limpeza com Dra. Ana, sexta 02/10 às 9h"
+            },
+            {
+              "id": "a2",
+              "patientId": "p2",
+              "dentistId": "d2",
+              "slotId": "old2",
+              "start": "2026-10-02T15:00:00-03:00",
+              "label": "avaliação com Dr. Pedro, sexta 02/10 às 15h"
+            }
+          ],
+          "slots": [
+            {
+              "id": "w3",
+              "dentistId": "d1",
+              "start": "2026-10-03T14:00:00-03:00",
+              "label": "sábado 03/10 às 14h"
+            },
+            {
+              "id": "w10",
+              "dentistId": "d1",
+              "start": "2026-10-10T14:00:00-03:00",
+              "label": "sábado 10/10 às 14h"
+            },
+            {
+              "id": "w13",
+              "dentistId": "d1",
+              "start": "2026-10-13T14:00:00-03:00",
+              "label": "terça 13/10 às 14h"
+            },
+            {
+              "id": "w31",
+              "dentistId": "d1",
+              "start": "2026-10-31T14:00:00-03:00",
+              "label": "sábado 31/10 às 14h"
+            },
+            {
+              "id": "nov7",
+              "dentistId": "d1",
+              "start": "2026-11-07T14:00:00-03:00",
+              "label": "sábado 07/11 às 14h"
+            },
+            {
+              "id": "nov21",
+              "dentistId": "d1",
+              "start": "2026-11-21T14:00:00-03:00",
+              "label": "sábado 21/11 às 14h"
+            },
+            {
+              "id": "wed14",
+              "dentistId": "d1",
+              "start": "2026-10-14T14:00:00-03:00",
+              "label": "quarta 14/10 às 14h"
+            },
+            {
+              "id": "fri16",
+              "dentistId": "d1",
+              "start": "2026-10-16T14:00:00-03:00",
+              "label": "sexta 16/10 às 14h"
+            }
+          ],
+          "attempts": 0,
+          "info": {
+            "name": "Clínica Sorriso Exemplo",
+            "address": "Rua das Flores, 120, Centro",
+            "parking": "Estacionamento gratuito na Rua das Flores, 124.",
+            "hours": "Segunda a sábado, das 8h às 18h.",
+            "prices": {
+              "limpeza": "R$ 180",
+              "avaliação": "R$ 100"
+            },
+            "insurance": [
+              "Plano Sorriso",
+              "Dental Exemplo"
+            ],
+            "phone": "(11) 4000-1234"
+          }
+        }
+      }
+    ],
+    "scenarios": [
+      {
+        "id": "unclear-mixed",
+        "caller": {
+          "role": "patient",
+          "patientId": "p1"
+        },
+        "simulator": "scripted",
+        "turns": [
+          {
+            "user": "Quero remarcar minha consulta.",
+            "expect": {
+              "status": "WaitingForUser"
+            }
+          },
+          {
+            "user": "Não tenho uma data decidida.",
+            "expect": {
+              "status": "WaitingForUser"
+            }
+          },
+          {
+            "user": "Pode ser sábado, e tem estacionamento?",
+            "expect": {
+              "status": "WaitingForUser",
+              "says": [
+                "124"
+              ]
+            }
+          },
+          {
+            "user": "Pode consultar os sábados.",
+            "expect": {
+              "status": "WaitingForUser",
+              "says": [
+                "2026-10-03",
+                "2026-10-10"
+              ]
+            }
+          }
+        ],
+        "expect": {
+          "never": [
+            "clinic/reschedule"
+          ]
+        }
+      },
+      {
+        "id": "twice-unclear",
+        "caller": {
+          "role": "patient",
+          "patientId": "p1"
+        },
+        "simulator": "scripted",
+        "turns": [
+          {
+            "user": "Quero remarcar minha consulta.",
+            "expect": {
+              "status": "WaitingForUser"
+            }
+          },
+          {
+            "user": "Ainda estou pensando no dia.",
+            "expect": {
+              "status": "WaitingForUser"
+            }
+          },
+          {
+            "user": "Não consegui escolher por enquanto.",
+            "expect": {
+              "status": "WaitingForUser"
+            }
+          },
+          {
+            "user": "Pode ser quarta ou sexta à tarde.",
+            "expect": {
+              "status": "WaitingForUser",
+              "says": [
+                "2026-10-14",
+                "2026-10-16"
+              ]
+            }
+          }
+        ],
+        "expect": {
+          "never": [
+            "clinic/reschedule"
+          ]
+        }
+      },
+      {
+        "id": "correct-mixed",
+        "caller": {
+          "role": "patient",
+          "patientId": "p1"
+        },
+        "simulator": "scripted",
+        "turns": [
+          {
+            "user": "Quero remarcar minha consulta.",
+            "expect": {
+              "status": "WaitingForUser"
+            }
+          },
+          {
+            "user": "Sábado é bom. Onde fica a clínica?",
+            "expect": {
+              "status": "WaitingForUser",
+              "says": [
+                "120"
+              ]
+            }
+          },
+          {
+            "user": "Mudei de ideia: só sexta.",
+            "expect": {
+              "status": "Confirming",
+              "says": [
+                "16/10",
+                "14h"
+              ]
+            }
+          }
+        ],
+        "expect": {
+          "never": [
+            "clinic/reschedule"
+          ]
+        }
+      },
+      {
+        "id": "mixed-repeat-faq",
+        "caller": {
+          "role": "patient",
+          "patientId": "p1"
+        },
+        "simulator": "scripted",
+        "turns": [
+          {
+            "user": "Quero remarcar minha consulta.",
+            "expect": {
+              "status": "WaitingForUser"
+            }
+          },
+          {
+            "user": "Quero sexta. Há estacionamento?",
+            "expect": {
+              "status": "WaitingForUser",
+              "says": [
+                "124"
+              ]
+            }
+          },
+          {
+            "user": "E o endereço da clínica?",
+            "expect": {
+              "status": "WaitingForUser",
+              "says": [
+                "120"
+              ]
+            }
+          },
+          {
+            "user": "Pode buscar para mim.",
+            "expect": {
+              "status": "Confirming",
+              "says": [
+                "16/10",
+                "14h"
+              ]
+            }
+          }
+        ],
+        "expect": {
+          "never": [
+            "clinic/reschedule"
+          ]
+        }
+      }
+    ]
+  }
+}

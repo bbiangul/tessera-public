@@ -1,0 +1,56 @@
+# The traveler's profile (the legacy platform's traveler_profiles), as the built-in
+# sql plugin: what a user told once and every search uses. A save only
+# changes what was said; the rest is kept.
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata:
+  name: profile
+  version: 0.1.0
+spec:
+  sql:
+    migrations:
+      - >-
+        CREATE TABLE profiles (user_id TEXT PRIMARY KEY, home_city TEXT, time_value TEXT,
+        loyalty_program TEXT, never_middle_seat INTEGER, avoided_airlines TEXT,
+        hotel_dealbreaker TEXT, updated_at TEXT NOT NULL)
+  actions:
+    get:
+      input: { user: string }
+      output: map
+      effect: read
+      sql:
+        query: "SELECT home_city, time_value, loyalty_program, never_middle_seat, avoided_airlines, hotel_dealbreaker FROM profiles WHERE user_id = :u"
+        params: { u: "${ inputs.user }" }
+        result: row
+    save:
+      input:
+        user: string
+        homeCity: any
+        timeValue: any
+        loyaltyProgram: any
+        neverMiddleSeat: any
+        avoidedAirlines: any
+        hotelDealbreaker: any
+        at: timestamp
+      effect: idempotent-write
+      sql:
+        query: >-
+          INSERT INTO profiles (user_id, home_city, time_value, loyalty_program, never_middle_seat, avoided_airlines, hotel_dealbreaker, updated_at)
+          VALUES (:u, :home, :tv, :lp, :nm, :aa, :hd, :at)
+          ON CONFLICT (user_id) DO UPDATE SET
+          home_city = COALESCE(excluded.home_city, profiles.home_city),
+          time_value = COALESCE(excluded.time_value, profiles.time_value),
+          loyalty_program = COALESCE(excluded.loyalty_program, profiles.loyalty_program),
+          never_middle_seat = COALESCE(excluded.never_middle_seat, profiles.never_middle_seat),
+          avoided_airlines = COALESCE(excluded.avoided_airlines, profiles.avoided_airlines),
+          hotel_dealbreaker = COALESCE(excluded.hotel_dealbreaker, profiles.hotel_dealbreaker),
+          updated_at = excluded.updated_at
+        params:
+          u: "${ inputs.user }"
+          home: "${ inputs.homeCity }"
+          tv: "${ inputs.timeValue }"
+          lp: "${ inputs.loyaltyProgram }"
+          nm: "${ inputs.neverMiddleSeat }"
+          aa: "${ inputs.avoidedAirlines }"
+          hd: "${ inputs.hotelDealbreaker }"
+          at: "${ inputs.at }"

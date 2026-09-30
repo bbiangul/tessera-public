@@ -1,0 +1,65 @@
+# The agency's back office (illustrative, like testdata/agenda's
+# Agenda): where booking requests go, where the team records the
+# reservation, the payment and the tickets, and where the agent reads a
+# customer's bookings. The customer's personal data (names, birth dates,
+# e-mail) live here, never in a task's text (RFC-0009, D2).
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata:
+  name: agency
+  version: 0.1.0
+spec:
+  egress:
+    hosts: [api.tessera-viagens.test]
+  connection:
+    baseUrl: https://api.tessera-viagens.test/v1
+    auth: { header: Authorization, prefix: "Bearer ", secret: AGENCY_API_TOKEN }
+  types:
+    Booking:
+      fields: { id: string, key: string, status: string, summary: string, total: int, departDate: "string?", locator: "string?", payment: "string?", eticket: "string?" }
+  actions:
+    my-bookings:
+      input: { customer: string }
+      output: list<agency.Booking>
+      effect: read
+      http:
+        method: GET
+        path: "/customers/{{ inputs.customer }}/bookings"
+        output: "sources.response.body.bookings"
+    request-booking:
+      input: { key: string, customer: string, conversation: string, summary: string, flight: any, hotel: any, passengers: any, email: string, total: int, departDate: string }
+      output: agency.Booking
+      effect: irreversible
+      http:
+        method: POST
+        path: /bookings
+        body:
+          key: "${ inputs.key }"
+          customer: "${ inputs.customer }"
+          conversation: "${ inputs.conversation }"
+          summary: "${ inputs.summary }"
+          flight: "${ inputs.flight }"
+          hotel: "${ inputs.hotel }"
+          passengers: "${ inputs.passengers }"
+          email: "${ inputs.email }"
+          total: "${ inputs.total }"
+          departDate: "${ inputs.departDate }"
+      verify:
+        mode: probe
+        with: my-bookings
+        args: { customer: "${ inputs.customer }" }
+        happened: "sources.probe.output.exists(b, b.key == inputs.key)"
+        output: "sources.probe.output.filter(b, b.key == inputs.key)[0]"
+    update-booking:
+      input: { id: string, status: string, locator: any, payment: any, eticket: any, note: any }
+      output: agency.Booking
+      effect: idempotent-write
+      http:
+        method: PATCH
+        path: "/bookings/{{ inputs.id }}"
+        body:
+          status: "${ inputs.status }"
+          locator: "${ inputs.locator }"
+          payment: "${ inputs.payment }"
+          eticket: "${ inputs.eticket }"
+          note: "${ inputs.note }"

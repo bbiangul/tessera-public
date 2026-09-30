@@ -1,0 +1,11 @@
+# The Python competitors of the market and escalation benchmarks, pinned
+# (market-bench-000, deviation 3). Python 3.14.
+#   python3 -m venv bench/market/.venv && bench/market/.venv/bin/pip install -r bench/market/competitors/requirements.txt
+httpx==0.28.1
+langchain==1.4.2
+langchain-core==1.6.4
+langchain-openai==1.6.5
+langgraph==1.2.12
+langgraph-checkpoint-sqlite==3.1.1
+openai==3.19.1
+openai-agents==0.22.3

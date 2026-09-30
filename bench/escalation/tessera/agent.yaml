@@ -1,0 +1,56 @@
+# The escalation benchmark's onboarding assistant
+# (docs/research/escalation-000-preregistration.md), built with what
+# Tessera has today: the free mode answers from the checklist; a routable
+# Function asks the coach. The router decides between them without the
+# checklist.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata: { name: onboarding, namespace: brightpath }
+spec:
+  description: Onboarding assistant for Brightpath Learning store owners.
+  messages:
+    notUnderstood: "Sorry, I didn't get that. I can answer questions about the onboarding checklist."
+    failed: "Something went wrong. Your coach will follow up."
+  humanInTheLoop: { queue: coach }
+  freeMode:
+    # The policy text every competitor gets (competitors.py POLICY).
+    instructions: "You are the onboarding assistant for Brightpath Learning store owners, in chat. Answer from the onboarding checklist. When the question needs a decision, an approval or an exception that the checklist gives to the owner's coach, or a process the coach starts, ask the coach and tell the owner you did. Do not ask the coach what the checklist already answers."
+    reads: [ { act: checklist/read, public: true } ]
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: HumanQueue
+metadata: { name: coach, namespace: brightpath }
+spec:
+  description: The owner's store coach.
+---
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: checklist, version: 0.1.0 }
+spec:
+  actions:
+    # The onboarding checklist (bench/escalation/checklist.json), served
+    # in process by the runner.
+    read: { input: {}, output: map, effect: read }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: ask-coach, namespace: brightpath }
+spec:
+  description: Asks the owner's coach for a decision, and tells the owner what the checklist says meanwhile.
+  selector:
+    intent: ask-coach
+    description: "The owner needs a decision, an approval or an exception that belongs to their store coach, or a process the coach starts, not a question the onboarding checklist answers."
+  steps:
+    - { id: checklist, act: checklist/read }
+    - id: answer
+      generate:
+        state: { checklist: "${ steps.checklist.output }", message: "${ event.message }" }
+        instructions: "You are the onboarding assistant for Brightpath Learning store owners, in chat. The owner's MESSAGE needs their coach, whom you have just asked; they will answer in the Owner Portal. Tell the owner you asked the coach, and add briefly what the CHECKLIST says that is relevant. Do not decide what belongs to the coach. Reply with the message only."
+    - id: tell
+      respond: { template: "{{ steps.answer.output }}" }
+    - id: coach
+      escalate:
+        queue: coach
+        task: answer
+        message: "An owner asks: {{ event.message }}"
+  output: { template: "Your coach answered: {{ steps.coach.output }}" }

@@ -1,0 +1,14 @@
+[
+ {"id": "what-do", "message": "oi! o que você faz?"},
+ {"id": "how-help", "message": "como vc pode me ajudar exatamente?"},
+ {"id": "hotel", "message": "vocês também veem hotel ou só passagem?"},
+ {"id": "prefs", "message": "você consegue guardar minhas preferências de viagem?"},
+ {"id": "bag", "message": "consegue me dizer quanto custa despachar mala?"},
+ {"id": "book", "message": "você faz a reserva do voo pra mim?"},
+ {"id": "car", "message": "rola alugar um carro com vocês?"},
+ {"id": "cancel", "message": "quero cancelar uma passagem que comprei, consigo por aqui?"},
+ {"id": "alert", "message": "vc me avisa se o preço da passagem pra recife baixar?"},
+ {"id": "needs", "message": "o que você precisa saber pra buscar um voo pra mim?"},
+ {"id": "human", "message": "você é uma pessoa ou um robô?"},
+ {"id": "insurance", "message": "vocês vendem seguro viagem?"}
+]

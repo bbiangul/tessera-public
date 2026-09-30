@@ -1,0 +1,29 @@
+# Write the scenarios before the Functions (the authoring skill's rule).
+# Run live once: tessera test . --cassette evals.jsonl --cassette-mode record
+# Then in CI, offline and free: --cassette-mode replay
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata:
+  name: recados
+  namespace: @NS@
+spec:
+  description: Leaving a message and reading it back.
+  now: "2026-09-25T09:00:00-03:00"
+  scenarios:
+    - id: leave-and-read
+      caller: { userId: u1 }
+      simulator: scripted
+      turns:
+        - user: "Anota um recado pra equipe: preciso da segunda via do boleto"
+          expect: { routed: anotar-recado, status: Succeeded, says: ["Anotado", "segunda via"] }
+        - user: "quais recados eu deixei?"
+          expect: { routed: ver-recados, status: Succeeded, says: ["segunda via"] }
+    - id: off-script
+      description: A request no Function covers gets the free mode, not a dead end, and starts nothing.
+      caller: { userId: u2 }
+      simulator: scripted
+      turns:
+        - user: "vocês abrem sábado?"
+          expect: { notSays: ["não entendi"] }
+      expect:
+        never: [recados/anotar]

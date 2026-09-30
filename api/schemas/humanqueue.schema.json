@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bbiangul/tessera/api/agents/v1alpha1/human-queue",
+  "$ref": "#/$defs/HumanQueue",
+  "$defs": {
+    "BusinessHours": {
+      "properties": {
+        "days": {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array",
+          "description": "Days are the working weekdays, 0 (Sunday) to 6; default Monday to\nFriday."
+        },
+        "from": {
+          "type": "string",
+          "pattern": "^[0-2][0-9]:[0-5][0-9]$",
+          "description": "From and To bound the working day, HH:MM."
+        },
+        "to": {
+          "type": "string",
+          "pattern": "^[0-2][0-9]:[0-5][0-9]$"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "from",
+        "to"
+      ],
+      "description": "BusinessHours are working days and hours."
+    },
+    "HumanQueue": {
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "enum": [
+            "agents.tessera.dev/v1alpha1"
+          ],
+          "description": "APIVersion must be agents.tessera.dev/v1alpha1."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "HumanQueue"
+          ],
+          "description": "Kind must be HumanQueue."
+        },
+        "metadata": {
+          "$ref": "#/$defs/ObjectMeta",
+          "description": "Metadata names the queue (escalate.queue refers to it)."
+        },
+        "spec": {
+          "$ref": "#/$defs/HumanQueueSpec",
+          "description": "Spec is the queue's service level."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ],
+      "description": "HumanQueue is where work for people goes (RFC-0001, \"Humano no\ncircuito\"): who answers is outside Tessera (the console's inbox, a\nchannel); what Tessera owns is the deadline. A task waits for its queue;\npast the SLA it reminds, escalates, and at the end does what onTimeout\nsays, so no run waits for a person forever."
+    },
+    "HumanQueueSpec": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description says who works this queue."
+        },
+        "roles": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Roles are the Team roles that may answer this queue's tasks (and,\nafter an escalation or a forward, the tasks that reached it). With\nroles, every answer is a member's: on the task page after a one-time\ncode, on the API by naming the member. Without, anyone the channel\ntrusts answers, as before (RFC-0006)."
+        },
+        "channels": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true,
+          "description": "Channels are where the queue's tasks reach its members besides the\nconsole and links: whatsapp sends each task to the WhatsApp of every\nmember who may answer it, with buttons; a tap from the member's own\nnumber (attested by Meta) answers it. Needs roles, and the Agent's\nchannel plugin with a send-buttons action (backoffice-002). slack\nposts it to the Slack DM of every member who may answer it; a click\nin a request Slack signs answers it. Needs roles and the slack\nplugin with post-task and update-task (backoffice-003). teams sends\nit to the member's personal chat with the bot as an Adaptive Card; a\nclick the Bot Framework signs answers it. Needs roles and the teams\nplugin with open-dm, post-task and update-task (backoffice-004).\nemail sends it to the member's e-mail with a link bound to them; the\nlink and a one-time code (the Team's verify) answer it, never a reply\nto the e-mail. Needs roles, the Team's verify, and the email plugin\nwith send-task (backoffice-005)."
+        },
+        "sla": {
+          "$ref": "#/$defs/SLA",
+          "description": "SLA is how long a task may wait, and what happens then."
+        },
+        "notify": {
+          "items": {
+            "$ref": "#/$defs/Notify"
+          },
+          "type": "array",
+          "description": "Notify tells people about the queue's tasks through plugin actions\n(Slack, WhatsApp, e-mail, any webhook): each is called once when a\ntask is created, reminded or escalated to this queue. The console's\ninbox needs nothing here."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "HumanQueueSpec describes a queue."
+    },
+    "Notify": {
+      "properties": {
+        "act": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+/[a-z0-9-]+$",
+          "description": "Act is the plugin action, plugin/action."
+        },
+        "with": {
+          "type": "object",
+          "description": "With gives its arguments. Values are literal unless the whole value\nis \"${ expr }\" over inputs (the task)."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "act"
+      ],
+      "description": "Notify is one plugin action called for each task. Its arguments read\nthe task as inputs: runId, queue, kind (approve, answer, input,\ntakeover, indeterminate), text, stage (created, remind, escalate), link\n(a signed page where the task is answered, when tessera serve has a\npublic URL) and since."
+    },
+    "ObjectMeta": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Name of the resource, unique per kind within its namespace. Lowercase\nletters, digits and hyphens, starting and ending with a letter or digit."
+        },
+        "namespace": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Namespace the resource belongs to, usually one per customer."
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Labels are free-form key/value pairs for selecting and grouping."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "namespace"
+      ],
+      "description": "ObjectMeta identifies a resource."
+    },
+    "OnTimeout": {
+      "properties": {
+        "answer": {
+          "description": "Answer is used as the person's answer (a safe default: false for an\napproval, a value for an input), recorded as given by the timeout."
+        },
+        "fail": {
+          "type": "boolean",
+          "description": "Fail ends the run as failed."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "OnTimeout ends an unanswered task. Exactly one of answer and fail."
+    },
+    "SLA": {
+      "properties": {
+        "remind": {
+          "type": "string",
+          "description": "Remind sends the task to the queue again after this long."
+        },
+        "escalate": {
+          "type": "string",
+          "description": "Escalate sends the task to escalateTo after this long."
+        },
+        "escalateTo": {
+          "type": "string",
+          "description": "EscalateTo is the next queue."
+        },
+        "timeout": {
+          "type": "string",
+          "description": "Timeout ends the wait after this long, with onTimeout."
+        },
+        "onTimeout": {
+          "$ref": "#/$defs/OnTimeout",
+          "description": "OnTimeout says what the run does when nobody answered in time."
+        },
+        "businessHours": {
+          "$ref": "#/$defs/BusinessHours",
+          "description": "BusinessHours counts the durations only in working time, in the\nAgent's time zone."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "SLA is a task's deadlines, counted from when it was created. Each\nhappens once; durations are Go durations (4h, 90m), counted in the\nAgent's business hours when businessHours is set."
+    }
+  },
+  "title": "HumanQueue"
+}

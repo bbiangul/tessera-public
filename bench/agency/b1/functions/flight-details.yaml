@@ -1,0 +1,54 @@
+# Follow-up questions about a flight the agent already showed: "e a
+# bagagem do segundo?", "o da Azul tem mala?". Decide picks the flight from
+# the last search (measured: docs/research/decide-followups-001.md); the
+# answer comes from what was stored, with no new search.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: flight-details
+  namespace: traveler
+spec:
+  description: Answers questions about a flight from the last search (baggage, fare).
+  selector:
+    after: [search-flights, quote-trip, flight-details, flight-extras]   # follow-ups: only after flights were shown
+    intent: flight-details
+    description: "Perguntas curtas sobre a bagagem ou a tarifa de um dos voos que acabei de mostrar (\"e o da LATAM?\", \"o segundo tem mala?\", \"a bagagem do mais barato?\"). Não é pedir outros voos, outro horário ou outra data (isso é uma nova busca), nem perguntar preço de extras."
+  inputs:
+    last:
+      type: map
+      description: the last flight search of this conversation
+      resolve:
+        - id: saved
+          fromAction: memo/last-search
+          with: { conversation: "${ conversation.id }" }
+      onUnresolved:
+        - respond: { template: "Ainda não mostrei voos nesta conversa. Para onde você quer voar?" }
+    quote:
+      type: any
+      description: the last whole-trip quote shown in this conversation
+      resolve:
+        - { id: saved, fromAction: memo/last-shown, with: { conversation: "${ conversation.id }", kind: quote } }
+        - { id: found, when: "sources.saved.output != null", value: "sources.saved.output" }
+        - { id: none, value: "{}" }
+    namedFlight:
+      type: bool
+      description: whether the message points to a specific flight (o da Azul, o segundo, o das 7h, a opção 2)
+      resolve:
+        - { id: said, extract: { instructions: "true only when the message points to one specific flight or option; false otherwise" } }
+        - { id: default, value: "false" }
+    flight:
+      type: map
+      description: the flight the user asks about
+      resolve:
+        # Right after a quote, "e a mala?" is about the quote's flight.
+        - id: fromQuote
+          when: "!inputs.namedFlight && has(inputs.quote.items) && size(inputs.quote.items) > 0 && has(inputs.last.at) && inputs.quote.at >= inputs.last.at"
+          value: "inputs.quote.items[0].flight"
+        - id: pick
+          ask:
+            text: "Sobre qual voo? {{ inputs.last.results.map(f, f.label).join(' / ') }}"
+            choices: "inputs.last.results"
+            minConfidence: 0.6   # agency-001: the right flight came at 0.66 with the longer round-trip labels
+            onLowConfidence: ask-user
+  output:
+    template: "{{ inputs.flight.label }}\n{{ inputs.flight.baggage }}"

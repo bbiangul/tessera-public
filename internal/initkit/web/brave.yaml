@@ -1,0 +1,25 @@
+# Web search through the Brave Search API (tessera add web --provider
+# brave): a free monthly credit; its own index, no query logging. The key
+# is the secret BRAVE_API_KEY.
+# The contract every provider keeps: search {query} -> [{site, title, url, snippet}].
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata:
+  name: web
+  version: 0.1.0
+spec:
+  egress:
+    hosts: [api.search.brave.com]
+  connection:
+    baseUrl: https://api.search.brave.com
+    auth: { header: X-Subscription-Token, secret: BRAVE_API_KEY }
+  actions:
+    search:
+      input: { query: string }
+      output: list
+      effect: read
+      http:
+        method: GET
+        path: /res/v1/web/search
+        query: { q: "${ inputs.query }", count: 5 }
+        output: "has(sources.response.body.web) ? sources.response.body.web.results.map(r, {'site': has(r.profile) ? r.profile.name : '', 'title': r.title, 'url': r.url, 'snippet': r.description}) : []"

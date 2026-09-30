@@ -1,0 +1,57 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: orcamento, namespace: kb }
+spec:
+  description: retrieve-001; transcripts only, judged outside.
+  now: "2026-09-27T09:00:00-03:00"
+  scenarios:
+    - id: p01
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto fica a avaliação?"
+    - id: p02
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "qual o valor da limpeza particular?"
+    - id: p03
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "preço do clareamento no consultório?"
+    - id: p04
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "e o clareamento caseiro sai por quanto?"
+    - id: p05
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto custa uma restauração?"
+    - id: p06
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a limpeza e a avaliação juntas dão quanto?"
+    - id: p07
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto custa um tratamento de canal?"
+    - id: p08
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "valor de uma coroa de porcelana?"
+    - id: p09
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto sai tirar um siso?"
+    - id: p10
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "implante unitário custa quanto?"

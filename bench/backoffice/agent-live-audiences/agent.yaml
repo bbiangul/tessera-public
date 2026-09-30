@@ -1,0 +1,181 @@
+# audiences-001 live check: one clinic agent on WhatsApp for patients and
+# the team. Patients (the catch-all), dentists and the rest of the team
+# each get their menu, voice, free mode and messages; a dentist is known by
+# the number Meta attests (Team), never by what they write. The clinic's
+# data is a SQLite plugin; WhatsApp goes through the Cloud API binding
+# (point baseUrl at a stand-in for a local check).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata: { name: clinica, namespace: clinica-au }
+spec:
+  description: Recepção dos pacientes e assistente da equipe de uma clínica.
+  channel: whatsapp
+  messages:
+    notUnderstood: "Não entendi. Pode dizer de outro jeito?"
+    notAllowed: "Desculpe, não posso fazer isso por você."
+    failed: "Algo deu errado. Alguém da recepção vai te responder por aqui."
+  humanInTheLoop: { queue: recepcao }
+  audiences:
+    - name: dentista
+      who: "has(caller.roles) && 'dentista' in caller.roles"
+      functions: [ver-agenda, bloquear-agenda]
+      voice: { persona: "Assistente da equipe clínica: direto, objetivo, trata o dentista por doutor." }
+      freeMode:
+        instructions: "Você ajuda o dentista com a própria agenda. Nunca fale da agenda de outros dentistas nem de dados de pacientes além do que está na agenda dele."
+        reads: [ { act: clinic/schedule, with: { dentistId: "${ caller.attributes.dentistId }" } } ]
+      messages: { notUnderstood: "Não entendi, doutor. Pode repetir?" }
+    - name: equipe
+      who: "has(caller.roles) && size(caller.roles) > 0"
+      functions: []
+      voice: { persona: "Assistente da equipe: direto." }
+      freeMode: { instructions: "Você ajuda a equipe da recepção com dúvidas de processo da clínica." }
+    - name: paciente
+      functions: [pedir-desconto]
+      voice: { persona: "Recepcionista acolhedora da clínica, calorosa e breve." }
+      freeMode:
+        instructions: "Você tira dúvidas dos pacientes sobre a clínica: horários e serviços. Nunca fale de agendas de dentistas."
+        reads: [ { act: clinic/info, with: {}, public: true } ]
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: HumanQueue
+metadata: { name: recepcao, namespace: clinica-au }
+spec:
+  description: A recepção aprova exceções simples.
+  roles: [recepcao]
+  notify: [ { act: msg/notify, with: { queue: "${ inputs.queue }", text: "${ inputs.text }", link: "${ inputs.link }" } } ]
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Team
+metadata: { name: equipe, namespace: clinica-au }
+spec:
+  members:
+    - { id: rita, name: Rita, roles: [recepcao], contact: "+5511900000001", whatsapp: "5511900000001" }
+    - { id: bruno, name: Dr. Bruno, roles: [dentista], contact: "+5511900000004", whatsapp: "5511900000004", attributes: { dentistId: D1 } }
+  verify: { act: msg/code, with: { to: "${ inputs.contact }", text: "${ 'Código: ' + inputs.code }" } }
+---
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: msg, version: 0.1.0 }
+spec:
+  sql:
+    migrations:
+      - CREATE TABLE codes (key TEXT UNIQUE, to_contact TEXT, text TEXT)
+      - CREATE TABLE notifications (key TEXT UNIQUE, queue TEXT, text TEXT, link TEXT)
+  actions:
+    code:
+      input: { to: string, text: string }
+      effect: external-message
+      sql: { query: "INSERT INTO codes (key, to_contact, text) VALUES (:idempotencyKey, :to, :text) ON CONFLICT (key) DO NOTHING", params: { to: "${ inputs.to }", text: "${ inputs.text }" } }
+    notify:
+      input: { queue: string, text: string, link: string }
+      effect: external-message
+      sql: { query: "INSERT INTO notifications (key, queue, text, link) VALUES (:idempotencyKey, :q, :t, :l) ON CONFLICT (key) DO NOTHING", params: { q: "${ inputs.queue }", t: "${ inputs.text }", l: "${ inputs.link }" } }
+---
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: clinic, version: 0.1.0 }
+spec:
+  sql:
+    migrations:
+      - CREATE TABLE discounts (key TEXT UNIQUE, patient TEXT, percent INTEGER)
+      - CREATE TABLE blocks (key TEXT UNIQUE, dentist TEXT, day TEXT)
+      - CREATE TABLE schedule (dentist TEXT, item TEXT)
+      - INSERT INTO schedule (dentist, item) VALUES ('D1', '9h consulta de Ana'), ('D1', '14h retorno de Caio'), ('D2', '10h cirurgia de Joana')
+  actions:
+    discount:
+      input: { patientId: string, percent: int }
+      effect: irreversible
+      sql: { query: "INSERT INTO discounts (key, patient, percent) VALUES (:idempotencyKey, :p, :n) ON CONFLICT (key) DO NOTHING", params: { p: "${ inputs.patientId }", n: "${ inputs.percent }" } }
+    block:
+      input: { dentistId: string, day: string }
+      effect: irreversible
+      sql: { query: "INSERT INTO blocks (key, dentist, day) VALUES (:idempotencyKey, :d, :day) ON CONFLICT (key) DO NOTHING", params: { d: "${ inputs.dentistId }", day: "${ inputs.day }" } }
+    schedule:
+      input: { dentistId: string }
+      output: list
+      effect: read
+      sql: { query: "SELECT item FROM schedule WHERE dentist = :d ORDER BY item", params: { d: "${ inputs.dentistId }" } }
+    info:
+      input: {}
+      output: list
+      effect: read
+      sql: { query: "SELECT 'segunda a sexta, das 8h às 18h; sábado, das 8h às 12h' AS horario, 'limpeza, clareamento, ortodontia, implantes' AS servicos" }
+---
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: whatsapp, version: 0.1.0 }
+spec:
+  channel: { window: 24h }
+  egress: { hosts: [graph.facebook.com] }
+  connection:
+    baseUrl: https://graph.facebook.com/v21.0/100000000000000
+    auth: { header: Authorization, prefix: "Bearer ", secret: WHATSAPP_TOKEN }
+  actions:
+    send-text:
+      input: { to: string, text: string }
+      output: map
+      effect: external-message
+      freeText: true
+      http:
+        method: POST
+        path: /messages
+        body: { messaging_product: whatsapp, to: "${ inputs.to }", type: text, text: { body: "${ inputs.text }" } }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: pedir-desconto, namespace: clinica-au }
+spec:
+  description: A patient asks for a discount; the reception approves.
+  authorize: "!has(caller.member)"
+  selector: { intent: pedir-desconto, description: "O paciente pede um desconto no tratamento." }
+  inputs:
+    percent:
+      type: int
+      description: the discount asked, in percent
+      resolve: [ { id: said, extract: {} } ]
+  steps:
+    - id: ok
+      escalate: { queue: recepcao, task: approve, message: "Desconto de {{ inputs.percent }}% para o paciente {{ caller.waId }}?", whileWaiting: { template: "Vou pedir à recepção e te aviso por aqui." } }
+  action:
+    act: clinic/discount
+    with: { patientId: "${ caller.waId }", percent: "${ inputs.percent }" }
+    idempotencyKey: "caller.waId + ':' + string(inputs.percent)"
+  output: { value: "'aprovado'" }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: ver-agenda, namespace: clinica-au }
+spec:
+  description: A dentist reads a schedule; only their own.
+  authorize: "has(caller.roles) && 'dentista' in caller.roles"
+  selector: { intent: ver-agenda, description: "O dentista quer ver a própria agenda." }
+  inputs:
+    dentist:
+      type: string
+      description: the dentist whose schedule, as an id like D1
+      resolve: [ { id: said, extract: {} }, { id: mine, value: "caller.attributes.dentistId" } ]
+  preconditions:
+    - cel: "inputs.dentist == caller.attributes.dentistId"
+      message: "Você só pode ver a sua própria agenda."
+  steps:
+    - { id: agenda, act: clinic/schedule, with: { dentistId: "${ inputs.dentist }" } }
+  output: { template: "Sua agenda: {{ steps.agenda.output.map(x, x.item).join('; ') }}." }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: bloquear-agenda, namespace: clinica-au }
+spec:
+  description: A dentist blocks a day of their own schedule.
+  authorize: "has(caller.roles) && 'dentista' in caller.roles"
+  selector: { intent: bloquear-agenda, description: "O dentista quer bloquear um dia da própria agenda." }
+  inputs:
+    day:
+      type: string
+      description: the weekday to block
+      resolve: [ { id: said, extract: {} } ]
+  action:
+    act: clinic/block
+    with: { dentistId: "${ caller.attributes.dentistId }", day: "${ inputs.day }" }
+    confirm: "Posso bloquear sua agenda de {{ inputs.day }}? Responda sim."
+    idempotencyKey: "caller.attributes.dentistId + ':' + inputs.day"
+  output: { template: "Agenda de {{ inputs.day }} bloqueada." }

@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bbiangul/tessera/api/agents/v1alpha1/trigger",
+  "$ref": "#/$defs/Trigger",
+  "$defs": {
+    "Expr": {
+      "type": "string",
+      "x-tessera-kind": "expression"
+    },
+    "MilestoneTrigger": {
+      "properties": {
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Subject is the Subject kind."
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Name of the milestone."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "subject",
+        "name"
+      ],
+      "description": "MilestoneTrigger names the milestone that starts a Function."
+    },
+    "ObjectMeta": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Name of the resource, unique per kind within its namespace. Lowercase\nletters, digits and hyphens, starting and ending with a letter or digit."
+        },
+        "namespace": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Namespace the resource belongs to, usually one per customer."
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Labels are free-form key/value pairs for selecting and grouping."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "namespace"
+      ],
+      "description": "ObjectMeta identifies a resource."
+    },
+    "Schedule": {
+      "properties": {
+        "cron": {
+          "type": "string",
+          "minLength": 9,
+          "description": "Cron is minute hour day-of-month month day-of-week, e.g. \"0 9 * * 1-5\"\nfor 9h on weekdays. Lists, ranges and steps; 0 and 7 are Sunday."
+        },
+        "timezone": {
+          "type": "string",
+          "description": "Timezone overrides the Agent's time zone for this schedule."
+        },
+        "maxDelay": {
+          "type": "string",
+          "description": "MaxDelay is how late a scheduled time may still start, after the\nplatform was down (Go duration, default 1h). Older times are skipped,\nnever run in a burst."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "cron"
+      ],
+      "description": "Schedule is a cron schedule. Each scheduled time starts one run, once,\nhowever many schedulers are running (the run's ID is the trigger and the\ntime)."
+    },
+    "Trigger": {
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "enum": [
+            "agents.tessera.dev/v1alpha1"
+          ],
+          "description": "APIVersion must be agents.tessera.dev/v1alpha1."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Trigger"
+          ],
+          "description": "Kind must be Trigger."
+        },
+        "metadata": {
+          "$ref": "#/$defs/ObjectMeta",
+          "description": "Metadata names the trigger; it starts Functions of its namespace."
+        },
+        "spec": {
+          "$ref": "#/$defs/TriggerSpec",
+          "description": "Spec says what starts and when."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ],
+      "description": "Trigger starts a Function without a user message (RFC-0001): on a\nschedule in the agent's time zone, or when another system calls a\nwebhook, or when a milestone is recorded. Exactly one of schedule,\nwebhook and milestone is set. A webhook can also deliver an event to\nthe runs waiting for it (event)."
+    },
+    "TriggerEvent": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Name of the event, as waits' events name it."
+        },
+        "key": {
+          "$ref": "#/$defs/Expr",
+          "description": "Key is a string expression on event.payload saying whom it is\nabout; it must equal the waiting run's key."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "key"
+      ],
+      "description": "TriggerEvent names the event a webhook delivers."
+    },
+    "TriggerSpec": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description says what the trigger is for."
+        },
+        "function": {
+          "type": "string",
+          "description": "Function is the Function started, by name, in the same namespace. Its\nrun sees event.time (the scheduled time) and event.trigger (this\ntrigger's name); it has no user message. With event, it starts only\nwhen no run was waiting for the event; without event it is required."
+        },
+        "event": {
+          "$ref": "#/$defs/TriggerEvent",
+          "description": "Event delivers the webhook's payload as an event to the runs whose\nwait listens for it with the same key (webhook triggers only)."
+        },
+        "schedule": {
+          "$ref": "#/$defs/Schedule",
+          "description": "Schedule starts the Function at the times of a cron expression."
+        },
+        "webhook": {
+          "$ref": "#/$defs/Webhook",
+          "description": "Webhook starts the Function when a system POSTs to\n/v1/hooks/\u003ctrigger name\u003e (tessera serve); the JSON body is\nevent.payload."
+        },
+        "milestone": {
+          "$ref": "#/$defs/MilestoneTrigger",
+          "description": "Milestone starts the Function once for each milestone of this name\nrecorded about a subject kind (a store opened, a lead booked),\nin the conversation of the run that recorded it, with the milestone\nas event.payload {subject, id, name, at, attributes}. Milestones\nrecorded before the trigger existed do not start it."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "TriggerSpec describes a trigger."
+    },
+    "Webhook": {
+      "properties": {
+        "secret": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "Secret is the name of the signing secret (TESSERA_SECRET_\u003cNAME\u003e when\nself-hosted); the value never appears in a definition."
+        },
+        "conversation": {
+          "$ref": "#/$defs/Expr",
+          "description": "Conversation is a string expression on event.payload giving the\nconversation the run belongs to (e.g. the lead's channel id), so the\nuser's replies reach it; default: a conversation of its own."
+        },
+        "key": {
+          "$ref": "#/$defs/Expr",
+          "description": "Key is a string expression on event.payload that identifies the\nrun instead of the Idempotency-Key header (e.g.\nevent.payload.leadId): one run per key, ever, whatever the sender\nretries or repeats."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "secret"
+      ],
+      "description": "Webhook authenticates calls with an HMAC-SHA256 of timestamp \".\" key \".\"\nbody (X-Tessera-Timestamp in unix seconds, within 5 minutes; the\nIdempotency-Key, empty without one), sent as X-Tessera-Signature:\nsha256=\u003chex\u003e. An Idempotency-Key header makes a\nrepeated delivery start nothing new (the run's ID is the trigger and the\nkey); without it the body's hash is the key."
+    }
+  },
+  "title": "Trigger"
+}

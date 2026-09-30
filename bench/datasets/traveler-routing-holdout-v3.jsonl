@@ -1,0 +1,27 @@
+{"id": "h3-search-flights-01", "message": "me ve uma passagem pra goiania", "want": "search-flights"}
+{"id": "h3-search-flights-02", "message": "quero ir pra santiago com 2 criancas em julho", "want": "search-flights"}
+{"id": "h3-search-flights-03", "message": "tem voo noturno pra manaus?", "want": "search-flights"}
+{"id": "h3-search-flights-04", "message": "gostaria de cotar aereo rio x lisboa", "want": "search-flights"}
+{"id": "h3-search-flights-05", "message": "e se eu sair dia 13?", "want": "search-flights", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h3-search-flights-06", "message": "preciso de passagem pro casamento em salvador dia 8", "want": "search-flights", "agentSaid": "Anotado para as próximas buscas: você costuma sair de São Paulo.", "after": "set-preferences"}
+{"id": "h3-flight-details-01", "message": "o 1 tem mala?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h3-flight-details-02", "message": "qual desses tem bagagem inclusa?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h3-flight-details-03", "message": "e a da latam, é qual tarifa?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h3-flight-details-04", "message": "o voo mais caro tem despachada?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h3-search-hotels-01", "message": "hotel fazenda em minas no feriado", "want": "search-hotels"}
+{"id": "h3-search-hotels-02", "message": "preciso de estadia em porto alegre de 3 a 6", "want": "search-hotels"}
+{"id": "h3-search-hotels-03", "message": "pousadinha em arraial pro fim de semana", "want": "search-hotels"}
+{"id": "h3-search-hotels-04", "message": "quero ficar num hotel perto do aeroporto de guarulhos hoje", "want": "search-hotels"}
+{"id": "h3-search-hotels-05", "message": "e hotel perto da praia?", "want": "search-hotels", "agentSaid": "Hotéis em Lisboa, 12/10–15/10 (3 noites):\n1. Hotel Avenida Palace — nota 9.0 (2100 avaliações), R$ 3.000 no total (R$ 1.000/noite)\n2. Lisboa Stay Apartments — nota 8.8 (900 avaliações), R$ 1.800 no total (R$ 600/noite), cancelamento grátis", "after": "search-hotels"}
+{"id": "h3-search-hotels-06", "message": "preciso de um lugar pra dormir em recife nessa data", "want": "search-hotels", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h3-set-preferences-01", "message": "sou latam pass platina", "want": "set-preferences"}
+{"id": "h3-set-preferences-02", "message": "nao gosto de voar de madrugada, prefiro sempre de dia", "want": "set-preferences"}
+{"id": "h3-set-preferences-03", "message": "gol eu evito", "want": "set-preferences"}
+{"id": "h3-set-preferences-04", "message": "pode considerar que eu saio sempre de BH", "want": "set-preferences"}
+{"id": "h3-set-preferences-05", "message": "cama ruim é o que mais me irrita em hotel", "want": "set-preferences"}
+{"id": "h3-none-01", "message": "oi", "want": "none"}
+{"id": "h3-none-02", "message": "qual a franquia de bagagem da gol em geral?", "want": "none"}
+{"id": "h3-none-03", "message": "quanto tempo antes devo chegar no aeroporto?", "want": "none"}
+{"id": "h3-none-04", "message": "vcs aceitam pix?", "want": "none"}
+{"id": "h3-none-05", "message": "blz", "want": "none", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h3-none-06", "message": "o que fazer em recife a noite?", "want": "none"}

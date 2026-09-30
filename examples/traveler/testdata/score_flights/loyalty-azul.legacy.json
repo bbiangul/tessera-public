@@ -1,0 +1,347 @@
+{
+ "loyaltyAirlines": "AD",
+ "loyaltyProgram": "tudoazul\n",
+ "neverMiddleSeat": false,
+ "summary": {
+  "analyzed": 7,
+  "baggageSummary": {
+   "allBaggageDetails": [
+    {
+     "baggage": {
+      "carryOn": true,
+      "checkedBag": true,
+      "details": [
+       "1 checked bag 23kg",
+       "1 personal item"
+      ],
+      "personalItem": true
+     },
+     "fareName": "Plus"
+    },
+    {
+     "baggage": {
+      "carryOn": true,
+      "checkedBag": false,
+      "details": [
+       "1 personal item"
+      ],
+      "personalItem": true
+     },
+     "fareName": "Light"
+    },
+    {
+     "baggage": {
+      "carryOn": true,
+      "checkedBag": false,
+      "details": [
+       "1 personal item"
+      ],
+      "personalItem": true
+     },
+     "fareName": "Light"
+    },
+    {
+     "baggage": {
+      "carryOn": true,
+      "checkedBag": false,
+      "details": [
+       "1 personal item"
+      ],
+      "personalItem": true
+     },
+     "fareName": "Light"
+    },
+    {
+     "baggage": {
+      "carryOn": true,
+      "checkedBag": false,
+      "details": [
+       "1 personal item"
+      ],
+      "personalItem": true
+     },
+     "fareName": "Light"
+    }
+   ],
+   "withCarryOn": 5,
+   "withCheckedBag": 1,
+   "withPersonalItem": 5
+  },
+  "cheapestPrice": 410,
+  "currency": "BRL",
+  "fastestDuration": 11700,
+  "filtered": 0,
+  "hasInfants": false,
+  "infantPrice": null,
+  "loyaltyFlightsInTop5": 2,
+  "timePreferenceMatchInTop5": 5,
+  "total": 7
+ },
+ "timeConstraint": {},
+ "topFlights": [
+  {
+   "airlines": [
+    "AD"
+   ],
+   "allConnectionAirports": [],
+   "arriveHour": 19,
+   "arriveTimeStr": "19:30",
+   "baggage": {
+    "carryOn": true,
+    "checkedBag": true,
+    "details": [
+     "1 checked bag 23kg",
+     "1 personal item"
+    ],
+    "personalItem": true
+   },
+   "currency": "BRL",
+   "departHour": 16,
+   "departTimeStr": "16:05",
+   "fareName": "Plus",
+   "isLoyaltyAirline": true,
+   "isOvernight": false,
+   "isPreferredAirline": false,
+   "matchesTimePreference": true,
+   "meetsTimeConstraints": true,
+   "price": 720,
+   "score": 107.8,
+   "segments": [
+    {
+     "airline": "Azul",
+     "airlineCode": "AD",
+     "arriveTime": "2026-10-12T19:30:00",
+     "connectionAirports": [],
+     "departTime": "2026-10-12T16:05:00",
+     "duration": 12300,
+     "flightNumber": "AD100",
+     "from": "GRU",
+     "stops": 0,
+     "to": "REC"
+    }
+   ],
+   "token": "t-azul-pm",
+   "totalDuration": 12300,
+   "totalStops": 0,
+   "travelers": [
+    {
+     "price": 720,
+     "type": "ADULT"
+    }
+   ],
+   "tripType": "ONEWAY"
+  },
+  {
+   "airlines": [
+    "AD"
+   ],
+   "allConnectionAirports": [
+    "CNF"
+   ],
+   "arriveHour": 8,
+   "arriveTimeStr": "08:15",
+   "baggage": {
+    "carryOn": true,
+    "checkedBag": false,
+    "details": [
+     "1 personal item"
+    ],
+    "personalItem": true
+   },
+   "currency": "BRL",
+   "departHour": 21,
+   "departTimeStr": "21:30",
+   "fareName": "Light",
+   "isLoyaltyAirline": true,
+   "isOvernight": true,
+   "isPreferredAirline": false,
+   "matchesTimePreference": true,
+   "meetsTimeConstraints": true,
+   "price": 505,
+   "score": 104.95,
+   "segments": [
+    {
+     "airline": "Azul",
+     "airlineCode": "AD",
+     "arriveTime": "2026-10-13T08:15:00",
+     "connectionAirports": [
+      "CNF"
+     ],
+     "departTime": "2026-10-12T21:30:00",
+     "duration": 38700,
+     "flightNumber": "AD200",
+     "from": "GRU",
+     "stops": 1,
+     "to": "REC"
+    }
+   ],
+   "token": "t-azul-late",
+   "totalDuration": 38700,
+   "totalStops": 1,
+   "travelers": [
+    {
+     "price": 505,
+     "type": "ADULT"
+    }
+   ],
+   "tripType": "ONEWAY"
+  },
+  {
+   "airlines": [
+    "G3"
+   ],
+   "allConnectionAirports": [
+    "BSB"
+   ],
+   "arriveHour": 12,
+   "arriveTimeStr": "12:30",
+   "baggage": {
+    "carryOn": true,
+    "checkedBag": false,
+    "details": [
+     "1 personal item"
+    ],
+    "personalItem": true
+   },
+   "currency": "BRL",
+   "departHour": 6,
+   "departTimeStr": "06:00",
+   "fareName": "Light",
+   "isLoyaltyAirline": false,
+   "isOvernight": false,
+   "isPreferredAirline": false,
+   "matchesTimePreference": true,
+   "meetsTimeConstraints": true,
+   "price": 410,
+   "score": 95.9,
+   "segments": [
+    {
+     "airline": "GOL",
+     "airlineCode": "G3",
+     "arriveTime": "2026-10-12T12:30:00",
+     "connectionAirports": [
+      "BSB"
+     ],
+     "departTime": "2026-10-12T06:00:00",
+     "duration": 23400,
+     "flightNumber": "G3200",
+     "from": "GRU",
+     "stops": 1,
+     "to": "REC"
+    }
+   ],
+   "token": "t-gol-stop",
+   "totalDuration": 23400,
+   "totalStops": 1,
+   "travelers": [
+    {
+     "price": 410,
+     "type": "ADULT"
+    }
+   ],
+   "tripType": "ONEWAY"
+  },
+  {
+   "airlines": [
+    "G3"
+   ],
+   "allConnectionAirports": [],
+   "arriveHour": 15,
+   "arriveTimeStr": "15:55",
+   "baggage": {
+    "carryOn": true,
+    "checkedBag": false,
+    "details": [
+     "1 personal item"
+    ],
+    "personalItem": true
+   },
+   "currency": "BRL",
+   "departHour": 12,
+   "departTimeStr": "12:40",
+   "fareName": "Light",
+   "isLoyaltyAirline": false,
+   "isOvernight": false,
+   "isPreferredAirline": false,
+   "matchesTimePreference": true,
+   "meetsTimeConstraints": true,
+   "price": 640,
+   "score": 93.6,
+   "segments": [
+    {
+     "airline": "GOL",
+     "airlineCode": "G3",
+     "arriveTime": "2026-10-12T15:55:00",
+     "connectionAirports": [],
+     "departTime": "2026-10-12T12:40:00",
+     "duration": 11700,
+     "flightNumber": "G3100",
+     "from": "GRU",
+     "stops": 0,
+     "to": "REC"
+    }
+   ],
+   "token": "t-gol-noon",
+   "totalDuration": 11700,
+   "totalStops": 0,
+   "travelers": [
+    {
+     "price": 640,
+     "type": "ADULT"
+    }
+   ],
+   "tripType": "ONEWAY"
+  },
+  {
+   "airlines": [
+    "LA"
+   ],
+   "allConnectionAirports": [],
+   "arriveHour": 10,
+   "arriveTimeStr": "10:25",
+   "baggage": {
+    "carryOn": true,
+    "checkedBag": false,
+    "details": [
+     "1 personal item"
+    ],
+    "personalItem": true
+   },
+   "currency": "BRL",
+   "departHour": 7,
+   "departTimeStr": "07:10",
+   "fareName": "Light",
+   "isLoyaltyAirline": false,
+   "isOvernight": false,
+   "isPreferredAirline": false,
+   "matchesTimePreference": true,
+   "meetsTimeConstraints": true,
+   "price": 890,
+   "score": 91.1,
+   "segments": [
+    {
+     "airline": "LATAM",
+     "airlineCode": "LA",
+     "arriveTime": "2026-10-12T10:25:00",
+     "connectionAirports": [],
+     "departTime": "2026-10-12T07:10:00",
+     "duration": 11700,
+     "flightNumber": "LA100",
+     "from": "GRU",
+     "stops": 0,
+     "to": "REC"
+    }
+   ],
+   "token": "t-latam-am",
+   "totalDuration": 11700,
+   "totalStops": 0,
+   "travelers": [
+    {
+     "price": 890,
+     "type": "ADULT"
+    }
+   ],
+   "tripType": "ONEWAY"
+  }
+ ]
+}

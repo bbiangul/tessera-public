@@ -1,0 +1,68 @@
+# The reschedule example from RFC-0001. It must always pass `tessera validate`.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: reschedule-appointment
+  namespace: agenda-exemplo
+spec:
+  description: Muda a data de uma consulta já existente.
+  selector:
+    intent: remarcar-consulta
+  authorize: "caller.role == 'patient'"
+  inputs:
+    appointment:
+      type: agenda.Appointment
+      resolve:
+        - id: upcoming
+          fromAction: agenda/list-upcoming-appointments
+          with: { patientId: "${ caller.patientId }" }
+        - id: only
+          when: "size(sources.upcoming.output) == 1"
+          value: "sources.upcoming.output[0]"
+        - id: pick
+          when: "size(sources.upcoming.output) > 1"
+          ask:
+            text: "Qual consulta você quer remarcar?"
+            choices: "sources.upcoming.output"
+            minConfidence: 0.7
+            onLowConfidence: ask-user
+      onUnresolved:
+        - respond:
+            template: "{{ size(sources.upcoming.output) == 0 ? 'Não encontrei consultas futuras no seu cadastro.' : 'Não consegui entender qual consulta você quer remarcar. Pode me dizer o dia dela?' }}"
+    newSlot:
+      type: agenda.Slot
+      resolve:
+        - id: slots
+          fromAction: agenda/find-slots
+          with:
+            dentistId: "${ inputs.appointment.dentistId }"
+            from: "${ event.time }"
+            days: 7
+        - id: pick
+          ask:
+            text: "Tenho estes horários: {{ sources.slots.output.map(s, s.label).join(', ') }}. Qual prefere?"
+            choices: "sources.slots.output"
+            minConfidence: 0.7
+            onLowConfidence: ask-user
+  preconditions:
+    - cel: "inputs.newSlot.start > event.time + duration('2h')"
+      message: "Remarcações precisam de 2 horas de antecedência."
+  action:
+    act: agenda/reschedule
+    with:
+      appointmentId: "${ inputs.appointment.id }"
+      slotId: "${ inputs.newSlot.id }"
+    confirm: "Posso remarcar sua consulta de {{ inputs.appointment.label }} para {{ inputs.newSlot.label }}? Responda sim para confirmar."
+    idempotencyKey: "inputs.appointment.id + ':' + inputs.newSlot.id"
+    milestone: { name: remarcou, subject: paciente }   # only when the clinic confirmed it
+  output:
+    template: "Pronto! Sua consulta foi remarcada para {{ inputs.newSlot.label }}."
+    guardrails: [sem-promessa-de-preco]
+  onError:
+    - probe: {}
+    - retry: { attempts: 1, backoff: 2s }
+    - escalate:
+        queue: recepcao
+        task: input
+        message: "Não consegui remarcar a consulta {{ inputs.appointment.id }}"
+        whileWaiting: { template: "Vou pedir para a equipe confirmar e te retorno." }

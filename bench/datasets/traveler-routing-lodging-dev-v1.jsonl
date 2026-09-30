@@ -1,0 +1,14 @@
+{"id": "ld-01", "message": "preciso de um flat em bh por 10 dias", "want": "search-hotels"}
+{"id": "ld-02", "message": "tem cabana pra alugar em monte verde?", "want": "search-hotels"}
+{"id": "ld-03", "message": "quero ficar 1 semana em floripa, algo perto da praia", "want": "search-hotels"}
+{"id": "ld-04", "message": "hostel barato em salvador", "want": "search-hotels"}
+{"id": "ld-05", "message": "casa de temporada em buzios pro carnaval", "want": "search-hotels"}
+{"id": "ld-06", "message": "resort all inclusive na bahia em janeiro", "want": "search-hotels"}
+{"id": "ld-07", "message": "quero ir pra salvador passar 10 dias", "want": "search-flights"}
+{"id": "ld-08", "message": "viagem pra bh semana que vem, 5 dias", "want": "search-flights"}
+{"id": "ld-09", "message": "passagem pra floripa pro feriado", "want": "search-flights"}
+{"id": "ld-10", "message": "vou pra lisboa por 2 semanas em novembro, saindo de sp", "want": "search-flights"}
+{"id": "ld-11", "message": "e um apartamento la perto?", "want": "search-hotels", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto) — R$ 720", "after": "search-flights"}
+{"id": "ld-12", "message": "qual o melhor bairro pra ficar em recife?", "want": "none"}
+{"id": "ld-13", "message": "quanto custa em media uma diaria em gramado?", "want": "none"}
+{"id": "ld-14", "message": "quarto pra 2 em ouro preto sabado", "want": "search-hotels"}

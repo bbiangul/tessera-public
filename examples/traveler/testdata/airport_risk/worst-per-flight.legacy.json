@@ -1,0 +1,50 @@
+{
+ "highRiskFlights": [
+  "x"
+ ],
+ "mediumRiskFlights": [],
+ "riskAssessments": [
+  {
+   "estimated": true,
+   "flightToken": "x",
+   "fromAirport": "GRU",
+   "layoverMinutes": 300,
+   "marginMinutes": 226,
+   "minRequired": 119,
+   "riskLevel": "LOW",
+   "toAirport": "CGH",
+   "transferMinutes": 74,
+   "warning": "ℹ️ Airport change: GRU→CGH. Transfer ~74min (Google Maps). Layover: 300min, margin: 226min - OK"
+  },
+  {
+   "estimated": true,
+   "flightToken": "x",
+   "fromAirport": "SDU",
+   "layoverMinutes": 60,
+   "marginMinutes": 20,
+   "minRequired": 85,
+   "riskLevel": "HIGH",
+   "toAirport": "GIG",
+   "transferMinutes": 40,
+   "warning": "⛔ HIGH RISK: Airport change SDU→GIG with only 60min layover. Transfer time: ~40min (Google Maps). Margin: 20min - NOT RECOMMENDED"
+  },
+  {
+   "estimated": true,
+   "flightToken": "y",
+   "fromAirport": "LHR",
+   "layoverMinutes": 200.5,
+   "marginMinutes": 105.5,
+   "minRequired": 140,
+   "riskLevel": "LOW",
+   "toAirport": "LGW",
+   "transferMinutes": 95,
+   "warning": "ℹ️ Airport change: LHR→LGW. Transfer ~95min (Google Maps). Layover: 200min, margin: 105min - OK"
+  }
+ ],
+ "summary": {
+  "highRisk": 1,
+  "lowRisk": 2,
+  "mediumRisk": 0,
+  "total": 3
+ }
+}

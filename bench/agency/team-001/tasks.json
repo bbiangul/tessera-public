@@ -1,0 +1,296 @@
+[
+ {
+  "id": "in01",
+  "kind": "answer",
+  "text": "Cliente pede: Meu filho de 14 anos vai sozinho pela GOL. Ele precisa do serviço de menor desacompanhado?",
+  "expected": "opcional de 12 a 17 anos, R$ 180 por trecho; precisa de autorização dos pais com firma reconhecida (até 15 anos)",
+  "inSheet": true
+ },
+ {
+  "id": "in02",
+  "kind": "answer",
+  "text": "Cliente pede: Quanto paga um bebê de 1 ano no voo?",
+  "expected": "10% da tarifa do adulto; não ocupa assento",
+  "inSheet": true
+ },
+ {
+  "id": "in03",
+  "kind": "answer",
+  "text": "Cliente pede: O ibis Maceió tem café da manhã?",
+  "expected": "café à parte, R$ 35 por pessoa",
+  "inSheet": true
+ },
+ {
+  "id": "in04",
+  "kind": "answer",
+  "text": "Cliente pede: O Hotel Farol da Barra tem cancelamento grátis?",
+  "expected": "sim, até 48 horas antes do check-in",
+  "inSheet": true
+ },
+ {
+  "id": "in05",
+  "kind": "answer",
+  "text": "Cliente pede: Quanto custa levar meu cachorro de 6 kg na cabine pela LATAM?",
+  "expected": "R$ 300 por trecho (até 7 kg), com atestado e vacina antirrábica",
+  "inSheet": true
+ },
+ {
+  "id": "in06",
+  "kind": "answer",
+  "text": "Cliente pede: Paguei com Pix há 30 minutos e ainda aparece aguardando pagamento. É normal?",
+  "expected": "sim, Pix confirma em até 2 horas",
+  "inSheet": true
+ },
+ {
+  "id": "in07",
+  "kind": "answer",
+  "text": "Cliente pede: Paguei ontem no Pix e ainda não confirmou. O que faço?",
+  "expected": "enviar o comprovante para financeiro@tessera-viagens.test; resolve em até 1 dia útil",
+  "inSheet": true
+ },
+ {
+  "id": "in08",
+  "kind": "answer",
+  "text": "Cliente pede: Quanto fica para remarcar a ida na Azul, tarifa Light?",
+  "expected": "diferença de tarifa mais multa de R$ 160 por trecho; a agência não cobra taxa",
+  "inSheet": true
+ },
+ {
+  "id": "in09",
+  "kind": "answer",
+  "text": "Cliente pede: Vocês têm transfer do aeroporto em Salvador?",
+  "expected": "sim, R$ 120 por trecho para até 3 pessoas",
+  "inSheet": true
+ },
+ {
+  "id": "in10",
+  "kind": "answer",
+  "text": "Cliente pede: Vocês têm cupom de desconto?",
+  "expected": "não há cupons; acima de R$ 5.000 no Pix, 3% de desconto",
+  "inSheet": true
+ },
+ {
+  "id": "in11",
+  "kind": "answer",
+  "text": "Cliente pede: Dá para segurar o preço até amanhã sem os dados da minha esposa?",
+  "expected": "não; o preço só fica garantido com a reserva feita com os dados de todos",
+  "inSheet": true
+ },
+ {
+  "id": "in12",
+  "kind": "answer",
+  "text": "Cliente pede: Quero cancelar a passagem comprada há 3 dias, tarifa Light. Recebo algo de volta?",
+  "expected": "só as taxas de embarque; a tarifa Light não é reembolsada",
+  "inSheet": true
+ },
+ {
+  "id": "in13",
+  "kind": "answer",
+  "text": "Cliente pede: Criança de 4 anos paga no hotel?",
+  "expected": "não, até 5 anos no quarto dos pais sem cama extra",
+  "inSheet": true
+ },
+ {
+  "id": "in14",
+  "kind": "answer",
+  "text": "Cliente pede: Preciso de seguro viagem para Portugal?",
+  "expected": "sim, cobertura de 30 mil euros exigida na entrada; a agência vende por R$ 190 por pessoa por semana",
+  "inSheet": true
+ },
+ {
+  "id": "in15",
+  "kind": "answer",
+  "text": "Cliente pede: Quanto custa marcar assento na janela?",
+  "expected": "R$ 35 por trecho",
+  "inSheet": true
+ },
+ {
+  "id": "in16",
+  "kind": "answer",
+  "text": "Cliente pede: Vocês vendem o passeio de buggy em Natal?",
+  "expected": "sim, R$ 180 por pessoa",
+  "inSheet": true
+ },
+ {
+  "id": "in17",
+  "kind": "answer",
+  "text": "Cliente pede: Vocês alugam carro em Maceió?",
+  "expected": "não; indica a locadora do aeroporto",
+  "inSheet": true
+ },
+ {
+  "id": "in18",
+  "kind": "answer",
+  "text": "Cliente pede: A Pousada do Pelourinho fica perto do Largo do Pelourinho?",
+  "expected": "sim, a 2 minutos a pé",
+  "inSheet": true
+ },
+ {
+  "id": "in19",
+  "kind": "answer",
+  "text": "Cliente pede: Posso pagar em boleto?",
+  "expected": "não; Pix ou cartão em até 10 vezes sem juros",
+  "inSheet": true
+ },
+ {
+  "id": "in20",
+  "kind": "answer",
+  "text": "Cliente pede: O e-mail com o bilhete não chegou. Podem reenviar?",
+  "expected": "reenvia na hora para o e-mail cadastrado; olhar o spam",
+  "inSheet": true
+ },
+ {
+  "id": "in21",
+  "kind": "answer",
+  "text": "Cliente pede: Minha mãe usa cadeira de rodas. Tem assistência no aeroporto?",
+  "expected": "gratuita, pedida com pelo menos 48 horas",
+  "inSheet": true
+ },
+ {
+  "id": "in22",
+  "kind": "answer",
+  "text": "Cliente pede: Quanto custa o transfer em Lisboa?",
+  "expected": "45 euros por trecho para até 3 pessoas",
+  "inSheet": true
+ },
+ {
+  "id": "in23",
+  "kind": "answer",
+  "text": "Cliente pede: Meu gato pesa 12 kg. Pode ir na cabine da GOL?",
+  "expected": "não, até 10 kg na cabine; maior só no porão, cotado caso a caso em até 1 dia útil",
+  "inSheet": true
+ },
+ {
+  "id": "in24",
+  "kind": "answer",
+  "text": "Cliente pede: Depois que eu pagar no cartão, quando sai o bilhete?",
+  "expected": "em até 24 horas após o pagamento confirmado",
+  "inSheet": true
+ },
+ {
+  "id": "out01",
+  "kind": "answer",
+  "text": "Cliente pede: O voo da GOL tem wifi a bordo?",
+  "inSheet": false
+ },
+ {
+  "id": "out02",
+  "kind": "answer",
+  "text": "Cliente pede: O Hotel Atlântico Copa tem estacionamento?",
+  "inSheet": false
+ },
+ {
+  "id": "out03",
+  "kind": "answer",
+  "text": "Cliente pede: Posso levar um papagaio na cabine?",
+  "inSheet": false
+ },
+ {
+  "id": "out04",
+  "kind": "answer",
+  "text": "Cliente pede: Qual é a voltagem das tomadas em Natal?",
+  "inSheet": false
+ },
+ {
+  "id": "out05",
+  "kind": "answer",
+  "text": "Cliente pede: O Copacabana Palace Mar tem piscina aquecida?",
+  "inSheet": false
+ },
+ {
+  "id": "out06",
+  "kind": "answer",
+  "text": "Cliente pede: Vocês vendem ingresso para o Cristo Redentor?",
+  "inSheet": false
+ },
+ {
+  "id": "out07",
+  "kind": "answer",
+  "text": "Cliente pede: Qual o horário do check-in no Hotel Iracema Praia?",
+  "inSheet": false
+ },
+ {
+  "id": "out08",
+  "kind": "answer",
+  "text": "Cliente pede: A Azul serve refeição quente no voo para Recife?",
+  "inSheet": false
+ },
+ {
+  "id": "out09",
+  "kind": "answer",
+  "text": "Cliente pede: Tem desconto para idoso na LATAM?",
+  "inSheet": false
+ },
+ {
+  "id": "out10",
+  "kind": "answer",
+  "text": "Cliente pede: O Hotel Moinhos Plaza aceita pet?",
+  "inSheet": false
+ },
+ {
+  "id": "out11",
+  "kind": "answer",
+  "text": "Cliente pede: Vocês vendem pacote para Buenos Aires?",
+  "inSheet": false
+ },
+ {
+  "id": "out12",
+  "kind": "answer",
+  "text": "Cliente pede: Quanto custa o estacionamento no aeroporto de Guarulhos?",
+  "inSheet": false
+ },
+ {
+  "id": "out13",
+  "kind": "answer",
+  "text": "Cliente pede: Posso levar drone na bagagem de mão?",
+  "inSheet": false
+ },
+ {
+  "id": "out14",
+  "kind": "answer",
+  "text": "Cliente pede: O ibis Recife Boa Viagem tem academia?",
+  "inSheet": false
+ },
+ {
+  "id": "out15",
+  "kind": "answer",
+  "text": "Cliente pede: Vocês vendem passeio de barco em Salvador com guia em inglês?",
+  "inSheet": false
+ },
+ {
+  "id": "out16",
+  "kind": "answer",
+  "text": "Cliente pede: Qual a política de milhas da GOL para esse voo?",
+  "inSheet": false
+ },
+ {
+  "id": "book1",
+  "kind": "input",
+  "text": "Reservar o pedido P101 (Voo GRU→POA, total R$ 871): os dados estão no sistema. Responda {reserved: true, locator, payment, note} ou {reserved: false, note}."
+ },
+ {
+  "id": "book2",
+  "kind": "input",
+  "text": "Reservar o pedido P102 (Pacote Maceió, total R$ 3.600): os dados estão no sistema. Responda {reserved: true, locator, payment, note} ou {reserved: false, note}."
+ },
+ {
+  "id": "book3",
+  "kind": "input",
+  "text": "Reservar o pedido P103 (Hotel Salvador, total R$ 1.240): os dados estão no sistema. Responda {reserved: true, locator, payment, note} ou {reserved: false, note}."
+ },
+ {
+  "id": "book4",
+  "kind": "input",
+  "text": "Reservar o pedido P104 (Voo Recife→Lisboa, total R$ 14.120): os dados estão no sistema. Responda {reserved: true, locator, payment, note} ou {reserved: false, note}."
+ },
+ {
+  "id": "book5",
+  "kind": "input",
+  "text": "Reservar o pedido P105 (Voo SSA→GRU, total R$ 690): os dados estão no sistema. Responda {reserved: true, locator, payment, note} ou {reserved: false, note}."
+ },
+ {
+  "id": "book6",
+  "kind": "input",
+  "text": "Reservar o pedido P106 (Pacote Natal, total R$ 2.260): os dados estão no sistema. Responda {reserved: true, locator, payment, note} ou {reserved: false, note}."
+ }
+]

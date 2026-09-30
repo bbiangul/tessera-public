@@ -1,0 +1,291 @@
+{
+ "rawHotels": {
+  "status": true,
+  "data": {
+   "hotels": [
+    {
+     "hotel_id": 101,
+     "property": {
+      "name": "Hotel Central",
+      "reviewScore": 8.7,
+      "reviewCount": 1200,
+      "priceBreakdown": {
+       "grossPrice": {
+        "value": 380.0,
+        "currency": "BRL"
+       }
+      },
+      "propertyType": "Hotel",
+      "freeCancellation": true,
+      "distanceToCenter": {
+       "label": "1.2 km from centre"
+      },
+      "checkinDate": "2026-10-12",
+      "checkoutDate": "2026-10-15",
+      "photoUrls": [
+       "https://example.test/101.jpg"
+      ]
+     }
+    },
+    {
+     "hotel_id": 102,
+     "property": {
+      "name": "Pousada do Porto",
+      "reviewScore": 9.1,
+      "reviewCount": 340,
+      "priceBreakdown": {
+       "grossPrice": {
+        "value": 210.0,
+        "currency": "BRL"
+       }
+      },
+      "propertyType": "Guesthouse",
+      "freeCancellation": false,
+      "distanceToCenter": {
+       "label": "1.2 km from centre"
+      },
+      "checkinDate": "2026-10-12",
+      "checkoutDate": "2026-10-15",
+      "photoUrls": [
+       "https://example.test/102.jpg"
+      ]
+     }
+    },
+    {
+     "hotel_id": 103,
+     "property": {
+      "name": "Apart Mar",
+      "reviewScore": 8.2,
+      "reviewCount": 90,
+      "priceBreakdown": {
+       "grossPrice": {
+        "value": 180.0,
+        "currency": "BRL"
+       }
+      },
+      "propertyType": "Aparthotel",
+      "freeCancellation": true,
+      "distanceToCenter": {
+       "label": "1.2 km from centre"
+      },
+      "checkinDate": "2026-10-12",
+      "checkoutDate": "2026-10-15",
+      "photoUrls": [
+       "https://example.test/103.jpg"
+      ]
+     }
+    },
+    {
+     "hotel_id": 104,
+     "property": {
+      "name": "Studio Alfama",
+      "reviewScore": 7.8,
+      "reviewCount": 45,
+      "priceBreakdown": {
+       "grossPrice": {
+        "value": 150.0,
+        "currency": "BRL"
+       }
+      },
+      "propertyType": "Apartment",
+      "freeCancellation": false,
+      "distanceToCenter": {
+       "label": "1.2 km from centre"
+      },
+      "checkinDate": "2026-10-12",
+      "checkoutDate": "2026-10-15",
+      "photoUrls": [
+       "https://example.test/104.jpg"
+      ]
+     }
+    },
+    {
+     "hotel_id": 105,
+     "property": {
+      "name": "Hostel Bairro",
+      "reviewScore": 6.9,
+      "reviewCount": 2000,
+      "priceBreakdown": {
+       "grossPrice": {
+        "value": 60.0,
+        "currency": "BRL"
+       }
+      },
+      "propertyType": "Hostel",
+      "freeCancellation": true,
+      "distanceToCenter": {
+       "label": "1.2 km from centre"
+      },
+      "checkinDate": "2026-10-12",
+      "checkoutDate": "2026-10-15",
+      "photoUrls": [
+       "https://example.test/105.jpg"
+      ]
+     }
+    },
+    {
+     "hotel_id": 106,
+     "property": {
+      "name": "Grand Palace Hotel",
+      "reviewScore": 9.2,
+      "reviewCount": 5000,
+      "priceBreakdown": {
+       "grossPrice": {
+        "value": 950.0,
+        "currency": "BRL"
+       }
+      },
+      "propertyType": "Hotel",
+      "freeCancellation": true,
+      "distanceToCenter": {
+       "label": "1.2 km from centre"
+      },
+      "checkinDate": "2026-10-12",
+      "checkoutDate": "2026-10-15",
+      "photoUrls": [
+       "https://example.test/106.jpg"
+      ]
+     }
+    },
+    {
+     "hotel_id": 107,
+     "property": {
+      "name": "Hotel Econômico",
+      "reviewScore": 7.4,
+      "reviewCount": 800,
+      "priceBreakdown": {
+       "grossPrice": {
+        "value": 120.0,
+        "currency": "BRL"
+       }
+      },
+      "propertyType": "Hotel",
+      "freeCancellation": false,
+      "distanceToCenter": {
+       "label": "1.2 km from centre"
+      },
+      "checkinDate": "2026-10-12",
+      "checkoutDate": "2026-10-15",
+      "photoUrls": [
+       "https://example.test/107.jpg"
+      ]
+     }
+    },
+    {
+     "hotel_id": 108,
+     "property": {
+      "name": "Residence Lx",
+      "reviewScore": 8.0,
+      "reviewCount": 12,
+      "priceBreakdown": {
+       "grossPrice": {
+        "value": 260.0,
+        "currency": "BRL"
+       }
+      },
+      "propertyType": "Serviced apartment",
+      "freeCancellation": true,
+      "distanceToCenter": {
+       "label": "1.2 km from centre"
+      },
+      "checkinDate": "2026-10-12",
+      "checkoutDate": "2026-10-15"
+     }
+    },
+    {
+     "hotel_id": 109,
+     "property": {
+      "name": "No Reviews Inn",
+      "reviewCount": 0,
+      "priceBreakdown": {
+       "grossPrice": {
+        "value": 100.0,
+        "currency": "BRL"
+       }
+      },
+      "propertyType": "Hotel",
+      "freeCancellation": true,
+      "distanceToCenter": {
+       "label": "1.2 km from centre"
+      },
+      "checkinDate": "2026-10-12",
+      "checkoutDate": "2026-10-15",
+      "photoUrls": [
+       "https://example.test/109.jpg"
+      ]
+     }
+    },
+    {
+     "hotel_id": 110,
+     "property": {
+      "name": "Mystery Price",
+      "reviewScore": 8.9,
+      "reviewCount": 60,
+      "propertyType": "Hotel",
+      "freeCancellation": false,
+      "distanceToCenter": {
+       "label": "1.2 km from centre"
+      },
+      "checkinDate": "2026-10-12",
+      "checkoutDate": "2026-10-15",
+      "photoUrls": [
+       "https://example.test/110.jpg"
+      ]
+     }
+    },
+    {
+     "hotel_id": 111,
+     "property": {
+      "name": "Twin Hotel A",
+      "reviewScore": 8.5,
+      "reviewCount": 100,
+      "priceBreakdown": {
+       "grossPrice": {
+        "value": 300.0,
+        "currency": "BRL"
+       }
+      },
+      "propertyType": "Hotel",
+      "freeCancellation": false,
+      "distanceToCenter": {
+       "label": "1.2 km from centre"
+      },
+      "checkinDate": "2026-10-12",
+      "checkoutDate": "2026-10-15",
+      "photoUrls": [
+       "https://example.test/111.jpg"
+      ]
+     }
+    },
+    {
+     "hotel_id": 112,
+     "property": {
+      "name": "Twin Hotel B",
+      "reviewScore": 8.5,
+      "reviewCount": 100,
+      "priceBreakdown": {
+       "grossPrice": {
+        "value": 300.0,
+        "currency": "BRL"
+       }
+      },
+      "propertyType": "Hotel",
+      "freeCancellation": false,
+      "distanceToCenter": {
+       "label": "1.2 km from centre"
+      },
+      "checkinDate": "2026-10-12",
+      "checkoutDate": "2026-10-15",
+      "photoUrls": [
+       "https://example.test/112.jpg"
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "userPreferences": {},
+ "propertyType": {
+  "propertyType": "aparthotel"
+ }
+}

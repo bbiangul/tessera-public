@@ -1,0 +1,89 @@
+# The outbound cadence on a simulated clock (RFC-0001 checklist: "nenhuma
+# mensagem de texto livre fora da janela de 24h, verificado por teste com
+# relógio simulado").
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: cadencia, namespace: sdr }
+spec:
+  description: A new lead from the CRM, through silence, replies and consent.
+  now: "2026-09-21T10:00:00-03:00"
+  sandboxes:
+    - plugin: whatsapp
+      script: whatsapp.sandbox.star
+      state: { sent: [] }
+  scenarios:
+    - id: silence-then-templates
+      description: Nobody answers; every touch after the first is a template, never free text.
+      simulator: scripted
+      turns:
+        - trigger: { name: crm-novo-lead, payload: { leadId: lead-1, phone: "5500000000001", name: Ana, optIn: true } }
+          expect: { status: WaitingForUser }
+        - advance: 49h
+          expect: { status: WaitingForUser }
+        - advance: 73h
+          expect: { status: Succeeded }
+      expect:
+        effects:
+          - { action: whatsapp/send-template, count: 3 }
+          - { action: whatsapp/send-template, count: 1, where: "inputs.template == 'followup_outbound'" }
+          - { action: whatsapp/send-template, count: 1, where: "inputs.template == 'nurture_reengagement'" }
+        never: [whatsapp/send-text]
+        notSays: ["Que bom falar com você", "conseguiu ver"]   # free text outside the window
+        milestones:
+          - { subject: lead, name: contatado, count: 1 }
+          - { subject: lead, name: respondeu, count: 0 }
+          - { subject: lead, name: experiment/primeira-mensagem, count: 1 }
+
+    - id: reply-stops-the-cadence
+      description: The lead answers after 10h; the answer is free text (the window is open) and no follow-up is sent.
+      simulator: scripted
+      turns:
+        - trigger: { name: crm-novo-lead, payload: { leadId: lead-2, phone: "5500000000002", name: Bruno, optIn: true } }
+        - user: "oi, pode falar sim"
+          expect: { status: Succeeded, says: ["Que bom falar com você"] }
+        - advance: 72h
+      expect:
+        effects: [ { action: whatsapp/send-template, count: 1 } ]
+        milestones: [ { subject: lead, name: respondeu, count: 1 } ]
+
+    - id: opt-out
+      description: The lead taps the template's "Parar" button; the cadence stops and records the opt-out (the experiment's guardrail).
+      simulator: scripted
+      turns:
+        - trigger: { name: crm-novo-lead, payload: { leadId: lead-4, phone: "5500000000004", name: Davi, optIn: true } }
+        - user: "Parar"
+          expect: { status: Succeeded, says: ["não vai mais receber"] }
+        - advance: 72h
+      expect:
+        effects: [ { action: whatsapp/send-template, count: 1 } ]
+        notSays: ["Que bom falar com você"]
+        milestones:
+          - { subject: lead, name: opt-out, count: 1 }
+          - { subject: lead, name: respondeu, count: 0 }
+
+    - id: meeting-booked
+      description: A seller books the meeting by phone; the CRM reports it and the cadence stops, with no follow-up.
+      simulator: scripted
+      turns:
+        - trigger: { name: crm-novo-lead, payload: { leadId: lead-5, phone: "5500000000005", name: Eva, optIn: true } }
+          expect: { status: WaitingForUser }
+        - trigger: { name: crm-novo-lead, payload: { leadId: lead-5, phone: "5500000000005", name: Eva, optIn: true } }
+        - advance: 20h
+        - trigger: { name: crm-reuniao, payload: { leadId: lead-5, when: "quinta 15h" } }
+          expect: { status: Succeeded }
+        - advance: 120h
+      expect:
+        effects: [ { action: whatsapp/send-template, count: 1 } ]   # one cadence, however often the CRM sends the lead
+        notSays: ["conseguiu ver"]
+        milestones:
+          - { subject: lead, name: reuniao-marcada, count: 1 }
+          - { subject: lead, name: contatado, count: 1 }
+
+    - id: no-consent
+      description: A lead without opt-in gets nothing, on any path.
+      simulator: scripted
+      turns:
+        - trigger: { name: crm-novo-lead, payload: { leadId: lead-3, phone: "5500000000003", name: Carla, optIn: false } }
+          expect: { status: Failed }
+      expect:
+        never: [whatsapp/send-template, whatsapp/send-text]

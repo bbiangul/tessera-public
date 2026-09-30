@@ -1,0 +1,101 @@
+# SDR (reference tenant 2, a first slice): an outbound cadence on
+# WhatsApp that stops when the lead answers, with consent, the 24h window
+# and an A/B test of the first message.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata: { name: sdr, namespace: sdr }
+spec:
+  description: SDR outbound no WhatsApp.
+  timezone: America/Sao_Paulo
+  channel: whatsapp
+  messages:
+    notUnderstood: "Obrigado pela mensagem! Um consultor vai te responder por aqui."
+    failed: "Algo deu errado. Um consultor vai te responder por aqui."
+  humanInTheLoop: { queue: vendas }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Subject
+metadata: { name: lead, namespace: sdr }
+spec:
+  description: Um lead, pelo ID do CRM (pseudônimo; o telefone fica só no canal).
+  id: "event.payload.leadId"
+  attributes:
+    origem: { type: string, enum: [crm, site, indicacao] }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Funnel
+metadata: { name: prospeccao, namespace: sdr }
+spec:
+  subject: lead
+  cohort: week
+  stages:
+    - { name: contatado, milestone: contatado }
+    - { name: respondeu, milestone: respondeu, within: 7d }
+    - { name: reuniao, milestone: reuniao-marcada, within: 21d }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Experiment
+metadata: { name: primeira-mensagem, namespace: sdr }
+spec:
+  description: A primeira mensagem com prova social converte mais respostas?
+  subject: lead
+  variants: [ { name: controle, weight: 50 }, { name: prova-social, weight: 50 } ]
+  primary: { funnel: prospeccao, stage: respondeu }
+  minSamplePerVariant: 200
+  # A message that makes leads tap "Parar" more is not a better message:
+  # 2 points more opt-outs than the control stops the experiment.
+  guardrails: [ { name: opt-out, milestone: opt-out, within: 7d, maxIncrease: 0.02 } ]
+  onBreach: { function: experimento-parado }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: experimento-parado, namespace: sdr }
+spec:
+  description: Tells the sales team a guardrail stopped an experiment.
+  authorize: "has(caller.experiment)"
+  steps:
+    - id: aviso
+      respond:
+        to: "queue:vendas"
+        template: "O experimento {{ event.payload.experiment }} foi parado: a variante {{ event.payload.variant }} piorou {{ event.payload.guardrail }} ({{ string(event.payload.variantRate) }} contra {{ string(event.payload.controlRate) }} no controle). Todos recebem o controle agora; decidam o que fazer com a variante."
+  output: { value: "true" }
+---
+# The CRM posts new leads: {"leadId", "phone" (E.164 digits), "name",
+# "optIn"}. The cadence runs in the lead's WhatsApp conversation
+# ("wa:" + phone), so their replies through the WhatsApp adapter reach it.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Trigger
+metadata: { name: crm-novo-lead, namespace: sdr }
+spec:
+  function: cadencia
+  # One cadence per lead, however often the CRM sends it.
+  webhook: { secret: CRM_HOOK, key: "event.payload.leadId", conversation: "'wa:' + event.payload.phone" }
+---
+# The CRM reports a meeting booked (by a seller, on the phone, anywhere):
+# {"leadId", "when"}. The lead's cadence stops waiting and ends; no more
+# follow-ups to someone who already booked.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Trigger
+metadata: { name: crm-reuniao, namespace: sdr }
+spec:
+  event: { name: reuniao-marcada, key: "event.payload.leadId" }
+  webhook: { secret: CRM_HOOK }
+---
+# The sales team hears about handoffs on WhatsApp too. The Cloud API does
+# not post to groups, so each seller gets the approved template
+# tarefa_vendas ("Nova tarefa: {{1}} Responder: {{2}}") on their own
+# number, through whatsapp-equipe (plugins.yaml): the team's channel is its
+# own plugin, because the users' channel plugin carries the leads' consent
+# and window rules, and admission refuses it here.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: HumanQueue
+metadata: { name: vendas, namespace: sdr }
+spec:
+  description: Consultores de vendas.
+  sla: { remind: 2h, businessHours: { from: "08:00", to: "18:00" } }
+  notify:
+    - act: whatsapp-equipe/send-template
+      with:
+        to: "5511900000001"
+        template: tarefa_vendas
+        params: "${ [inputs.text.replace('\\n', ' '), inputs.link == '' ? 'pelo console' : inputs.link] }"

@@ -1,0 +1,224 @@
+# backoffice-006 (RFC-0006 step 6): audiences-001's clinic, where the team
+# also talks to the agent on Slack and Teams (post-text), asks about its
+# open tasks (freeMode.tasks), and the owner asks for a report.
+# audiences-001 (RFC-0006 step 5): backoffice-005's clinic with audiences.
+# Patients (the catch-all), dentists and the rest of the team each get
+# their menu, voice, free mode and messages. The Functions carry no
+# selector.who: the audience alone filters the menu. A dentist is known by
+# the Team (roles, attributes.dentistId, through the WhatsApp number Meta
+# attests) or, for the earlier API scenarios, by caller.role.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata: { name: clinica, namespace: clinica-bo }
+spec:
+  description: Recepção e assistente da equipe de uma clínica.
+  messages:
+    notUnderstood: "Não entendi."
+    notAllowed: "Desculpe, não posso fazer isso por você."
+    failed: "Algo deu errado. Alguém da recepção vai te responder por aqui."
+  humanInTheLoop: { queue: recepcao }
+  channel: whatsapp
+  audiences:
+    - name: dentista
+      who: "(has(caller.roles) && 'dentista' in caller.roles) || (has(caller.role) && caller.role == 'dentist')"
+      functions: [ver-agenda, bloquear-agenda, pedir-folga]
+      voice: { persona: "Assistente da equipe clínica: direto e objetivo." }
+      freeMode:
+        instructions: "Ajude o dentista com a própria agenda. Nunca fale de outros dentistas."
+        tasks: true
+        reads: [ { act: clinic/schedule, with: { dentistId: "${ has(caller.attributes) ? caller.attributes.dentistId : caller.dentistId }" } } ]
+      messages: { denied: "Equipe: a gerência recusou o pedido." }
+    - name: dono
+      who: "has(caller.roles) && 'dono' in caller.roles"
+      functions: [relatorio-descontos]
+      voice: { persona: "Assistente da direção: direto." }
+      freeMode: { instructions: "Ajude a direção da clínica.", tasks: true }
+    - name: equipe
+      who: "has(caller.roles) && size(caller.roles) > 0"
+      functions: []
+      voice: { persona: "Assistente da equipe: direto." }
+      freeMode: { instructions: "Ajude a equipe da recepção com dúvidas de processo.", tasks: true }
+    - name: paciente
+      functions: [pedir-desconto]
+      voice: { persona: "Recepcionista acolhedora da clínica." }
+      freeMode:
+        instructions: "Tire dúvidas dos pacientes sobre a clínica."
+        reads: [ { act: clinic/info, with: {}, public: true } ]
+      messages: { denied: "Paciente: infelizmente o pedido foi recusado." }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: HumanQueue
+metadata: { name: recepcao, namespace: clinica-bo }
+spec:
+  description: A recepção aprova exceções simples.
+  roles: [recepcao]
+  channels: [whatsapp, slack, teams, email]
+  sla: { escalate: 2h, escalateTo: gerencia }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: HumanQueue
+metadata: { name: gerencia, namespace: clinica-bo }
+spec: { description: A gerência., roles: [gerencia], channels: [whatsapp, slack, teams, email] }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: HumanQueue
+metadata: { name: dono, namespace: clinica-bo }
+spec: { description: O dono decide descontos grandes., roles: [dono], channels: [whatsapp, slack, teams, email] }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Team
+metadata: { name: equipe, namespace: clinica-bo }
+spec:
+  members:
+    - { id: rita, name: Rita, roles: [recepcao], contact: "+5511900000001", whatsapp: "5511900000001", slack: U0RITA, teams: 0a0a0a0a-0000-0000-0000-000000000001, email: rita@clinica.example }
+    - { id: gil, name: Gil, roles: [gerencia], contact: "+5511900000002", whatsapp: "5511900000002", slack: U0GIL, teams: 0a0a0a0a-0000-0000-0000-000000000002, email: gil@clinica.example }
+    - { id: dora, name: Dora, roles: [dono], contact: "+5511900000003", whatsapp: "5511900000003", slack: U0DORA, teams: 0a0a0a0a-0000-0000-0000-000000000003, email: dora@clinica.example }
+    - { id: bruno, name: Dr. Bruno, roles: [dentista], contact: "+5511900000004", whatsapp: "5511900000004", slack: U0BRUNO, teams: 0a0a0a0a-0000-0000-0000-000000000004, attributes: { dentistId: D1 } }
+  verify: { act: msg/code, with: { to: "${ inputs.contact }", text: "${ 'Código: ' + inputs.code }" } }
+---
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: msg, version: 0.1.0 }
+spec:
+  actions:
+    code: { input: { to: string, text: string }, effect: external-message }
+---
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: clinic, version: 0.1.0 }
+spec:
+  actions:
+    discount: { input: { patientId: string, percent: int }, output: map, effect: irreversible }
+    block: { input: { dentistId: string, day: string }, output: map, effect: irreversible }
+    schedule: { input: { dentistId: string }, output: list, effect: read }
+    info: { input: {}, output: map, effect: read }
+    discounts-report: { input: {}, output: list, effect: read }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: pedir-desconto, namespace: clinica-bo }
+spec:
+  description: A patient asks for a discount; the reception approves.
+  authorize: "caller.role == 'patient'"
+  selector: { intent: pedir-desconto, description: "O paciente pede um desconto." }
+  inputs:
+    percent:
+      type: int
+      description: the discount asked, in percent
+      resolve: [ { id: said, extract: {} } ]
+  steps:
+    - id: ok
+      escalate:
+        queue: recepcao
+        task: approve
+        message: "Desconto de {{ inputs.percent }}% para o paciente {{ caller.patientId }}?"
+        route: [ { when: "inputs.percent > 50", queue: dono } ]
+  action:
+    act: clinic/discount
+    with: { patientId: "${ caller.patientId }", percent: "${ inputs.percent }" }
+    idempotencyKey: "caller.patientId + ':' + string(inputs.percent)"
+  output: { value: "'aprovado'" }   # after a person's wait the 24h window may be closed (WINDOW_RISK)
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: bloquear-agenda, namespace: clinica-bo }
+spec:
+  description: A dentist blocks a day of their own schedule.
+  authorize: "(has(caller.roles) && 'dentista' in caller.roles) || (has(caller.role) && caller.role == 'dentist')"
+  selector: { intent: bloquear-agenda, description: "Bloquear um dia da agenda de um dentista." }
+  inputs:
+    day:
+      type: string
+      description: the weekday to block
+      resolve: [ { id: said, extract: {} } ]
+  action:
+    act: clinic/block
+    with: { dentistId: "${ has(caller.attributes) ? caller.attributes.dentistId : caller.dentistId }", day: "${ inputs.day }" }
+    confirm: "Posso bloquear sua agenda de {{ inputs.day }}? Responda sim."
+    idempotencyKey: "(has(caller.attributes) ? caller.attributes.dentistId : caller.dentistId) + ':' + inputs.day"
+  output: { template: "Agenda de {{ inputs.day }} bloqueada." }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: pedir-folga, namespace: clinica-bo }
+spec:
+  description: A dentist asks for a day off; the management approves.
+  authorize: "(has(caller.roles) && 'dentista' in caller.roles) || (has(caller.role) && caller.role == 'dentist')"
+  selector: { intent: pedir-folga, description: "O dentista pede folga em um dia." }
+  inputs:
+    day:
+      type: string
+      description: the weekday off
+      resolve: [ { id: said, extract: {} } ]
+  steps:
+    - { id: ok, escalate: { queue: gerencia, task: approve, message: "Folga de {{ inputs.day }} para {{ has(caller.attributes) ? caller.attributes.dentistId : caller.dentistId }}?" } }
+  action:
+    act: clinic/block
+    with: { dentistId: "${ has(caller.attributes) ? caller.attributes.dentistId : caller.dentistId }", day: "${ inputs.day }" }
+    idempotencyKey: "'folga:' + (has(caller.attributes) ? caller.attributes.dentistId : caller.dentistId) + ':' + inputs.day"
+  output: { value: "'aprovada'" }   # after a person's wait the 24h window may be closed (WINDOW_RISK)
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: relatorio-descontos, namespace: clinica-bo }
+spec:
+  description: The owner reads the week's discounts.
+  authorize: "has(caller.roles) && 'dono' in caller.roles"
+  selector: { intent: relatorio-descontos, description: "O dono pede o relatório de descontos da semana." }
+  steps:
+    - { id: r, act: clinic/discounts-report, with: {} }
+  output: { template: "Descontos da semana: {{ steps.r.output.join('; ') }}" }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: ver-agenda, namespace: clinica-bo }
+spec:
+  description: A dentist reads a schedule; only their own.
+  authorize: "(has(caller.roles) && 'dentista' in caller.roles) || (has(caller.role) && caller.role == 'dentist')"
+  selector: { intent: ver-agenda, description: "Ver a agenda de um dentista." }
+  inputs:
+    dentist:
+      type: string
+      description: the dentist whose schedule, as an id like D1
+      resolve: [ { id: said, extract: {} }, { id: mine, value: "has(caller.attributes) ? caller.attributes.dentistId : caller.dentistId" } ]
+  preconditions:
+    - cel: "inputs.dentist == (has(caller.attributes) ? caller.attributes.dentistId : caller.dentistId)"
+      message: "Você só pode ver a sua própria agenda."
+  steps:
+    - { id: agenda, act: clinic/schedule, with: { dentistId: "${ inputs.dentist }" } }
+  output: { template: "Sua agenda: {{ steps.agenda.output.join(', ') }}" }
+---
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: whatsapp, version: 0.1.0 }
+spec:
+  channel: { window: 24h }
+  actions:
+    send-text: { input: { to: string, text: string }, effect: external-message, freeText: true }
+    send-buttons: { input: { to: string, text: string, buttons: list }, effect: external-message, freeText: true }
+---
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: slack, version: 0.1.0 }
+spec:
+  actions:
+    post-task: { input: { to: string, text: string, buttons: list }, effect: external-message }
+    update-task: { input: { channel: string, ts: string, text: string }, effect: external-message }
+    post-text: { input: { to: string, text: string }, effect: external-message }
+---
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: teams, version: 0.1.0 }
+spec:
+  actions:
+    open-dm: { input: { user: string, tenant: string, bot: string }, output: map, effect: idempotent-write }
+    post-task: { input: { conversation: string, text: string, buttons: list }, output: map, effect: external-message }
+    update-task: { input: { conversation: string, activity: string, text: string }, effect: external-message }
+    post-text: { input: { conversation: string, text: string }, effect: external-message }
+---
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: email, version: 0.1.0 }
+spec:
+  actions:
+    send-task: { input: { to: string, subject: string, text: string, link: string, raw: string }, effect: external-message }

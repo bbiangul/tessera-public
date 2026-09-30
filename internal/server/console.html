@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tessera console</title>
+<style>
+:root {
+  --bg: #f7f7f5; --panel: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --line: #e3e2dc;
+  --accent: #2f5bd3; --ok: #1f7a4a; --warn: #9a6400; --bad: #b3261e; --code: #f1f0ea;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #151514; --panel: #1e1e1c; --text: #ecebe6; --muted: #9b9a93; --line: #34332f;
+    --accent: #7ea0ff; --ok: #5cc38d; --warn: #e0a84a; --bad: #ff8a80; --code: #262624; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--panel); }
+header h1 { font-size: 15px; margin: 0 8px 0 0; }
+header .meta { color: var(--muted); font-size: 12px; }
+header .spacer { flex: 1; }
+input, textarea, select, button { font: inherit; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; }
+button { cursor: pointer; }
+button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+main { display: grid; grid-template-columns: 340px 1fr; gap: 12px; padding: 12px 16px; }
+@media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+section { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-bottom: 12px; min-width: 0; }
+section h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 8px; }
+.row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 6px; }
+.row > input, .row > select { flex: 1; min-width: 0; }
+.list { max-height: 420px; overflow: auto; }
+.item { padding: 6px 8px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; }
+.item:hover { border-color: var(--line); }
+.item.sel { border-color: var(--accent); }
+.small { font-size: 12px; color: var(--muted); }
+.badge { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 10px; border: 1px solid var(--line); }
+.s-Succeeded { color: var(--ok); } .s-Failed, .s-Indeterminate { color: var(--bad); } .s-WaitingForUser, .s-WaitingForHuman, .s-WaitingForTime, .s-Confirming { color: var(--warn); }
+.chat { max-height: 360px; overflow: auto; display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.bubble { max-width: 85%; padding: 6px 10px; border-radius: 10px; white-space: pre-wrap; border: 1px solid var(--line); }
+.from-user, .from-reply { align-self: flex-end; background: var(--code); }
+.from-agent { align-self: flex-start; }
+.from-queue { align-self: flex-start; border-style: dashed; }
+table { width: 100%; border-collapse: collapse; }
+td, th { text-align: left; vertical-align: top; padding: 5px 6px; border-top: 1px solid var(--line); }
+th { font-size: 12px; color: var(--muted); font-weight: 600; }
+td.what { color: var(--muted); width: 28%; }
+pre { background: var(--code); padding: 8px; border-radius: 6px; overflow: auto; margin: 4px 0 0; font-size: 12px; max-height: 300px; }
+.err { color: var(--bad); }
+details summary { cursor: pointer; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Tessera console</h1>
+  <span class="meta" id="agentMeta">not connected</span>
+  <span class="spacer"></span>
+  <input id="token" type="password" placeholder="API token" size="22" aria-label="API token">
+  <button id="connect" class="primary">Connect</button>
+  <input id="advance" placeholder="48h" size="6" aria-label="Advance the clock by">
+  <button id="clock" title="Only with tessera serve --dev">Advance clock</button>
+  <button id="tick" title="Run the scheduler once">Tick</button>
+</header>
+<p class="err" id="error" role="alert" style="padding:0 16px"></p>
+<main>
+  <div>
+    <section>
+      <h2>Playground</h2>
+      <div class="row"><input id="conv" aria-label="Conversation"><button id="newConv" title="New conversation">New</button></div>
+      <div class="row"><input id="caller" value='{}' aria-label="Caller JSON" title="Caller identity, JSON"></div>
+      <div class="chat" id="chat"></div>
+      <div class="row"><input id="msg" placeholder="Message" aria-label="Message"><button id="send" class="primary">Send</button></div>
+      <div id="waiting"></div>
+    </section>
+    <section>
+      <h2>Inbox</h2>
+      <div class="row"><input id="by" placeholder="your name (recorded)" aria-label="Your name"><button id="refreshTasks">↻</button></div>
+      <div id="tasks" class="small">—</div>
+    </section>
+    <section>
+      <h2>Runs</h2>
+      <div class="row">
+        <input id="fConv" placeholder="conversation" aria-label="Filter by conversation">
+        <select id="fStatus" aria-label="Filter by status"><option value="">any status</option>
+          <option>WaitingForUser</option><option>WaitingForHuman</option><option>WaitingForTime</option><option>Confirming</option>
+          <option>Indeterminate</option><option>Succeeded</option><option>Failed</option></select>
+        <button id="refresh">↻</button>
+      </div>
+      <div class="list" id="runs"></div>
+    </section>
+    <section>
+      <h2>Triggers</h2>
+      <div id="triggers" class="small">—</div>
+    </section>
+    <section>
+      <h2>EvalSuites</h2>
+      <div class="row"><input id="evalOnly" placeholder="suite/scenario (empty: all)" aria-label="Which scenarios"><button id="runEvals">Run</button></div>
+      <div class="small">Uses the server's models (budgeted); re-reads the definitions from disk.</div>
+      <div id="evalOut"></div>
+    </section>
+    <section>
+      <h2>Metrics</h2>
+      <div class="row"><select id="metric" aria-label="Funnel or experiment"></select><button id="showMetric">Show</button></div>
+      <div id="metricOut"></div>
+    </section>
+  </div>
+  <div>
+    <section>
+      <h2>Run</h2>
+      <div id="run" class="small">Pick a run, or send a message.</div>
+    </section>
+    <section>
+      <h2>Live</h2>
+      <div class="row"><label class="small"><input type="checkbox" id="follow"> follow every run as it happens (GET /v1/activity)</label></div>
+      <div class="list" id="live"></div>
+    </section>
+  </div>
+</main>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+let token = "";
+try { token = sessionStorage.getItem("tessera-token") || ""; } catch (e) {}
+$("token").value = token;
+$("conv").value = "console-" + Math.random().toString(36).slice(2, 8);
+
+function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function showError(e) { $("error").textContent = e ? String(e) : ""; }
+
+async function api(method, path, body) {
+  const res = await fetch(path, { method, headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+    body: body === undefined ? undefined : JSON.stringify(body) });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || res.status + " " + res.statusText);
+  return data;
+}
+
+async function connect() {
+  token = $("token").value.trim();
+  try { sessionStorage.setItem("tessera-token", token); } catch (e) {}
+  try {
+    const a = await api("GET", "/v1/agent");
+    $("agentMeta").textContent = a.namespace + " · generation " + a.generation + " · " + (a.routes || []).length + " routes";
+    $("triggers").innerHTML = (a.triggers || []).map(t => t.schedule
+      ? `<div class="row"><span>${esc(t.name)} <span class="small">${esc(t.schedule)} → ${esc(t.function)}</span></span><button data-fire="${esc(t.name)}">Fire</button></div>`
+      : `<div class="small">${esc(t.name)}: webhook ${esc(t.webhook)} → ${esc(t.function)}</div>`).join("") || "none";
+    const opts = (a.funnels || []).map(f => `<option value="f:${esc(f)}">funnel ${esc(f)}</option>`)
+      .concat((a.experiments || []).map(x => `<option value="x:${esc(x)}">experiment ${esc(x)}</option>`));
+    $("metric").innerHTML = opts.join("") || "<option value=''>none</option>";
+    showError("");
+    await refreshRuns();
+    await refreshChat();
+    await refreshTasks();
+  } catch (e) { showError(e); }
+}
+
+async function refreshRuns() {
+  const q = new URLSearchParams();
+  if ($("fConv").value) q.set("conversation", $("fConv").value);
+  if ($("fStatus").value) q.set("status", $("fStatus").value);
+  const { runs } = await api("GET", "/v1/runs?" + q);
+  $("runs").innerHTML = runs.map(r => `<div class="item" data-run="${esc(r.id)}">
+    <div><b>${esc(r.function)}</b> <span class="badge s-${esc(r.status)}">${esc(r.status)}</span></div>
+    <div class="small">${esc(r.conversation)} · ${new Date(r.createdAt).toLocaleString()}</div></div>`).join("") || "<div class='small'>no runs</div>";
+}
+
+async function showRun(id) {
+  document.querySelectorAll(".item").forEach(e => e.classList.toggle("sel", e.dataset.run === id));
+  const r = await api("GET", "/v1/runs/" + encodeURIComponent(id));
+  const rows = (r.timeline || []).map(e => `<tr><td>${e.seq}</td><td><span class="badge">${esc(e.kind)}</span></td>
+    <td class="what">${esc(e.what)}</td><td>${esc(e.summary)}<details><summary class="small">value</summary><pre>${esc(JSON.stringify(e.value, null, 2))}</pre></details></td></tr>`).join("");
+  $("run").innerHTML = `<div class="row"><b>${esc(r.function)}</b><span class="badge s-${esc(r.status)}">${esc(r.status)}</span>
+    <span class="small">${esc(r.id)} · conversation ${esc(r.conversation)}${r.pending ? " · waits at " + esc(r.pending) : ""}</span></div>
+    <details><summary class="small">scopes (caller, event, limits)</summary><pre>${esc(JSON.stringify(r.scopes, null, 2))}</pre></details>
+    <table><thead><tr><th>#</th><th>kind</th><th>what</th><th>what happened</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+async function refreshChat() {
+  const conv = $("conv").value;
+  const c = await api("GET", "/v1/conversations/" + encodeURIComponent(conv));
+  $("chat").innerHTML = (c.transcript || []).map(l => {
+    const cls = l.from.startsWith("agent →") ? "from-queue" : "from-" + l.from;
+    return `<div class="bubble ${cls}" title="${esc(l.from)} · ${esc(l.runId)}">${esc(l.text)}</div>`; }).join("");
+  $("chat").scrollTop = $("chat").scrollHeight;
+  const waiting = (c.runs || []).filter(r => r.status === "WaitingForHuman" || r.status === "Indeterminate");
+  $("waiting").innerHTML = waiting.map(r => `<div class="row"><span class="small">${esc(r.function)} waits for a person</span>
+    <input data-answer="${esc(r.id)}" placeholder='answer (text or JSON: true, "o2")'><button data-reply="${esc(r.id)}">Answer</button></div>`).join("");
+}
+
+async function send() {
+  const text = $("msg").value.trim();
+  if (!text) return;
+  let caller;
+  try { caller = JSON.parse($("caller").value || "{}"); } catch (e) { return showError("caller is not JSON"); }
+  $("msg").value = "";
+  try {
+    const r = await api("POST", "/v1/messages", { conversation: $("conv").value, caller, text });
+    await ackAll(r);
+    await refreshChat(); await refreshRuns();
+    if (r.runId) await showRun(r.runId);
+    showError("");
+  } catch (e) { showError(e); }
+}
+
+// The console is the channel here: what it showed is delivered.
+async function ackAll(r) {
+  const out = r.outbox || [];
+  if (r.runId && out.length) await api("POST", `/v1/runs/${encodeURIComponent(r.runId)}/ack`, { seq: out[out.length - 1].seq });
+}
+
+document.addEventListener("click", async ev => {
+  const t = ev.target;
+  try {
+    if (t.dataset.run || t.closest("[data-run]")) return await showRun((t.dataset.run ? t : t.closest("[data-run]")).dataset.run);
+    if (t.dataset.fire) { const r = await api("POST", `/v1/triggers/${encodeURIComponent(t.dataset.fire)}/fire`); await refreshRuns(); return await showRun(r.runId); }
+    if (t.dataset.reply) {
+      const raw = document.querySelector(`[data-answer="${CSS.escape(t.dataset.reply)}"]`).value;
+      let value = null; try { value = JSON.parse(raw); } catch (e) {}
+      const r = await api("POST", `/v1/runs/${encodeURIComponent(t.dataset.reply)}/reply`, { from: "human", text: raw, value });
+      await ackAll(r); await refreshChat(); await refreshRuns(); return await showRun(t.dataset.reply);
+    }
+  } catch (e) { showError(e); }
+});
+$("connect").onclick = connect;
+$("send").onclick = send;
+$("msg").addEventListener("keydown", e => { if (e.key === "Enter") send(); });
+$("newConv").onclick = () => { $("conv").value = "console-" + Math.random().toString(36).slice(2, 8); refreshChat().catch(showError); };
+$("conv").addEventListener("change", () => refreshChat().catch(showError));
+$("refresh").onclick = () => refreshRuns().catch(showError);
+$("tick").onclick = async () => { try { const r = await api("POST", "/v1/tick"); for (const x of r.results || []) await ackAll(x); await refreshRuns(); await refreshChat(); } catch (e) { showError(e); } };
+$("clock").onclick = async () => {
+  try { const r = await api("POST", "/v1/dev/clock", { advance: $("advance").value || "1h" });
+    for (const x of r.results || []) await ackAll(x);
+    showError("clock now " + new Date(r.now).toLocaleString()); await refreshRuns(); await refreshChat(); } catch (e) { showError(e); }
+};
+$("showMetric").onclick = async () => {
+  const v = $("metric").value; if (!v) return;
+  try {
+    const [kind, name] = [v.slice(0, 1), v.slice(2)];
+    const r = await api("GET", (kind === "f" ? "/v1/metrics/funnels/" : "/v1/metrics/experiments/") + encodeURIComponent(name));
+    if (kind === "f") {
+      const t = r.totals || { stages: [] };
+      $("metricOut").innerHTML = `<div class="small">${t.entered} entered</div><table><tr><th>stage</th><th>reached</th><th>pending</th><th>lost</th><th>conv.</th></tr>` +
+        t.stages.map(s => `<tr><td>${esc(s.name)}</td><td>${s.reached}</td><td>${s.pending}</td><td>${s.lost}</td><td>${s.reached + s.lost ? Math.round(100 * s.conversion) + "%" : "–"}</td></tr>`).join("") + "</table>";
+    } else {
+      $("metricOut").innerHTML = `<div><b>${esc(r.decision)}</b> <span class="small">SRM p=${Number(r.srm).toFixed(3)}</span></div><table><tr><th>variant</th><th>exposed</th><th>rate</th><th>95%</th></tr>` +
+        (r.arms || []).map(a => `<tr><td>${esc(a.name)}</td><td>${a.exposed}</td><td>${(100 * a.rate).toFixed(1)}%</td><td>${(100 * a.low).toFixed(1)}–${(100 * a.high).toFixed(1)}%</td></tr>`).join("") + "</table>";
+    }
+  } catch (e) { showError(e); }
+};
+$("runEvals").onclick = async () => {
+  $("evalOut").textContent = "running…";
+  try {
+    const r = await api("POST", "/v1/evals/run", { only: $("evalOnly").value });
+    $("evalOut").innerHTML = `<div class="small">${r.scenarios} scenarios, ${r.failed} failed, $${Number(r.costUSD).toFixed(4)}</div>` +
+      (r.results || []).map(x => `<details><summary><span class="${x.pass ? "s-Succeeded" : "s-Failed"}">${x.pass ? "PASS" : "FAIL"}</span> ${esc(x.suite)}/${esc(x.scenario)}</summary>` +
+        (x.failures || []).map(f => `<div class="err small">${esc(f)}</div>`).join("") +
+        `<pre>${esc((x.transcript || []).map(l => l.who + ": " + l.text).join("\n"))}</pre></details>`).join("");
+  } catch (e) { $("evalOut").textContent = ""; showError(e); }
+};
+async function refreshTasks() {
+  const { tasks } = await api("GET", "/v1/tasks");
+  $("tasks").innerHTML = tasks.map(t => `<div class="item" style="cursor:default">
+    <div><span class="badge">${esc(t.queue)}</span> <span class="badge">${esc(t.kind)}</span> <span class="small">${new Date(t.since).toLocaleString()}${t.next ? " · SLA " + new Date(t.next).toLocaleString() : ""}</span></div>
+    <div>${esc(t.text)}</div>
+    <div class="row">${t.kind === "approve"
+      ? `<button data-task="${esc(t.runId)}" data-hash="${esc(t.hash)}" data-value="true">Approve</button><button data-task="${esc(t.runId)}" data-hash="${esc(t.hash)}" data-value="false">Deny</button>`
+      : `<input data-taskin="${esc(t.runId)}" placeholder="answer"><button data-task="${esc(t.runId)}" data-hash="${esc(t.hash)}">Answer</button>`}
+      <button data-run="${esc(t.runId)}">Run</button></div></div>`).join("") || "no tasks";
+}
+document.addEventListener("click", async ev => {
+  const t = ev.target;
+  if (!t.dataset.task) return;
+  try {
+    let text = "", value = null;
+    if (t.dataset.value) { value = t.dataset.value === "true"; text = t.dataset.value === "true" ? "sim" : "não"; }
+    else { text = document.querySelector(`[data-taskin="${CSS.escape(t.dataset.task)}"]`).value; try { value = JSON.parse(text); } catch (e) {} }
+    const r = await api("POST", `/v1/runs/${encodeURIComponent(t.dataset.task)}/reply`, { from: "human", text, value, taskHash: t.dataset.hash, by: $("by").value });
+    await ackAll(r); await refreshTasks(); await refreshRuns(); await showRun(t.dataset.task);
+  } catch (e) { showError(e); }
+});
+$("refreshTasks").onclick = () => refreshTasks().catch(showError);
+
+// Live: poll the activity stream with its cursor; newest first, the last 200.
+let liveCursor = 0, liveTimer = null, liveRows = [];
+async function pollLive() {
+  try {
+    for (;;) {
+      const { items, next } = await api("GET", "/v1/activity?limit=500&after=" + liveCursor);
+      liveCursor = next;
+      for (const it of items) {
+        liveRows.unshift(`<div class="item" data-run="${esc(it.runId)}"><div><b>${esc(it.function)}</b> <span class="badge">${esc(it.entry.kind)}</span> <span class="small">${new Date(it.entry.at).toLocaleTimeString()} · ${esc(it.conversation)}</span></div><div class="small">${esc(it.entry.summary)}</div></div>`);
+      }
+      liveRows = liveRows.slice(0, 200);
+      if (items.length < 500) break; // caught up
+    }
+    $("live").innerHTML = liveRows.join("") || "<div class='small'>nothing yet</div>";
+  } catch (e) { showError(e); }
+}
+$("follow").onchange = () => {
+  clearInterval(liveTimer);
+  if ($("follow").checked) { pollLive(); liveTimer = setInterval(pollLive, 1000); }
+};
+if (token) connect();
+</script>
+</body>
+</html>

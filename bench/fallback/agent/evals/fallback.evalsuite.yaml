@@ -1,0 +1,127 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: fallback, namespace: kb }
+spec:
+  description: fallback-001; transcripts only, judged outside.
+  now: "2026-09-28T09:00:00-03:00"
+  scenarios:
+    - id: c01
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "gestante pode fazer clareamento com moldeira em casa?"
+    - id: c02
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "lactante pode fazer clareamento no consultório?"
+    - id: c03
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "aceitam o Amil Dental Premium?"
+    - id: c04
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "meu plano é Unimed Odonto Empresarial, atendem?"
+    - id: c05
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "no domingo de páscoa vcs abrem?"
+    - id: c06
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso pagar com cheque pré-datado?"
+    - id: c07
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso tomar milkshake de canudo logo depois de tirar o dente?"
+    - id: c08
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "fumar cigarro eletrônico no dia seguinte da extração pode?"
+    - id: c09
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a coroa de porcelana que eu tenho vai clarear?"
+    - id: c10
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tratamento de 500 reais dá pra parcelar?"
+    - id: c11
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "se eu faltar e trouxer atestado no dia seguinte pago a taxa?"
+    - id: c12
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "atrasei 25 minutos, ainda sou atendido?"
+    - id: t01
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "clareamento pra quem tem 15 anos e meio pode?"
+    - id: t02
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso fazer clareamento se tenho bruxismo?"
+    - id: t03
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "abrem no feriado municipal de aniversário da cidade?"
+    - id: t04
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a sala de espera tem ar condicionado?"
+    - id: t05
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso comer pipoca depois da extração?"
+    - id: t06
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o estacionamento tem manobrista?"
+    - id: t07
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "aceitam pix parcelado?"
+    - id: t08
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a Dra. Paula atende convênio?"
+    - id: t09
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a avaliação de criança também custa 120?"
+    - id: t10
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "depois da extração posso tomar banho quente?"
+    - id: t11
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o clareamento caseiro tem garantia?"
+    - id: t12
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "Bradesco Dental Top Família é o mesmo que o Top?"

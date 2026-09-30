@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bbiangul/tessera/api/agents/v1alpha1/knowledge-base",
+  "$ref": "#/$defs/KnowledgeBase",
+  "$defs": {
+    "KnowledgeAct": {
+      "properties": {
+        "act": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+/[a-z0-9-]+$",
+          "description": "Act is the read action, plugin/action."
+        },
+        "with": {
+          "type": "object",
+          "description": "With gives its arguments. Values are literal unless the whole value\nis \"${ expr }\"; fetch reads item."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "act"
+      ],
+      "description": "KnowledgeAct is a plugin action with its arguments."
+    },
+    "KnowledgeBase": {
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "enum": [
+            "agents.tessera.dev/v1alpha1"
+          ],
+          "description": "APIVersion must be agents.tessera.dev/v1alpha1."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "KnowledgeBase"
+          ],
+          "description": "Kind must be KnowledgeBase."
+        },
+        "metadata": {
+          "$ref": "#/$defs/ObjectMeta",
+          "description": "Metadata names the base."
+        },
+        "spec": {
+          "$ref": "#/$defs/KnowledgeBaseSpec",
+          "description": "Spec says where its documents are and who may read them."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ],
+      "description": "KnowledgeBase is a set of the business's documents the agent answers\nfrom (RFC-0008 part A, knowledge-001): its policies, FAQ, price lists.\nEach passage keeps its source; its text is data, never instructions."
+    },
+    "KnowledgeBaseSpec": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Description says what the documents are about."
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/KnowledgeSource"
+          },
+          "type": "array",
+          "description": "Sources are where the documents come from. A base with lessons may\nhave none."
+        },
+        "lessons": {
+          "$ref": "#/$defs/KnowledgeLessons",
+          "description": "Lessons make this base learn from the team's answers (learn-003):\nevery so often the agent proposes lessons, a person approves each\none in the team's channel, and approved lessons join this base."
+        },
+        "audiences": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Audiences are the Agent's audiences whose callers may receive its\npassages (RFC-0006). Empty: every caller. A staff-only policy names\nthe team's audience."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "description"
+      ],
+      "description": "KnowledgeBaseSpec is a knowledge base's sources and audiences."
+    },
+    "KnowledgeLessons": {
+      "properties": {
+        "queue": {
+          "type": "string",
+          "description": "Queue is the HumanQueue whose members approve lessons; default the\nAgent's humanInTheLoop."
+        },
+        "every": {
+          "type": "string",
+          "description": "Every is how often lessons are proposed (a duration, at least 1h);\ndefault 168h."
+        },
+        "min": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Min is how many answered cases a lesson needs; default 2."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "KnowledgeLessons configures a base that learns (learn-003)."
+    },
+    "KnowledgeSource": {
+      "properties": {
+        "files": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Files are glob patterns, relative to this resource's file, of\nMarkdown (.md), text (.txt), PDF or DOCX documents. Each is split by\nheadings and paragraphs when the agent loads."
+        },
+        "list": {
+          "$ref": "#/$defs/KnowledgeAct",
+          "description": "List is a read action returning the documents: a list of\n{name, id?, modified?, text?, base64?}. The name's extension says\nthe type (.md, .txt, .pdf, .docx); other types are skipped\n(plugin-001)."
+        },
+        "fetch": {
+          "$ref": "#/$defs/KnowledgeAct",
+          "description": "Fetch is a read action called for each listed document without\ntext or base64, with the listed document as inputs (\"${ inputs.id }\"); it returns\n{base64} or {text}. A document whose modified did not change is not\nfetched again."
+        },
+        "refresh": {
+          "type": "string",
+          "description": "Refresh is how often a plugin source is read again (a duration, at\nleast 1m); default 24h. A failed read keeps the previous documents\nand is retried within 5 minutes."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "KnowledgeSource is one place documents come from: files, or a plugin\n(list, and fetch for each listed document). Exactly one of files and\nlist."
+    },
+    "ObjectMeta": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Name of the resource, unique per kind within its namespace. Lowercase\nletters, digits and hyphens, starting and ending with a letter or digit."
+        },
+        "namespace": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Namespace the resource belongs to, usually one per customer."
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Labels are free-form key/value pairs for selecting and grouping."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "namespace"
+      ],
+      "description": "ObjectMeta identifies a resource."
+    }
+  },
+  "title": "KnowledgeBase"
+}

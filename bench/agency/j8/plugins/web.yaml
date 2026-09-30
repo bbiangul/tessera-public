@@ -1,0 +1,25 @@
+# Web search through TinyFish (tessera add web): free, no card, 30 searches
+# a minute. The key is a free account's (tinyfish.ai), as the secret
+# TINYFISH_API_KEY (TESSERA_SECRET_TINYFISH_API_KEY when self-hosted).
+# The contract every provider keeps: search {query} -> [{site, title, url, snippet}].
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata:
+  name: web
+  version: 0.1.0
+spec:
+  egress:
+    hosts: [api.search.tinyfish.ai]
+  connection:
+    baseUrl: https://api.search.tinyfish.ai
+    auth: { header: X-API-Key, secret: TINYFISH_API_KEY }
+  actions:
+    search:
+      input: { query: string }
+      output: list
+      effect: read
+      http:
+        method: GET
+        path: /
+        query: { query: "${ inputs.query }" }
+        output: "sources.response.body.results.map(r, {'site': r.site_name, 'title': r.title, 'url': r.url, 'snippet': r.snippet})"

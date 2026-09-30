@@ -1,0 +1,41 @@
+{
+  "apiVersion": "agents.tessera.dev/v1alpha1",
+  "kind": "Function",
+  "metadata": {
+    "name": "render",
+    "namespace": "travel"
+  },
+  "spec": {
+    "description": "Reports an interpreted weekday set, or stops without guessing.",
+    "inputs": {
+      "mask": {
+        "type": "any",
+        "resolve": [
+          {
+            "id": "empty",
+            "value": "{}"
+          }
+        ]
+      }
+    },
+    "steps": [
+      {
+        "id": "report",
+        "branch": [
+          {
+            "when": "inputs.mask.known",
+            "respond": {
+              "template": "Dias permitidos: {{ inputs.mask.allowed.map(d, ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'][d]).join(', ') }}."
+            }
+          },
+          {
+            "else": true,
+            "respond": {
+              "template": "Não consegui determinar os dias. Encerrei sem selecionar nenhum."
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

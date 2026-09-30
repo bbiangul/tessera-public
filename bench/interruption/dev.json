@@ -1,0 +1,146 @@
+[
+  {
+    "id": "dev-01",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Antes de confirmar, queria aproveitar e marcar também uma limpeza nova. Tem como?",
+    "want": "side"
+  },
+  {
+    "id": "dev-02",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Sim, pode confirmar a remarcação. E sobre a limpeza nova, consegue agendar?",
+    "want": "side"
+  },
+  {
+    "id": "dev-03",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Quero também cancelar a consulta do meu marido.",
+    "want": "side"
+  },
+  {
+    "id": "dev-04",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Sim, mas antes: vocês aceitam Odontoprev?",
+    "want": "side"
+  },
+  {
+    "id": "dev-05",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Vocês têm estacionamento?",
+    "want": "side"
+  },
+  {
+    "id": "dev-06",
+    "pending": "Posso alterar a entrega para sexta? Responda sim para confirmar.",
+    "message": "Também queria contratar um seguro para essa entrega.",
+    "want": "side"
+  },
+  {
+    "id": "dev-07",
+    "pending": "Posso alterar a categoria do seu quarto para superior? Responda sim para confirmar.",
+    "message": "Sim, e consegue reservar um quarto adicional para meus pais?",
+    "want": "side"
+  },
+  {
+    "id": "dev-08",
+    "pending": "Posso transferir 100 reais para Ana? Responda sim para confirmar.",
+    "message": "Antes de aprovar a transferência, dá para aumentar meu limite?",
+    "want": "side"
+  },
+  {
+    "id": "dev-09",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Sim, pode confirmar.",
+    "want": "answer"
+  },
+  {
+    "id": "dev-10",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Não, prefiro deixar como está.",
+    "want": "answer"
+  },
+  {
+    "id": "dev-11",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Na verdade prefiro sábado 10/10 às 10h. Pode ser?",
+    "want": "answer"
+  },
+  {
+    "id": "dev-12",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Pode ser terça em vez de sexta?",
+    "want": "answer"
+  },
+  {
+    "id": "dev-13",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Confirmo sexta 09/10 às 14h, obrigado!",
+    "want": "answer"
+  },
+  {
+    "id": "dev-14",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Não, quero mudar para sexta às 9h.",
+    "want": "answer"
+  },
+  {
+    "id": "dev-15",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Quero parar esse processo.",
+    "want": "cancel"
+  },
+  {
+    "id": "dev-16",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Desisti de remarcar.",
+    "want": "cancel"
+  },
+  {
+    "id": "dev-17",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Tchau, até outra hora.",
+    "want": "goodbye"
+  },
+  {
+    "id": "dev-18",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Obrigado, adeus.",
+    "want": "goodbye"
+  },
+  {
+    "id": "dev-19",
+    "pending": "Posso alterar a categoria do seu quarto para superior? Responda sim para confirmar.",
+    "message": "Antes de confirmar, o hotel permite animais?",
+    "want": "side"
+  },
+  {
+    "id": "dev-20",
+    "pending": "Posso transferir 100 reais para Ana? Responda sim para confirmar.",
+    "message": "Sim, mas qual é a taxa dessa transferência?",
+    "want": "side"
+  },
+  {
+    "id": "dev-21",
+    "pending": "Posso alterar a entrega para sexta? Responda sim para confirmar.",
+    "message": "Posso mudar a entrega para sábado em vez de sexta?",
+    "want": "answer"
+  },
+  {
+    "id": "dev-22",
+    "pending": "Posso transferir 100 reais para Ana? Responda sim para confirmar.",
+    "message": "Pode trocar o valor da transferência para 200 reais?",
+    "want": "answer"
+  },
+  {
+    "id": "dev-23",
+    "pending": "Posso alterar a categoria do seu quarto para superior? Responda sim para confirmar.",
+    "message": "Pode mudar meu quarto para a categoria superior em vez da atual?",
+    "want": "answer"
+  },
+  {
+    "id": "dev-24",
+    "pending": "Posso alterar a categoria do seu quarto para superior? Responda sim para confirmar.",
+    "message": "Quero uma reserva nova além dessa alteração.",
+    "want": "side"
+  }
+]

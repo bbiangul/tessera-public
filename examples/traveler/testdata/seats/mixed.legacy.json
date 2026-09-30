@@ -1,0 +1,56 @@
+[
+ {
+  "bassinetSeatPrice": null,
+  "bassinetSeatsCount": 0,
+  "freeSeatsCount": 2,
+  "hasBassinetSeats": false,
+  "infantsOnFlight": false,
+  "isLongFlight": false,
+  "isOvernight": false,
+  "onlyMiddleSeats": false,
+  "seatCurrency": "BRL",
+  "seatStatus": "ok",
+  "token": "t1",
+  "warning": null,
+  "windowAisleSeatPrice": 0
+ },
+ {
+  "bassinetSeatPrice": null,
+  "bassinetSeatsCount": 0,
+  "freeSeatsCount": 2,
+  "hasBassinetSeats": false,
+  "infantsOnFlight": false,
+  "isLongFlight": true,
+  "isOvernight": true,
+  "onlyMiddleSeats": true,
+  "seatCurrency": "BRL",
+  "seatStatus": "middle_only",
+  "token": "t2",
+  "warning": "Only middle seats available on long flight",
+  "windowAisleSeatPrice": null
+ },
+ {
+  "bassinetSeatPrice": null,
+  "bassinetSeatsCount": 0,
+  "freeSeatsCount": 1,
+  "hasBassinetSeats": false,
+  "infantsOnFlight": false,
+  "isLongFlight": true,
+  "isOvernight": true,
+  "onlyMiddleSeats": false,
+  "seatCurrency": "BRL",
+  "seatStatus": "paid_only",
+  "token": "t3",
+  "warning": "Window/aisle seats from BRL 39.9",
+  "windowAisleSeatPrice": 39.9
+ },
+ {
+  "freeSeatsCount": 0,
+  "isLongFlight": false,
+  "isOvernight": true,
+  "onlyMiddleSeats": false,
+  "seatStatus": "unknown",
+  "token": "t5",
+  "warning": null
+ }
+]

@@ -1,0 +1,18 @@
+{"id": "gt-01", "message": "qual bairro é mais seguro pra ficar no Rio?", "want": "none"}
+{"id": "gt-02", "message": "quanto tempo de voo de Recife pra Lisboa?", "want": "none"}
+{"id": "gt-03", "message": "hotel ou flat, o que compensa mais em São Paulo?", "want": "none"}
+{"id": "gt-04", "message": "qual aeroporto de Paris é melhor pra chegar no centro?", "want": "none"}
+{"id": "gt-05", "message": "Fernando de Noronha é muito caro pra se hospedar?", "want": "none"}
+{"id": "gt-06", "message": "voo pra Tóquio costuma fazer escala onde?", "want": "none"}
+{"id": "gt-07", "message": "qual a diferença entre classe econômica premium e executiva?", "want": "none"}
+{"id": "gt-08", "message": "Porto de Galinhas ou Maragogi, qual é melhor pra ficar?", "want": "none"}
+{"id": "gt-09", "message": "compensa ficar em Copacabana ou Ipanema?", "want": "none"}
+{"id": "gt-10", "message": "qual companhia aérea voa direto pra Lisboa?", "want": "none"}
+{"id": "gt-11", "message": "quero um hotel em Copacabana de 5 a 8 de março", "want": "search-hotels"}
+{"id": "gt-12", "message": "passagem de Recife pra Lisboa em maio", "want": "search-flights"}
+{"id": "gt-13", "message": "tem flat em São Paulo perto da Paulista?", "want": "search-hotels"}
+{"id": "gt-14", "message": "quanto tá o voo pra Tóquio em outubro?", "want": "search-flights"}
+{"id": "gt-15", "message": "procura uma pousada em Porto de Galinhas pro feriado", "want": "search-hotels"}
+{"id": "gt-16", "message": "quero voar de Brasília pra Paris dia 3 de novembro", "want": "search-flights"}
+{"id": "gt-17", "message": "me mostra hotéis em Noronha", "want": "search-hotels"}
+{"id": "gt-18", "message": "tem voo barato pra Buenos Aires semana que vem?", "want": "search-flights"}

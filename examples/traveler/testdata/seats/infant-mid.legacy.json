@@ -1,0 +1,17 @@
+[
+ {
+  "bassinetSeatPrice": 0,
+  "bassinetSeatsCount": 4,
+  "freeSeatsCount": 3,
+  "hasBassinetSeats": true,
+  "infantsOnFlight": true,
+  "isLongFlight": false,
+  "isOvernight": false,
+  "onlyMiddleSeats": false,
+  "seatCurrency": "BRL",
+  "seatStatus": "ok",
+  "token": "t1",
+  "warning": null,
+  "windowAisleSeatPrice": 0
+ }
+]

@@ -1,0 +1,16 @@
+# The clinic's reception: what the platform says on its own, in Portuguese,
+# and the queue that receives work for people.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata:
+  name: recepcao-clinica
+  namespace: agenda-exemplo
+spec:
+  description: Recepção da clínica, para pacientes.
+  messages:
+    notUnderstood: "Desculpe, não entendi. Pode escrever de outro jeito?"
+    withAPerson: "Alguém da recepção está vendo isso e responde por aqui."
+    notAllowed: "Desculpe, não posso fazer isso por você."
+    cancelled: "Tudo bem, não mudei nada."
+    failed: "Algo deu errado. Alguém da recepção vai te responder por aqui."
+  humanInTheLoop: { queue: recepcao }

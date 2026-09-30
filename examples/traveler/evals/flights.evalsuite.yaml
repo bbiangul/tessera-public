@@ -1,0 +1,183 @@
+# Whole-conversation tests for search-flights, written from the cases in
+# the legacy platform's TRAVELER_TESTS.md. Booking.com is a sandbox; extraction uses
+# the Generate engine (live or replayed).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata:
+  name: flights
+  namespace: traveler
+spec:
+  description: Flight searches, from a complete request to one built over several messages.
+  now: "2026-09-23T09:00:00-03:00"
+  sandboxes:
+    - plugin: agency
+      script: agency.sandbox.star
+      state: { next: 101, bookings: [] }
+    - plugin: web
+      script: web.sandbox.star
+    - plugin: booking
+      script: booking.sandbox.star
+      state:
+        searches: []
+        routes: [REC.AIRPORT, LIS.AIRPORT, CWB.AIRPORT, LHR.AIRPORT, LON.CITY]
+        places:
+          - { id: SAO.CITY, name: "São Paulo", cityName: "São Paulo", type: CITY }
+          - { id: GRU.AIRPORT, name: "Guarulhos International Airport", cityName: "São Paulo", type: AIRPORT }
+          - { id: CGH.AIRPORT, name: "Congonhas Airport", cityName: "São Paulo", type: AIRPORT }
+          - { id: REC.AIRPORT, name: "Recife International Airport", cityName: "Recife", type: AIRPORT }
+          - { id: LIS.AIRPORT, name: "Humberto Delgado Airport", cityName: "Lisboa", type: AIRPORT }
+          - { id: CWB.AIRPORT, name: "Afonso Pena International Airport", cityName: "Curitiba", type: AIRPORT }
+          - { id: LON.CITY, name: "Londres", cityName: "Londres", type: CITY }
+          - { id: LHR.AIRPORT, name: "Heathrow Airport", cityName: "Londres", type: AIRPORT }
+          - { id: LGW.AIRPORT, name: "Gatwick Airport", cityName: "Londres", type: AIRPORT }
+    - plugin: routes
+      script: routes.sandbox.star
+      state:
+        minutes: { GRU-CGH: 74 }
+  scenarios:
+    - id: teen-alone
+      simulator: scripted
+      turns:
+        - user: "Minha filha de 15 anos vai sozinha de Recife para São Paulo no dia 18 de dezembro, só ida. Quais voos tem?"
+          expect: { routed: search-flights, status: Succeeded, says: ["1 adulto"], notSays: ["criança"] }
+
+    - id: complete-request
+      simulator: scripted
+      turns:
+        - user: "Quero voar de São Paulo para Recife dia 12 de outubro"
+          expect:
+            routed: search-flights
+            status: Succeeded
+            says: ["São Paulo → Recife", "GOL", "R$ 640", "12/10"]
+      expect:
+        effects: [ { action: booking/search-flights, count: 1 } ]
+        budget: { generateCalls: 4, decideCalls: 3 }   # agent mode plans the call and the reply (agency-005)
+
+    - id: built-over-messages
+      description: The destination and the date come in later messages; the origin is the user's home city.
+      caller: { homeCity: "São Paulo" }
+      simulator: scripted
+      turns:
+        - user: "quero viajar"
+          expect: { routed: search-flights, status: WaitingForUser, says: ["Para onde"] }
+        - user: "Lisboa"
+          expect: { status: WaitingForUser, says: ["dia da ida"] }
+        - user: "sexta que vem"
+          expect: { status: Succeeded, says: ["São Paulo → Lisboa", "02/10"] }
+      expect:
+        effects: [ { action: booking/search-flights, count: 1 } ]
+
+    - id: date-in-the-past
+      simulator: scripted
+      turns:
+        - user: "Passagem de São Paulo pra Recife ontem"
+          expect: { status: Failed, says: ["já passou"] }
+      expect:
+        never: [booking/search-flights]
+
+    - id: unknown-destination
+      simulator: scripted
+      turns:
+        - user: "Quero ir de São Paulo para Atlântida no dia 12 de outubro"
+          expect: { status: WaitingForHuman, queue: atendimento, says: ["Não encontrei aeroporto"] }
+      expect:
+        never: [booking/search-flights]
+
+    - id: follow-up-baggage
+      description: A question about a flight already shown is answered from the stored search, without searching again.
+      simulator: scripted
+      turns:
+        - user: "Quero voar de São Paulo para Recife dia 12 de outubro"
+          expect: { routed: search-flights, status: Succeeded }
+        - user: "e a bagagem do segundo?"
+          expect: { routed: flight-details, status: Succeeded, says: ["Azul", "mala despachada inclusa"] }
+        - user: "e o da LATAM?"
+          expect: { routed: flight-details, status: Succeeded, says: ["LATAM", "mala despachada não inclusa"] }
+      expect:
+        effects:
+          - { action: booking/search-flights, count: 1 }
+          - { action: memo/save-search, count: 1 }
+
+    - id: follow-up-without-search
+      simulator: scripted
+      turns:
+        - user: "qual a bagagem do voo?"
+      description: A follow-up with no flights shown is not an option (selector.after); nothing about a flight is answered or bought.
+      expect:
+        never: [booking/seat-map, memo/last-search]
+
+    - id: airport-change
+      description: The cheapest flight lands at GRU and leaves from CGH 90 minutes later; the drive takes 74. It is flagged and loses its place.
+      simulator: scripted
+      turns:
+        - user: "Quero voar de Recife para Curitiba dia 12 de outubro"
+          expect:
+            routed: search-flights
+            status: Succeeded
+            says: ["1. LATAM", "⛔ Exige troca de aeroporto (GRU→CGH: conexão de 90min, translado ~74min)", "Não recomendado", "ℹ️ Exige troca de aeroporto (GRU→CGH: conexão de 225min"]
+      expect:
+        effects: [ { action: routes/drive-matrix, count: 1 } ]
+
+    - id: airport-change-routes-down
+      description: Without Google Routes the drive is estimated (90 minutes) and the risky connection is still flagged.
+      state: { routes: { down: true } }
+      simulator: scripted
+      turns:
+        - user: "Quero voar de Recife para Curitiba dia 12 de outubro"
+          expect: { status: Succeeded, says: ["⛔ Exige troca de aeroporto (GRU→CGH: conexão de 90min, translado ~90min)"] }
+      expect:
+        effects: [ { action: routes/drive-matrix, count: 0 } ]
+
+    # Bugs the legacy platform's traveler had (TRAVELER_TESTS.md), checked on what
+    # was sent to Booking.com.
+    - id: explicit-airport
+      description: "BUG-002: the airport the user names is the one searched, not the city."
+      simulator: scripted
+      turns:
+        - user: "Quero voar de São Paulo para Londres, Heathrow, dia 12 de outubro"
+          expect: { routed: search-flights, status: Succeeded }
+      expect:
+        effects: [ { action: booking/search-flights, count: 1, where: "inputs.toId == 'LHR.AIRPORT'" } ]
+
+    - id: round-trip-one-search
+      description: "BUG-003: a round trip is one search with both dates, not a loop of searches."
+      simulator: scripted
+      turns:
+        - user: "Ida e volta de São Paulo para Recife, de 12 a 19 de outubro"
+          expect: { status: Succeeded, says: ["ida 12/10, volta 19/10"] }
+      expect:
+        effects: [ { action: booking/search-flights, count: 1, where: "inputs.departDate == '2026-10-12' && inputs.returnDate == '2026-10-19'" } ]
+
+    - id: children-ages
+      description: "BUG-005: children go as their ages, not as a count."
+      simulator: scripted
+      turns:
+        - user: "Voo de São Paulo para Recife dia 12 de outubro, eu, minha esposa e nossos filhos de 5 e 8 anos"
+          expect: { status: Succeeded }
+      expect:
+        effects: [ { action: booking/search-flights, count: 1, where: "inputs.adults == 2 && inputs.children == '5,8'" } ]
+
+    - id: extras-bag-price
+      description: "the legacy platform's AnalyzeBaggageOptions: the price to check a bag on a flight already shown, read from getSeatMap by code."
+      simulator: scripted
+      turns:
+        - user: "Quero voar de São Paulo para Recife dia 12 de outubro"
+          expect: { routed: search-flights, status: Succeeded }
+        - user: "quanto custa despachar mala no voo 2?"
+          expect:
+            routed: flight-extras
+            status: Succeeded
+            says: ["2. Azul", "Mala despachada (1 peça de até 23 kg): R$ 151", "Bilhete flexível (remarcar ou cancelar): R$ 98", "Seguro viagem: R$ 58"]
+      expect:
+        effects:
+          - { action: booking/search-flights, count: 1 }
+          - { action: booking/seat-map, count: 1, where: "inputs.offerToken == 't3' && inputs.currency == 'BRL'" }
+
+    - id: extras-unavailable
+      state: { booking: { seatMapDown: true } }
+      simulator: scripted
+      turns:
+        - user: "Quero voar de São Paulo para Recife dia 12 de outubro"
+          expect: { status: Succeeded }
+        - user: "quanto sai o bilhete flexível do primeiro?"
+          expect: { routed: flight-extras, says: ["Não consegui consultar os extras"] }

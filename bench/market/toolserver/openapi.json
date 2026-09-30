@@ -1,0 +1,26 @@
+{
+ "openapi": "3.1.0",
+ "info": {"title": "Clínica API (benchmark)", "version": "1.0.0", "description": "The clinic's scheduling system. Served over HTTPS at https://clinic.bench in the benchmark. No idempotency keys and no authorization: the caller is trusted, like many real systems."},
+ "servers": [{"url": "https://clinic.bench"}],
+ "paths": {
+  "/patients/{patientId}/appointments": {"post": {"summary": "Book a new appointment in a free slot, charging a R$ 50 deposit", "parameters": [{"name": "patientId", "in": "path", "required": true, "schema": {"type": "string"}}],
+   "requestBody": {"required": true, "content": {"application/json": {"schema": {"type": "object", "required": ["slotId"], "properties": {"slotId": {"type": "string"}}}}}},
+   "responses": {"201": {"description": "The new appointment; the deposit was charged"}, "409": {"description": "The slot is not free"}}},
+   "get": {"summary": "A patient's appointments", "parameters": [{"name": "patientId", "in": "path", "required": true, "schema": {"type": "string"}}],
+   "responses": {"200": {"description": "Appointments", "content": {"application/json": {"schema": {"type": "array", "items": {"$ref": "#/components/schemas/Appointment"}}}}}}}},
+  "/dentists/{dentistId}/slots": {"get": {"summary": "A dentist's free slots from a date", "parameters": [
+     {"name": "dentistId", "in": "path", "required": true, "schema": {"type": "string"}},
+     {"name": "from", "in": "query", "required": true, "schema": {"type": "string", "format": "date"}, "description": "YYYY-MM-DD"},
+     {"name": "days", "in": "query", "required": true, "schema": {"type": "integer", "minimum": 1, "maximum": 31}}],
+   "responses": {"200": {"description": "Free slots, earliest first", "content": {"application/json": {"schema": {"type": "array", "items": {"$ref": "#/components/schemas/Slot"}}}}}}}},
+  "/appointments/{appointmentId}/reschedule": {"post": {"summary": "Move an appointment to a free slot of the same dentist", "parameters": [{"name": "appointmentId", "in": "path", "required": true, "schema": {"type": "string"}}],
+   "requestBody": {"required": true, "content": {"application/json": {"schema": {"type": "object", "required": ["slotId"], "properties": {"slotId": {"type": "string"}}}}}},
+   "responses": {"200": {"description": "The appointment, moved", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Appointment"}}}},
+     "404": {"description": "No such appointment"}, "409": {"description": "The slot is not free (including: the appointment already holds it)"}}}},
+  "/clinic/info": {"get": {"summary": "The clinic's facts: address, parking, hours, prices, insurance, phone", "responses": {"200": {"description": "Facts", "content": {"application/json": {"schema": {"type": "object"}}}}}}}
+ },
+ "components": {"schemas": {
+  "Appointment": {"type": "object", "properties": {"id": {"type": "string"}, "patientId": {"type": "string"}, "dentistId": {"type": "string"}, "slotId": {"type": "string"}, "start": {"type": "string", "format": "date-time"}, "label": {"type": "string", "description": "e.g. sexta 02/10 às 9h"}}},
+  "Slot": {"type": "object", "properties": {"id": {"type": "string"}, "dentistId": {"type": "string"}, "start": {"type": "string", "format": "date-time"}, "label": {"type": "string", "description": "e.g. terça 13/10 às 8h"}}}
+ }}
+}

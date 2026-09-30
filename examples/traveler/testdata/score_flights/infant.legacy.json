@@ -1,0 +1,215 @@
+{
+ "loyaltyAirlines": "",
+ "loyaltyProgram": "\n",
+ "neverMiddleSeat": false,
+ "summary": {
+  "analyzed": 3,
+  "baggageSummary": {
+   "allBaggageDetails": [
+    {
+     "baggage": {
+      "carryOn": true,
+      "checkedBag": false,
+      "details": [
+       "1 personal item"
+      ],
+      "personalItem": true
+     },
+     "fareName": "Light"
+    },
+    {
+     "baggage": {
+      "carryOn": true,
+      "checkedBag": true,
+      "details": [
+       "1 checked bag 23kg",
+       "1 personal item"
+      ],
+      "personalItem": true
+     },
+     "fareName": "Plus"
+    },
+    {
+     "baggage": {
+      "carryOn": true,
+      "checkedBag": false,
+      "details": [
+       "1 personal item"
+      ],
+      "personalItem": true
+     },
+     "fareName": "Light"
+    }
+   ],
+   "withCarryOn": 3,
+   "withCheckedBag": 1,
+   "withPersonalItem": 3
+  },
+  "cheapestPrice": 640,
+  "currency": "BRL",
+  "fastestDuration": 11700,
+  "filtered": 0,
+  "hasInfants": true,
+  "infantPrice": 150,
+  "loyaltyFlightsInTop5": 0,
+  "timePreferenceMatchInTop5": 3,
+  "total": 3
+ },
+ "timeConstraint": {},
+ "topFlights": [
+  {
+   "airlines": [
+    "G3"
+   ],
+   "allConnectionAirports": [],
+   "arriveHour": 15,
+   "arriveTimeStr": "15:55",
+   "baggage": {
+    "carryOn": true,
+    "checkedBag": false,
+    "details": [
+     "1 personal item"
+    ],
+    "personalItem": true
+   },
+   "currency": "BRL",
+   "departHour": 12,
+   "departTimeStr": "12:40",
+   "fareName": "Light",
+   "isLoyaltyAirline": false,
+   "isOvernight": false,
+   "isPreferredAirline": false,
+   "matchesTimePreference": true,
+   "meetsTimeConstraints": true,
+   "price": 640,
+   "score": 87.05,
+   "segments": [
+    {
+     "airline": "GOL",
+     "airlineCode": "G3",
+     "arriveTime": "2026-10-12T15:55:00",
+     "connectionAirports": [],
+     "departTime": "2026-10-12T12:40:00",
+     "duration": 11700,
+     "flightNumber": "G3100",
+     "from": "GRU",
+     "stops": 0,
+     "to": "REC"
+    }
+   ],
+   "token": "t-gol-noon",
+   "totalDuration": 11700,
+   "totalStops": 0,
+   "travelers": [
+    {
+     "price": 640,
+     "type": "ADULT"
+    }
+   ],
+   "tripType": "ONEWAY"
+  },
+  {
+   "airlines": [
+    "AD"
+   ],
+   "allConnectionAirports": [],
+   "arriveHour": 19,
+   "arriveTimeStr": "19:30",
+   "baggage": {
+    "carryOn": true,
+    "checkedBag": true,
+    "details": [
+     "1 checked bag 23kg",
+     "1 personal item"
+    ],
+    "personalItem": true
+   },
+   "currency": "BRL",
+   "departHour": 16,
+   "departTimeStr": "16:05",
+   "fareName": "Plus",
+   "isLoyaltyAirline": false,
+   "isOvernight": false,
+   "isPreferredAirline": false,
+   "matchesTimePreference": true,
+   "meetsTimeConstraints": true,
+   "price": 720,
+   "score": 86.15,
+   "segments": [
+    {
+     "airline": "Azul",
+     "airlineCode": "AD",
+     "arriveTime": "2026-10-12T19:30:00",
+     "connectionAirports": [],
+     "departTime": "2026-10-12T16:05:00",
+     "duration": 12300,
+     "flightNumber": "AD100",
+     "from": "GRU",
+     "stops": 0,
+     "to": "REC"
+    }
+   ],
+   "token": "t-azul-pm",
+   "totalDuration": 12300,
+   "totalStops": 0,
+   "travelers": [
+    {
+     "price": 720,
+     "type": "ADULT"
+    }
+   ],
+   "tripType": "ONEWAY"
+  },
+  {
+   "airlines": [
+    "LA"
+   ],
+   "allConnectionAirports": [],
+   "arriveHour": 12,
+   "arriveTimeStr": "12:15",
+   "baggage": {
+    "carryOn": true,
+    "checkedBag": false,
+    "details": [
+     "1 personal item"
+    ],
+    "personalItem": true
+   },
+   "currency": "BRL",
+   "departHour": 9,
+   "departTimeStr": "09:00",
+   "fareName": "Light",
+   "isLoyaltyAirline": false,
+   "isOvernight": false,
+   "isPreferredAirline": false,
+   "matchesTimePreference": true,
+   "meetsTimeConstraints": true,
+   "price": 1200,
+   "score": 84.25,
+   "segments": [
+    {
+     "airline": "LATAM",
+     "airlineCode": "LA",
+     "arriveTime": "2026-10-12T12:15:00",
+     "connectionAirports": [],
+     "departTime": "2026-10-12T09:00:00",
+     "duration": 11700,
+     "flightNumber": "LA100",
+     "from": "GRU",
+     "stops": 0,
+     "to": "REC"
+    }
+   ],
+   "token": "t-infant",
+   "totalDuration": 11700,
+   "totalStops": 0,
+   "travelers": [
+    {
+     "price": 1200,
+     "type": "ADULT"
+    }
+   ],
+   "tripType": "ONEWAY"
+  }
+ ]
+}

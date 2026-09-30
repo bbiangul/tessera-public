@@ -1,0 +1,62 @@
+# What can be bought for a flight already shown: checked bags, the flexible
+# ticket and travel insurance, from Booking.com's getSeatMap. the legacy platform
+# asked a model to read the whole response and write an analysis; here the
+# numbers are read by code and the message is built from them, so a price
+# is never invented.
+
+def _money(p):
+    total = (p or {}).get("total") or {}
+    units = total.get("units")
+    if units == None:
+        return None
+    value = units + (total.get("nanos") or 0) / 1e9
+    currency = total.get("currencyCode") or "BRL"
+    whole = int(value + 0.5)
+    s = str(whole)
+    groups = []
+    for _ in range(10):
+        if len(s) <= 3:
+            break
+        groups.insert(0, s[-3:])
+        s = s[:-3]
+    groups.insert(0, s)
+    return ("R$ " if currency == "BRL" else currency + " ") + ".".join(groups)
+
+def _kg(allowance):
+    w = allowance.get("maxWeightPerPiece")
+    if w == None:
+        return ""
+    if allowance.get("massUnit") == "LB":
+        w = w * 0.4536
+    return " de até %d kg" % int(w + 0.5)
+
+def extras(data):
+    """The extras on sale, as data: bags, flexible ticket, insurance."""
+    data = data or {}
+    bags = []
+    for o in (data.get("checkedInBaggage") or {}).get("options") or []:
+        a = o.get("luggageAllowance") or {}
+        price = _money(o.get("priceBreakdown"))
+        if price:
+            bags.append({"pieces": a.get("maxPiece") or 1, "weight": _kg(a), "price": price})
+    flex = _money((data.get("flexibleTicket") or {}).get("priceBreakdown"))
+    ins = (data.get("travelInsurance") or {})
+    insurance = _money(((ins.get("options") or {}).get("priceBreakdown")))
+    benefits = ((ins.get("content") or {}).get("benefits") or [])[:3]
+    return {"bags": bags, "flexibleTicket": flex, "insurance": insurance, "insuranceBenefits": benefits}
+
+def extras_message(flight, data):
+    x = extras(data)
+    lines = [flight["label"]]
+    if flight.get("baggage"):
+        lines.append("Incluso: " + flight["baggage"])
+    for b in x["bags"]:
+        lines.append("Mala despachada (%d peça%s%s): %s" % (b["pieces"], "" if b["pieces"] == 1 else "s", b["weight"], b["price"]))
+    if x["flexibleTicket"]:
+        lines.append("Bilhete flexível (remarcar ou cancelar): %s" % x["flexibleTicket"])
+    if x["insurance"]:
+        extra = (" — cobre " + "; ".join(x["insuranceBenefits"]).lower()) if x["insuranceBenefits"] else ""
+        lines.append("Seguro viagem: %s%s" % (x["insurance"], extra))
+    if len(lines) == (2 if flight.get("baggage") else 1):
+        lines.append("A companhia não oferece extras para compra nesse voo.")
+    return "\n".join(lines)

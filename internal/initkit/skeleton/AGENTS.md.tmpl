@@ -1,0 +1,61 @@
+# AGENTS.md
+
+This repository is a Tessera agent (namespace `@NS@`). Tessera runs it:
+the definitions here say what the agent may do, and the platform gives
+every action its guarantees. It confirms before irreversible effects, never
+repeats one, journals every decision, and hands off to people.
+
+## Building the agent
+
+Ask Claude Code for what you want in plain language ("an agent that
+reschedules appointments in our system and tells the team when it
+can't"). The skill `.claude/skills/tessera-author` does the rest. It maps
+your systems, writes the definitions and the EvalSuite, and runs the gates
+below until they pass.
+
+**Reference:**
+- `.tessera/guides/`: authoring, testing, validation, expressions.
+- `.tessera/examples/traveler`: a whole travel agency (searches, bookings
+  with a team, Starlark, agent mode, webhooks, a sales funnel).
+- `tessera explain <Kind.spec.field>` documents any field. Never guess a
+  field name.
+
+References to `docs/research/` and `docs/rfcs/` point to Tessera's own
+measurements, in its repository.
+
+## What is here
+
+| Path | What |
+| --- | --- |
+| `agent.yaml` | The Agent: its messages, voice, free mode and human queue |
+| `functions/` | One Function per thing people ask for |
+| `plugins/` | Your systems (`http`) and the agent's storage (`sql`) |
+| `evals/` | EvalSuites: the conversations that must work |
+| `Dockerfile` | The agent on the Tessera image |
+
+The starting agent takes messages for a team and shows them back. Replace
+it.
+
+## Gates
+
+```bash
+tessera validate .                               # 0 errors; read every warning
+tessera test . --cassette evals.jsonl --cassette-mode record   # live, once
+tessera test . --cassette evals.jsonl --cassette-mode replay   # offline, free: CI
+```
+
+Live runs need these keys, as environment variables, never in files:
+- `TYPESAFE_API_KEY` (decisions);
+- `OPENROUTER_API_KEY` (text).
+
+## Running
+
+```bash
+docker build -t @NS@ .
+docker run -p 8080:8080 -v @NS@-data:/data \
+  -e TESSERA_API_TOKEN -e TYPESAFE_API_KEY -e OPENROUTER_API_KEY @NS@
+```
+
+- **Secrets:** plugins read theirs from `TESSERA_SECRET_<NAME>`.
+- **The API:** `GET /v1/openapi.json`; `POST /v1/messages` receives a
+  user's message.

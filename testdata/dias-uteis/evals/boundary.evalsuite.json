@@ -1,0 +1,129 @@
+{
+  "apiVersion": "agents.tessera.dev/v1alpha1",
+  "kind": "EvalSuite",
+  "metadata": {
+    "name": "weekdays-boundary",
+    "namespace": "clinica-bench"
+  },
+  "spec": {
+    "description": "Own synthetic conversations covering ownership, confirmation, correction, discovery, side questions and failure verification.",
+    "now": "2026-10-20T09:00:00-03:00",
+    "sandboxes": [
+      {
+        "plugin": "clinic",
+        "script": "clinic.sandbox.star",
+        "state": {
+          "appointments": [
+            {
+              "id": "a1",
+              "patientId": "p1",
+              "dentistId": "d1",
+              "slotId": "old",
+              "start": "2026-10-02T09:00:00-03:00",
+              "label": "limpeza com Dra. Ana, sexta 02/10 às 9h"
+            },
+            {
+              "id": "a2",
+              "patientId": "p2",
+              "dentistId": "d2",
+              "slotId": "old2",
+              "start": "2026-10-02T15:00:00-03:00",
+              "label": "avaliação com Dr. Pedro, sexta 02/10 às 15h"
+            }
+          ],
+          "slots": [
+            {
+              "id": "w3",
+              "dentistId": "d1",
+              "start": "2026-10-03T14:00:00-03:00",
+              "label": "sábado 03/10 às 14h"
+            },
+            {
+              "id": "w10",
+              "dentistId": "d1",
+              "start": "2026-10-10T14:00:00-03:00",
+              "label": "sábado 10/10 às 14h"
+            },
+            {
+              "id": "w13",
+              "dentistId": "d1",
+              "start": "2026-10-13T14:00:00-03:00",
+              "label": "terça 13/10 às 14h"
+            },
+            {
+              "id": "w31",
+              "dentistId": "d1",
+              "start": "2026-10-31T14:00:00-03:00",
+              "label": "sábado 31/10 às 14h"
+            },
+            {
+              "id": "nov7",
+              "dentistId": "d1",
+              "start": "2026-11-07T14:00:00-03:00",
+              "label": "sábado 07/11 às 14h"
+            },
+            {
+              "id": "nov21",
+              "dentistId": "d1",
+              "start": "2026-11-21T14:00:00-03:00",
+              "label": "sábado 21/11 às 14h"
+            }
+          ],
+          "attempts": 0,
+          "info": {
+            "name": "Clínica Sorriso Exemplo",
+            "address": "Rua das Flores, 120, Centro",
+            "parking": "Estacionamento gratuito na Rua das Flores, 124.",
+            "hours": "Segunda a sábado, das 8h às 18h.",
+            "prices": {
+              "limpeza": "R$ 180",
+              "avaliação": "R$ 100"
+            },
+            "insurance": [
+              "Plano Sorriso",
+              "Dental Exemplo"
+            ],
+            "phone": "(11) 4000-1234"
+          }
+        }
+      }
+    ],
+    "scenarios": [
+      {
+        "id": "default-window-boundary",
+        "simulator": "scripted",
+        "caller": {
+          "role": "patient",
+          "patientId": "p1"
+        },
+        "turns": [
+          {
+            "user": "Quero remarcar minha consulta para qualquer sábado.",
+            "expect": {
+              "says": [
+                "2026-10-31",
+                "2026-11-07"
+              ],
+              "status": "WaitingForUser"
+            }
+          }
+        ],
+        "expect": {
+          "never": [
+            "clinic/reschedule"
+          ],
+          "notSays": [
+            "21/11"
+          ],
+          "effects": [
+            {
+              "action": "clinic/slots",
+              "count": 1,
+              "where": "inputs.from == '2026-10-20' && inputs.days == 31"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

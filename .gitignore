@@ -1,0 +1,17 @@
+bin/
+.DS_Store
+*.test
+*.out
+.env
+
+# Reference studies of other harnesses (kept local, not committed)
+docs/research/harness-*.md
+out/
+bench/market/.venv/
+__pycache__/
+build/
+dist/
+bench/market/.venv
+bench/results/**/db/
+
+bench/market/.venv-crewai

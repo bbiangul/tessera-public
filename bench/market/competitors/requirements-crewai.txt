@@ -1,0 +1,5 @@
+# CrewAI for the market benchmark (market-bench-005), in its own
+# environment: it needs Python < 3.14 and openai < 3, which conflict with
+# requirements.txt. Approved by the owner on 2026-09-26.
+#   python3.12 -m venv bench/market/.venv-crewai && bench/market/.venv-crewai/bin/pip install -r bench/market/competitors/requirements-crewai.txt
+crewai==1.15.22

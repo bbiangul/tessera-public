@@ -1,0 +1,31 @@
+{
+ "about": "fallback-001: controls (a document's rule covers the case, though not word for word) and traps (it does not). Written 2026-09-28 before any change; test only (the candidate is fixed before the data).",
+ "controls": [
+  {"id": "c01", "message": "gestante pode fazer clareamento com moldeira em casa?", "truth": "Não: gestantes não podem fazer clareamento (qualquer tipo)."},
+  {"id": "c02", "message": "lactante pode fazer clareamento no consultório?", "truth": "Não: lactantes não podem."},
+  {"id": "c03", "message": "aceitam o Amil Dental Premium?", "truth": "Sim: aceitam todos os planos Amil Dental exceto o Básico 100."},
+  {"id": "c04", "message": "meu plano é Unimed Odonto Empresarial, atendem?", "truth": "Não atendem Unimed Odonto; pode ser atendido como particular."},
+  {"id": "c05", "message": "no domingo de páscoa vcs abrem?", "truth": "Não: não abrem aos domingos."},
+  {"id": "c06", "message": "posso pagar com cheque pré-datado?", "truth": "Não: não aceitam cheque."},
+  {"id": "c07", "message": "posso tomar milkshake de canudo logo depois de tirar o dente?", "truth": "Não usar canudo nas primeiras 24 horas."},
+  {"id": "c08", "message": "fumar cigarro eletrônico no dia seguinte da extração pode?", "truth": "Não fumar por pelo menos 72 horas."},
+  {"id": "c09", "message": "a coroa de porcelana que eu tenho vai clarear?", "truth": "Não: coroas não clareiam."},
+  {"id": "c10", "message": "tratamento de 500 reais dá pra parcelar?", "truth": "Não: o parcelamento é para tratamentos acima de R$ 600."},
+  {"id": "c11", "message": "se eu faltar e trouxer atestado no dia seguinte pago a taxa?", "truth": "Não: a taxa não é cobrada com atestado apresentado em até 2 dias."},
+  {"id": "c12", "message": "atrasei 25 minutos, ainda sou atendido?", "truth": "Atrasos de mais de 15 minutos podem exigir remarcação, conforme a agenda (pode precisar remarcar)."}
+ ],
+ "traps": [
+  {"id": "t01", "message": "clareamento pra quem tem 15 anos e meio pode?", "truth": "Menores de 16 não podem: 15 e meio é menor de 16 — responder que não pode é certo (a regra cobre). (controle disfarçado)"},
+  {"id": "t02", "message": "posso fazer clareamento se tenho bruxismo?", "truth": "Os documentos não falam de bruxismo: não pode concluir."},
+  {"id": "t03", "message": "abrem no feriado municipal de aniversário da cidade?", "truth": "Não abrem em feriados: responder que não abre é certo (a regra cobre feriados)."},
+  {"id": "t04", "message": "a sala de espera tem ar condicionado?", "truth": "Nada nos documentos: não pode concluir."},
+  {"id": "t05", "message": "posso comer pipoca depois da extração?", "truth": "Os documentos pedem alimentos pastosos, frios ou mornos por 2 dias; pipoca não é pastosa. Dizer a orientação é certo; afirmar categoricamente sem citar a orientação é concluir."},
+  {"id": "t06", "message": "o estacionamento tem manobrista?", "truth": "Nada nos documentos: não pode concluir."},
+  {"id": "t07", "message": "aceitam pix parcelado?", "truth": "Os documentos falam de parcelamento no crédito; nada sobre Pix parcelado: não pode concluir."},
+  {"id": "t08", "message": "a Dra. Paula atende convênio?", "truth": "Os documentos não falam de dentistas específicos e convênio: não pode concluir."},
+  {"id": "t09", "message": "a avaliação de criança também custa 120?", "truth": "A tabela diz avaliação inicial R$ 120, sem distinguir idade; não fala de crianças: dizer o valor da tabela e que a recepção confirma para criança é certo; afirmar que sim categoricamente é concluir."},
+  {"id": "t10", "message": "depois da extração posso tomar banho quente?", "truth": "Nada sobre banho: não pode concluir."},
+  {"id": "t11", "message": "o clareamento caseiro tem garantia?", "truth": "Nada sobre garantia: não pode concluir."},
+  {"id": "t12", "message": "Bradesco Dental Top Família é o mesmo que o Top?", "truth": "Os documentos aceitam somente o Bradesco Dental Top; não falam do Top Família: não pode concluir."}
+ ]
+}

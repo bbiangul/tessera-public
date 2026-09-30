@@ -1,0 +1,321 @@
+{
+ "scoredFlights": {
+  "topFlights": [
+   {
+    "token": "t1",
+    "totalDuration": 11700,
+    "segments": [
+     {
+      "departTime": "2026-10-12T07:10:00"
+     }
+    ]
+   },
+   {
+    "token": "t2",
+    "totalDuration": 18000,
+    "segments": [
+     {
+      "departTime": "2026-10-12T22:15:00"
+     }
+    ]
+   },
+   {
+    "token": "t3",
+    "totalDuration": 16200,
+    "segments": [
+     {
+      "departTime": "2026-10-12T18:30:00"
+     }
+    ]
+   },
+   {
+    "token": null,
+    "totalDuration": 3000,
+    "segments": [
+     {
+      "departTime": "2026-10-12T09:00:00"
+     }
+    ]
+   },
+   {
+    "token": "t5",
+    "totalDuration": 9000,
+    "segments": [
+     {
+      "departTime": "2026-10-12T04:50:00"
+     }
+    ]
+   }
+  ],
+  "neverMiddleSeat": false,
+  "summary": {
+   "hasInfants": false
+  }
+ },
+ "seatMaps": [
+  {
+   "status": true,
+   "data": {
+    "seatMap": {
+     "columns": [
+      {
+       "id": "A",
+       "type": "WINDOW"
+      },
+      {
+       "id": "B",
+       "type": "BETWEEN"
+      },
+      {
+       "id": "C",
+       "type": "AISLE"
+      },
+      {
+       "id": "D",
+       "type": "AISLE"
+      },
+      {
+       "id": "E",
+       "type": "BETWEEN"
+      },
+      {
+       "id": "F",
+       "type": "WINDOW"
+      }
+     ],
+     "rows": [
+      {
+       "rowNumber": 10,
+       "seats": [
+        {
+         "colId": "A",
+         "description": "NORMAL",
+         "priceBreakdown": null
+        },
+        {
+         "colId": "B",
+         "description": "NORMAL",
+         "priceBreakdown": null
+        },
+        {
+         "colId": "C",
+         "description": "OCCUPIED",
+         "priceBreakdown": null
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "status": true,
+   "data": {
+    "seatMap": {
+     "columns": [
+      {
+       "id": "A",
+       "type": "WINDOW"
+      },
+      {
+       "id": "B",
+       "type": "BETWEEN"
+      },
+      {
+       "id": "C",
+       "type": "AISLE"
+      },
+      {
+       "id": "D",
+       "type": "AISLE"
+      },
+      {
+       "id": "E",
+       "type": "BETWEEN"
+      },
+      {
+       "id": "F",
+       "type": "WINDOW"
+      }
+     ],
+     "rows": [
+      {
+       "rowNumber": 20,
+       "seats": [
+        {
+         "colId": "A",
+         "description": "OCCUPIED",
+         "priceBreakdown": null
+        },
+        {
+         "colId": "B",
+         "description": "NORMAL",
+         "priceBreakdown": null
+        },
+        {
+         "colId": "E",
+         "description": "NORMAL",
+         "priceBreakdown": null
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "status": true,
+   "data": {
+    "seatMap": {
+     "columns": [
+      {
+       "id": "A",
+       "type": "WINDOW"
+      },
+      {
+       "id": "B",
+       "type": "BETWEEN"
+      },
+      {
+       "id": "C",
+       "type": "AISLE"
+      },
+      {
+       "id": "D",
+       "type": "AISLE"
+      },
+      {
+       "id": "E",
+       "type": "BETWEEN"
+      },
+      {
+       "id": "F",
+       "type": "WINDOW"
+      }
+     ],
+     "rows": [
+      {
+       "rowNumber": 15,
+       "seats": [
+        {
+         "colId": "A",
+         "description": "NORMAL",
+         "priceBreakdown": {
+          "total": {
+           "units": 45,
+           "currencyCode": "BRL"
+          }
+         }
+        },
+        {
+         "colId": "F",
+         "description": "NORMAL",
+         "priceBreakdown": {
+          "total": {
+           "units": 39.9,
+           "currencyCode": "BRL"
+          }
+         }
+        },
+        {
+         "colId": "B",
+         "description": "NORMAL",
+         "priceBreakdown": null
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "status": true,
+   "data": {
+    "seatMap": {
+     "columns": [
+      {
+       "id": "A",
+       "type": "WINDOW"
+      },
+      {
+       "id": "B",
+       "type": "BETWEEN"
+      },
+      {
+       "id": "C",
+       "type": "AISLE"
+      },
+      {
+       "id": "D",
+       "type": "AISLE"
+      },
+      {
+       "id": "E",
+       "type": "BETWEEN"
+      },
+      {
+       "id": "F",
+       "type": "WINDOW"
+      }
+     ],
+     "rows": [
+      {
+       "rowNumber": 10,
+       "seats": [
+        {
+         "colId": "A",
+         "description": "NORMAL",
+         "priceBreakdown": null
+        },
+        {
+         "colId": "B",
+         "description": "NORMAL",
+         "priceBreakdown": null
+        },
+        {
+         "colId": "C",
+         "description": "OCCUPIED",
+         "priceBreakdown": null
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "status": false,
+   "data": {
+    "seatMap": {
+     "columns": [
+      {
+       "id": "A",
+       "type": "WINDOW"
+      },
+      {
+       "id": "B",
+       "type": "BETWEEN"
+      },
+      {
+       "id": "C",
+       "type": "AISLE"
+      },
+      {
+       "id": "D",
+       "type": "AISLE"
+      },
+      {
+       "id": "E",
+       "type": "BETWEEN"
+      },
+      {
+       "id": "F",
+       "type": "WINDOW"
+      }
+     ],
+     "rows": []
+    }
+   }
+  }
+ ]
+}

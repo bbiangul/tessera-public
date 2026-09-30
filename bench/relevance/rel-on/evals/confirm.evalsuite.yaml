@@ -1,0 +1,107 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: confirm, namespace: learn }
+spec:
+  description: learn-001 confirm; transcripts only, judged outside.
+  now: "2026-09-27T09:00:00-03:00"
+  scenarios:
+    - id: c-a1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "aceitam amil dental básico 100?"
+    - id: c-a2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto é a restauração de resina?"
+    - id: c-a3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "se eu chegar 20 minutos atrasado?"
+    - id: c-a4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "lactante pode clarear os dentes?"
+    - id: c-a5
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "qual o endereço?"
+    - id: c-a6
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso usar canudo depois da extração?"
+    - id: c-n1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "clareamento em adolescente de 17 anos pode?"
+    - id: c-n2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "depois de fazer implante posso comer pão?"
+    - id: c-n3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o sulamérica cobre clareamento?"
+    - id: c-n4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto custa uma extração de siso?"
+    - id: c-n5
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem bicicletário?"
+    - id: c-n6
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "se eu remarcar em cima da hora pago taxa?"
+    - id: c-n7
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "dá pra pagar metade no pix e metade no cartão?"
+    - id: c-n8
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "depois do clareamento posso tomar vinho branco?"
+    - id: c-n9
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "preciso de pedido médico pra usar o plano?"
+    - id: c-n10
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs abrem no feriado de carnaval?"
+    - id: c-x1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs atendem pelo SUS?"
+    - id: c-x2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem cadeira de massagem na espera?"
+    - id: c-x3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "fazem clareamento em gengiva?"
+    - id: c-x4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a clínica tem alvará da vigilância sanitária?"

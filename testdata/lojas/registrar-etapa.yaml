@@ -1,0 +1,50 @@
+# The team says which store finished which step, or the ERP reports it
+# through a signed webhook (trigger erp-etapa); the step becomes a
+# milestone of that store.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: registrar-etapa, namespace: rede }
+spec:
+  description: Registers that a store finished a step of its opening.
+  selector:
+    intent: registrar-etapa
+    description: "A equipe informa que uma loja concluiu uma etapa da abertura: contrato assinado, ponto aprovado, projeto aprovado, obra concluída, equipe treinada, loja inaugurada."
+  authorize: "(has(caller.role) && caller.role == 'implantacao') || (has(caller.trigger) && caller.trigger == 'erp-etapa')"
+  inputs:
+    unidade:
+      type: string
+      description: the store number, digits only (a loja 12 -> "12")
+      resolve:
+        - { id: erp, when: "has(event.payload)", value: "event.payload.unidade" }
+        - { id: said, extract: {} }
+        - id: asked
+          ask: { text: "Qual o número da loja?", minConfidence: 0.7, onLowConfidence: ask-user }
+    etapa:
+      type: string
+      description: "the step finished, one of: contrato, ponto, projeto, obra, treinamento, inauguracao"
+      resolve:
+        - { id: erp, when: "has(event.payload)", value: "event.payload.etapa" }
+        - { id: said, extract: { instructions: "contrato assinado -> contrato; ponto aprovado -> ponto; projeto aprovado -> projeto; obra concluída -> obra; equipe treinada -> treinamento; loja aberta or inaugurada -> inauguracao; null otherwise" } }
+        - id: asked
+          ask: { text: "Qual etapa foi concluída? (contrato, ponto, projeto, obra, treinamento ou inauguração)", minConfidence: 0.7, onLowConfidence: ask-user }
+    regiao:
+      type: string
+      description: "the region of the store when said: sul, sudeste, nordeste, centro-oeste or norte"
+      resolve:
+        - { id: erp, when: "has(event.payload) && has(event.payload.regiao)", value: "event.payload.regiao" }
+        - { id: said, extract: { instructions: "null unless the message names the region" } }
+        - { id: none, value: "''" }
+  preconditions:
+    - cel: "inputs.etapa in ['contrato', 'ponto', 'projeto', 'obra', 'treinamento', 'inauguracao']"
+      message: "Não reconheci a etapa. Use: contrato, ponto, projeto, obra, treinamento ou inauguração."
+    - cel: "inputs.regiao in ['', 'sul', 'sudeste', 'nordeste', 'centro-oeste', 'norte']"
+      message: "Não reconheci a região. Use: sul, sudeste, nordeste, centro-oeste ou norte."
+  steps:
+    - { id: contrato,    when: "inputs.etapa == 'contrato'",    compute: { cel: "true" }, milestone: { name: contrato-assinado, subject: loja, attributes: { regiao: "inputs.regiao" } } }
+    - { id: ponto,       when: "inputs.etapa == 'ponto'",       compute: { cel: "true" }, milestone: { name: ponto-aprovado, subject: loja } }
+    - { id: projeto,     when: "inputs.etapa == 'projeto'",     compute: { cel: "true" }, milestone: { name: projeto-aprovado, subject: loja } }
+    - { id: obra,        when: "inputs.etapa == 'obra'",        compute: { cel: "true" }, milestone: { name: obra-concluida, subject: loja } }
+    - { id: treinamento, when: "inputs.etapa == 'treinamento'", compute: { cel: "true" }, milestone: { name: equipe-treinada, subject: loja } }
+    - { id: inauguracao, when: "inputs.etapa == 'inauguracao'", compute: { cel: "true" }, milestone: { name: loja-aberta, subject: loja } }
+  output:
+    template: "Registrado: loja {{ inputs.unidade }}, etapa {{ inputs.etapa }}."

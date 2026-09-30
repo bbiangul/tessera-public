@@ -1,0 +1,52 @@
+# What can be bought for a flight already shown (the legacy platform's
+# AnalyzeBaggageOptions and AnalyzeFlexibleTicket): checked-bag prices,
+# flexible ticket, insurance. One getSeatMap call; the prices are read by
+# code (scripts/extras.star), never written by a model.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: flight-extras
+  namespace: traveler
+spec:
+  description: Tells what can be bought for a flight from the last search (checked bags, flexible ticket, insurance) and the prices.
+  selector:
+    after: [search-flights, flight-details, flight-extras]   # follow-ups: only after flights were shown
+    intent: flight-extras
+    description: "Quanto custa um extra de um dos voos que acabei de mostrar (agentSaid lista voos): despachar mala (preço), bilhete flexível para remarcar ou cancelar, seguro viagem. Sem voos mostrados, uma pergunta geral sobre preços não é isto."
+  inputs:
+    last:
+      type: map
+      description: the last flight search of this conversation
+      resolve:
+        - id: saved
+          fromAction: memo/last-search
+          with: { conversation: "${ conversation.id }" }
+      onUnresolved:
+        - respond: { template: "Ainda não mostrei voos nesta conversa. Para onde você quer voar?" }
+    flight:
+      type: map
+      description: the flight the user asks about
+      resolve:
+        - id: only
+          when: "size(inputs.last.results) == 1"
+          value: "inputs.last.results[0]"
+        - id: pick
+          ask:
+            text: "Sobre qual voo? {{ inputs.last.results.map(f, f.label).join(' / ') }}"
+            choices: "inputs.last.results"
+            minConfidence: 0.7
+            onLowConfidence: ask-user
+  steps:
+    - id: offer
+      act: booking/seat-map
+      with: { offerToken: "${ inputs.flight.token }", currency: "${ has(inputs.flight.currency) ? inputs.flight.currency : 'BRL' }" }
+      onError:
+        - respond: { template: "Não consegui consultar os extras desse voo agora. Quer que eu tente de novo?" }
+    - id: message
+      compute:
+        starlark:
+          script: ../scripts/extras.star
+          function: extras_message
+          with: { flight: "${ inputs.flight }", data: "${ steps.offer.output }" }
+  output:
+    template: "{{ steps.message.output }}"

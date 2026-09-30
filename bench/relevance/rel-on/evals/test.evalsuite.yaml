@@ -1,0 +1,127 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: test, namespace: learn }
+spec:
+  description: learn-001 test; transcripts only, judged outside.
+  now: "2026-09-27T09:00:00-03:00"
+  scenarios:
+    - id: t-a1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "bradesco dental serve?"
+    - id: t-a2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "aceita cheque?"
+    - id: t-a3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a avaliação é paga?"
+    - id: t-a4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "se eu faltar tem que pagar alguma coisa?"
+    - id: t-a5
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "que horas vcs fecham?"
+    - id: t-a6
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso tomar café depois do clareamento?"
+    - id: t-a7
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o clareamento caseiro custa quanto?"
+    - id: t-a8
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "sangrou muito depois da extração, o que faço?"
+    - id: t-n1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "meu filho de 8 anos pode fazer consulta?"
+    - id: t-n2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o odontoprev integral cobre implante?"
+    - id: t-n3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "depois da limpeza posso beber café?"
+    - id: t-n4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto custa um canal particular?"
+    - id: t-n5
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "aceitam vale-refeição?"
+    - id: t-n6
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "se a dentista faltar eu recebo algum desconto?"
+    - id: t-n7
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem ponto de ônibus perto?"
+    - id: t-n8
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "clareamento funciona em dente com canal?"
+    - id: t-n9
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a autorização do plano pra aparelho demora quanto?"
+    - id: t-n10
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso fazer academia depois de arrancar o siso?"
+    - id: t-x1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs fazem botox?"
+    - id: t-x2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem café na sala de espera?"
+    - id: t-x3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "atendem urgência de madrugada?"
+    - id: t-x4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quem é o dentista responsável técnico?"
+    - id: t-x5
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs tem instagram?"
+    - id: t-x6
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "fazem raio-x panorâmico aí mesmo?"

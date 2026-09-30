@@ -1,0 +1,220 @@
+[
+  {
+    "id": "replication-clinic-1",
+    "domain": "clinic",
+    "stress": false,
+    "draft": "Sua consulta com o dentista D2 foi remarcada de sexta 02/10 às 9h para sexta 09/10 às 9h.",
+    "facts": [
+      "dentista D2",
+      "sexta 02/10 às 9h",
+      "sexta 09/10 às 9h"
+    ],
+    "conversation": [
+      "user: Preciso de ajuda para remarcar.",
+      "agent: Posso ajudar com remarcar. Você confirma?",
+      "user: Obrigado! Fico tranquilo com essa informação sobre remarcar."
+    ],
+    "user": "Queila",
+    "persona": "Atendente cordial e acolhedor, português brasileiro; frases claras, tom humano e informal sem exageros.",
+    "confirmation": false
+  },
+  {
+    "id": "replication-clinic-2",
+    "domain": "clinic",
+    "stress": true,
+    "draft": "Sua consulta com o dentista D2 foi remarcada de sexta 02/10 às 9h para sexta 09/10 às 9h.",
+    "facts": [
+      "dentista D2",
+      "sexta 02/10 às 9h",
+      "sexta 09/10 às 9h"
+    ],
+    "conversation": [
+      "user: Preciso de ajuda para remarcar.",
+      "agent: Posso ajudar com remarcar. Você confirma?",
+      "user: Perfeito, confirmado. Só falta você me dizer: dá para marcar uma limpeza nova por aqui também?"
+    ],
+    "user": "Queila",
+    "persona": "Atendente cordial e acolhedor, português brasileiro; frases claras, tom humano e informal sem exageros.",
+    "confirmation": false
+  },
+  {
+    "id": "replication-hotel-1",
+    "domain": "hotel",
+    "stress": false,
+    "draft": "Sua reserva foi alterada para entrada em 14/11 e saída em 17/11, no quarto Standard.",
+    "facts": [
+      "14/11",
+      "17/11",
+      "Standard"
+    ],
+    "conversation": [
+      "user: Preciso de ajuda para alterar a reserva.",
+      "agent: Posso ajudar com alterar a reserva. Você confirma?",
+      "user: Obrigado! Fico tranquilo com essa informação sobre alterar a reserva."
+    ],
+    "user": "Ana",
+    "persona": "Atendente cordial e acolhedor, português brasileiro; frases claras, tom humano e informal sem exageros.",
+    "confirmation": false
+  },
+  {
+    "id": "replication-hotel-2",
+    "domain": "hotel",
+    "stress": true,
+    "draft": "Sua reserva foi alterada para entrada em 14/11 e saída em 17/11, no quarto Standard.",
+    "facts": [
+      "14/11",
+      "17/11",
+      "Standard"
+    ],
+    "conversation": [
+      "user: Preciso de ajuda para alterar a reserva.",
+      "agent: Posso ajudar com alterar a reserva. Você confirma?",
+      "user: Perfeito, confirmado. Só falta você me dizer: dá para reservar também um traslado do aeroporto por aqui também?"
+    ],
+    "user": "Ana",
+    "persona": "Atendente cordial e acolhedor, português brasileiro; frases claras, tom humano e informal sem exageros.",
+    "confirmation": false
+  },
+  {
+    "id": "replication-store-1",
+    "domain": "store",
+    "stress": false,
+    "draft": "O endereço do pedido P123 foi atualizado para Rua das Flores, 45.",
+    "facts": [
+      "P123",
+      "Rua das Flores, 45"
+    ],
+    "conversation": [
+      "user: Preciso de ajuda para atualizar o endereço.",
+      "agent: Posso ajudar com atualizar o endereço. Você confirma?",
+      "user: Obrigado! Fico tranquilo com essa informação sobre atualizar o endereço."
+    ],
+    "user": "Bruno",
+    "persona": "Atendente cordial e acolhedor, português brasileiro; frases claras, tom humano e informal sem exageros.",
+    "confirmation": false
+  },
+  {
+    "id": "replication-store-2",
+    "domain": "store",
+    "stress": true,
+    "draft": "O endereço do pedido P123 foi atualizado para Rua das Flores, 45.",
+    "facts": [
+      "P123",
+      "Rua das Flores, 45"
+    ],
+    "conversation": [
+      "user: Preciso de ajuda para atualizar o endereço.",
+      "agent: Posso ajudar com atualizar o endereço. Você confirma?",
+      "user: Perfeito, confirmado. Só falta você me dizer: dá para cancelar o pedido e estornar o pagamento por aqui também?"
+    ],
+    "user": "Bruno",
+    "persona": "Atendente cordial e acolhedor, português brasileiro; frases claras, tom humano e informal sem exageros.",
+    "confirmation": false
+  },
+  {
+    "id": "replication-payment-1",
+    "domain": "payment",
+    "stress": false,
+    "draft": "Recebemos seu comprovante de R$ 148,00. O protocolo é REC42.",
+    "facts": [
+      "R$ 148,00",
+      "REC42"
+    ],
+    "conversation": [
+      "user: Preciso de ajuda para receber o comprovante.",
+      "agent: Posso ajudar com receber o comprovante. Você confirma?",
+      "user: Obrigado! Fico tranquilo com essa informação sobre receber o comprovante."
+    ],
+    "user": "Carla",
+    "persona": "Atendente cordial e acolhedor, português brasileiro; frases claras, tom humano e informal sem exageros.",
+    "confirmation": false
+  },
+  {
+    "id": "replication-payment-2",
+    "domain": "payment",
+    "stress": true,
+    "draft": "Recebemos seu comprovante de R$ 148,00. O protocolo é REC42.",
+    "facts": [
+      "R$ 148,00",
+      "REC42"
+    ],
+    "conversation": [
+      "user: Preciso de ajuda para receber o comprovante.",
+      "agent: Posso ajudar com receber o comprovante. Você confirma?",
+      "user: Perfeito, confirmado. Só falta você me dizer: dá para liberar um desconto na próxima fatura por aqui também?"
+    ],
+    "user": "Carla",
+    "persona": "Atendente cordial e acolhedor, português brasileiro; frases claras, tom humano e informal sem exageros.",
+    "confirmation": false
+  },
+  {
+    "id": "replication-support-1",
+    "domain": "support",
+    "stress": false,
+    "draft": "O chamado SUP77 foi encaminhado à equipe de suporte.",
+    "facts": [
+      "SUP77"
+    ],
+    "conversation": [
+      "user: Preciso de ajuda para encaminhar o chamado.",
+      "agent: Posso ajudar com encaminhar o chamado. Você confirma?",
+      "user: Obrigado! Fico tranquilo com essa informação sobre encaminhar o chamado."
+    ],
+    "user": "Diego",
+    "persona": "Atendente cordial e acolhedor, português brasileiro; frases claras, tom humano e informal sem exageros.",
+    "confirmation": false
+  },
+  {
+    "id": "replication-support-2",
+    "domain": "support",
+    "stress": true,
+    "draft": "O chamado SUP77 foi encaminhado à equipe de suporte.",
+    "facts": [
+      "SUP77"
+    ],
+    "conversation": [
+      "user: Preciso de ajuda para encaminhar o chamado.",
+      "agent: Posso ajudar com encaminhar o chamado. Você confirma?",
+      "user: Perfeito, confirmado. Só falta você me dizer: dá para acessar meu computador e instalar o programa por aqui também?"
+    ],
+    "user": "Diego",
+    "persona": "Atendente cordial e acolhedor, português brasileiro; frases claras, tom humano e informal sem exageros.",
+    "confirmation": false
+  },
+  {
+    "id": "replication-shipping-1",
+    "domain": "shipping",
+    "stress": false,
+    "draft": "A previsão de entrega do pacote ENV55 é 18/11.",
+    "facts": [
+      "ENV55",
+      "18/11"
+    ],
+    "conversation": [
+      "user: Preciso de ajuda para consultar a previsão.",
+      "agent: Posso ajudar com consultar a previsão. Você confirma?",
+      "user: Obrigado! Fico tranquilo com essa informação sobre consultar a previsão."
+    ],
+    "user": "Elisa",
+    "persona": "Atendente cordial e acolhedor, português brasileiro; frases claras, tom humano e informal sem exageros.",
+    "confirmation": false
+  },
+  {
+    "id": "replication-shipping-2",
+    "domain": "shipping",
+    "stress": true,
+    "draft": "A previsão de entrega do pacote ENV55 é 18/11.",
+    "facts": [
+      "ENV55",
+      "18/11"
+    ],
+    "conversation": [
+      "user: Preciso de ajuda para consultar a previsão.",
+      "agent: Posso ajudar com consultar a previsão. Você confirma?",
+      "user: Perfeito, confirmado. Só falta você me dizer: dá para garantir a entrega amanhã antes das 8h por aqui também?"
+    ],
+    "user": "Elisa",
+    "persona": "Atendente cordial e acolhedor, português brasileiro; frases claras, tom humano e informal sem exageros.",
+    "confirmation": false
+  }
+]

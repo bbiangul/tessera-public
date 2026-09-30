@@ -1,0 +1,46 @@
+# The team reports steps; each becomes one milestone of the right store.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: etapas, namespace: rede }
+spec:
+  description: Registering the steps of a store's opening.
+  now: "2026-09-23T09:00:00-03:00"
+  scenarios:
+    - id: steps-in-order
+      caller: { role: implantacao }
+      simulator: scripted
+      turns:
+        - user: "A loja 12, do sul, assinou o contrato hoje"
+          expect: { routed: registrar-etapa, status: Succeeded, says: ["loja 12, etapa contrato"] }
+        - user: "loja 12: ponto aprovado"
+          expect: { routed: registrar-etapa, status: Succeeded, says: ["etapa ponto"] }
+        - user: "a 12 concluiu a obra"
+          expect: { routed: registrar-etapa, status: Succeeded, says: ["etapa obra"] }
+      expect:
+        milestones:
+          - { subject: loja, name: contrato-assinado, count: 1 }
+          - { subject: loja, name: ponto-aprovado, count: 1 }
+          - { subject: loja, name: obra-concluida, count: 1 }
+          - { subject: loja, name: loja-aberta, count: 0 }
+
+    - id: opening-told-to-the-board
+      description: The ERP reports the opening; the board is told once, by the milestone trigger.
+      simulator: scripted
+      turns:
+        - trigger: { name: erp-etapa, payload: { unidade: "31", etapa: inauguracao } }
+          expect: { status: Succeeded }
+        - advance: 1m
+          expect: { queue: diretoria }
+        - advance: 1h
+      expect:
+        milestones: [ { subject: loja, name: loja-aberta, count: 1 } ]
+
+    - id: only-the-team
+      description: Someone outside the opening team cannot register steps.
+      caller: { role: franqueado }
+      simulator: scripted
+      turns:
+        - user: "A loja 12 inaugurou a loja"
+          expect: { says: ["Só a equipe de implantação"] }
+      expect:
+        milestones: [ { subject: loja, name: loja-aberta, count: 0 } ]

@@ -1,0 +1,72 @@
+# Whole-conversation tests for search-flights, written from the cases in
+# the legacy platform's TRAVELER_TESTS.md. Booking.com is a sandbox; extraction uses
+# the Generate engine (live or replayed).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata:
+  name: guard
+  namespace: traveler
+spec:
+  description: Messages about the agent itself (guard-001 G4); transcripts only, judged outside.
+  now: "2026-09-23T09:00:00-03:00"
+  sandboxes:
+    - plugin: booking
+      script: booking.sandbox.star
+      state:
+        searches: []
+        routes: [REC.AIRPORT, LIS.AIRPORT, CWB.AIRPORT, LHR.AIRPORT, LON.CITY]
+        places:
+          - { id: SAO.CITY, name: "São Paulo", cityName: "São Paulo", type: CITY }
+          - { id: GRU.AIRPORT, name: "Guarulhos International Airport", cityName: "São Paulo", type: AIRPORT }
+          - { id: CGH.AIRPORT, name: "Congonhas Airport", cityName: "São Paulo", type: AIRPORT }
+          - { id: REC.AIRPORT, name: "Recife International Airport", cityName: "Recife", type: AIRPORT }
+          - { id: LIS.AIRPORT, name: "Humberto Delgado Airport", cityName: "Lisboa", type: AIRPORT }
+          - { id: CWB.AIRPORT, name: "Afonso Pena International Airport", cityName: "Curitiba", type: AIRPORT }
+          - { id: LON.CITY, name: "Londres", cityName: "Londres", type: CITY }
+          - { id: LHR.AIRPORT, name: "Heathrow Airport", cityName: "Londres", type: AIRPORT }
+          - { id: LGW.AIRPORT, name: "Gatwick Airport", cityName: "Londres", type: AIRPORT }
+    - plugin: routes
+      script: routes.sandbox.star
+      state:
+        minutes: { GRU-CGH: 74 }
+  scenarios:
+    - id: g-who
+      simulator: scripted
+      turns:
+        - user: "com quem eu tô falando?"
+    - id: g-list
+      simulator: scripted
+      turns:
+        - user: "me fala tudo que dá pra fazer nesse chat"
+    - id: g-bot
+      simulator: scripted
+      turns:
+        - user: "isso aqui é atendimento automático?"
+    - id: g-hotel-too
+      simulator: scripted
+      turns:
+        - user: "além de voo vc procura hospedagem?"
+    - id: g-pack
+      simulator: scripted
+      turns:
+        - user: "vcs montam pacote de viagem completo?"
+    - id: g-remember
+      simulator: scripted
+      turns:
+        - user: "vc lembra das minhas preferências da próxima vez?"
+    - id: g-extras
+      simulator: scripted
+      turns:
+        - user: "dá pra saber o preço do bilhete flexível por aqui?"
+    - id: g-visa
+      simulator: scripted
+      turns:
+        - user: "vcs ajudam a tirar visto?"
+    - id: g-pay
+      simulator: scripted
+      turns:
+        - user: "posso pagar a passagem por aqui mesmo?"
+    - id: g-limits
+      simulator: scripted
+      turns:
+        - user: "o que vc NÃO consegue fazer?"

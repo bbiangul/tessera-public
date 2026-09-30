@@ -1,0 +1,136 @@
+# Rescheduling a flight leg of a booking the customer already has
+# (agency-008). The planner did the arithmetic and the flight picking and
+# got them wrong. Here code does both:
+# - it reads the booking;
+# - it searches the same airline on the new date, one way;
+# - it computes new fare - fare paid + the airline's fee
+#   (scripts/reschedule.star, the rules of docs/agencia.md).
+# The estimate is the confirmation of the change request. Only after the
+# customer's yes does the team get it, with everything, to carry out with
+# the airline; its answer comes back to the customer.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: remarcar-voo
+  namespace: traveler
+spec:
+  description: Quotes moving the outbound or the return flight of the customer's booking to another day, and asks the team to do it once the customer confirms.
+  selector:
+    intent: flight-reschedule
+    description: "O cliente quer mudar a data da ida ou da volta de uma passagem que já comprou na agência (remarcar o voo, 'mudar a volta para dois dias depois', 'quanto fica remarcar a ida?'). Não é mudar as datas só do hotel, nem cancelar, nem uma viagem nova."
+  inputs:
+    reservas:
+      type: any
+      description: the customer's bookings in the agency's system
+      resolve:
+        - { id: saved, fromAction: agency/my-bookings, with: { customer: "${ has(caller.userId) ? caller.userId : conversation.id }" } }
+        - { id: found, when: "sources.saved.output != null", value: "sources.saved.output" }
+        - { id: none, value: "[]" }
+    reserva:
+      type: map
+      description: the booking whose flight changes
+      resolve:
+        - id: only
+          when: "size(inputs.reservas.filter(b, b.status == 'issued' && b.summary.contains('✈️'))) == 1"
+          value: "inputs.reservas.filter(b, b.status == 'issued' && b.summary.contains('✈️'))[0]"
+        - id: pick
+          when: "size(inputs.reservas.filter(b, b.status == 'issued' && b.summary.contains('✈️'))) > 1"
+          ask:
+            text: "Qual reserva você quer remarcar? {{ inputs.reservas.filter(b, b.status == 'issued' && b.summary.contains('✈️')).map(b, b.locator + ': ' + b.summary).join(' / ') }}"
+            choices: "inputs.reservas.filter(b, b.status == 'issued' && b.summary.contains('✈️')).map(b, {'label': b.locator + ': ' + b.summary, 'locator': b.locator, 'summary': b.summary, 'total': b.total, 'departDate': b.departDate, 'status': b.status})"
+            minConfidence: 0.6
+            onLowConfidence: ask-user
+      onUnresolved:
+        - respond: { template: "Não encontrei uma passagem emitida em seu nome para remarcar. Se ela foi comprada em outro nome ou ainda aguarda pagamento, me diga que eu passo para a equipe verificar." }
+    trecho:
+      type: string
+      description: "the leg that changes: 'ida' or 'volta'"
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "'ida' when the customer wants to move the outbound flight, 'volta' for the return flight; null when not said" } }
+        - id: asked
+          ask: { text: "É a ida ou a volta que você quer mudar?", choices: "['ida', 'volta']", minConfidence: 0.7, onLowConfidence: ask-user }
+    novaData:
+      type: string
+      description: the new day of that leg, when the customer gives a day
+      resolve:
+        - { id: said, extract: { conversation: true, future: true, instructions: "the new day for the leg as YYYY-MM-DD when the message gives a day ('dia 7', '07/12'); resolve from STATE.now; null when the change is relative ('dois dias depois') or not given" } }
+        - { id: none, value: "''" }
+    deslocamento:
+      type: int
+      description: "how many days the leg moves when the customer says it relatively: 'dois dias depois' 2, 'um dia antes' -1"
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "the number of days later (positive) or earlier (negative) the customer wants the leg; null unless the change is said relative to the booked day" } }
+      onUnresolved:
+        - fallback: { useNull: true }
+  steps:
+    - id: plan
+      compute:
+        starlark:
+          script: ../scripts/reschedule.star
+          function: plan
+          with:
+            booking: "${ inputs.reserva }"
+            leg: "${ inputs.trecho }"
+            new_date: "${ inputs.novaData }"
+            shift: "${ inputs.deslocamento }"
+            today: "${ string(event.time).substring(0, 10) }"
+    - id: problem
+      when: "!steps.plan.output.ok"
+      respond: { template: "{{ steps.plan.output.message }}" }
+    - id: fromPlaces
+      when: "steps.plan.output.ok"
+      act: booking/search-flight-destination
+      with: { query: "${ steps.plan.output.from }" }
+    - id: toPlaces
+      when: "steps.plan.output.ok"
+      act: booking/search-flight-destination
+      with: { query: "${ steps.plan.output.to }" }
+    - id: offers
+      when: "steps.plan.output.ok && size(steps.fromPlaces.output) > 0 && size(steps.toPlaces.output) > 0"
+      act: booking/search-flights
+      with:
+        fromId: "${ steps.fromPlaces.output[0].id }"
+        toId: "${ steps.toPlaces.output[0].id }"
+        departDate: "${ steps.plan.output.newDate }"
+        returnDate: "${ dyn(null) }"
+        adults: "${ steps.plan.output.adults }"
+        children: "${ dyn(null) }"
+        cabinClass: ECONOMY
+        currency: BRL
+      onError:
+        - fallback: { useNull: true }
+    - id: quote
+      when: "steps.plan.output.ok"
+      compute:
+        starlark:
+          script: ../scripts/reschedule.star
+          function: quote
+          with:
+            p: "${ steps.plan.output }"
+            offers: "${ has(steps.offers.output) && steps.offers.output != null ? steps.offers.output : [] }"
+            locator: "${ inputs.reserva.locator }"
+    - id: noFlight
+      when: "steps.plan.output.ok && !steps.quote.output.ok"
+      respond: { template: "{{ steps.quote.output.message }}" }
+    - id: request
+      when: "steps.plan.output.ok && steps.quote.output.ok"
+      act: agency/request-change
+      with:
+        key: "${ 'change/' + inputs.reserva.locator + '/' + inputs.trecho + '/' + steps.plan.output.newDate }"
+        customer: "${ has(caller.userId) ? caller.userId : '' }"
+        locator: "${ inputs.reserva.locator }"
+        leg: "${ inputs.trecho }"
+        newDate: "${ steps.plan.output.newDate }"
+        flight: "${ steps.quote.output.flight }"
+        estimate: "${ steps.quote.output.total }"
+      confirm: "{{ steps.quote.output.message }} Posso pedir à equipe a remarcação da {{ inputs.trecho }} da reserva {{ inputs.reserva.locator }} para {{ steps.plan.output.newDate.substring(8, 10) + '/' + steps.plan.output.newDate.substring(5, 7) }}?"
+      idempotencyKey: "'change/' + inputs.reserva.locator + '/' + inputs.trecho + '/' + steps.plan.output.newDate"
+    - id: team
+      when: "steps.plan.output.ok && steps.quote.output.ok"
+      escalate:
+        queue: atendimento
+        task: answer
+        message: "Remarcação confirmada pelo cliente: reserva {{ inputs.reserva.locator }} ({{ inputs.reserva.summary }}), {{ inputs.trecho }} para {{ steps.plan.output.newDate }}, voo {{ steps.quote.output.flight.airline }} {{ steps.quote.output.flight.from }}→{{ steps.quote.output.flight.to }} {{ steps.quote.output.flight.departure }}, tarifa atual R$ {{ string(steps.quote.output.flight.fare) }}{{ steps.quote.output.total != null ? ', total estimado R$ ' + string(steps.quote.output.total) : '' }}. Faça a remarcação e informe o valor final."
+        whileWaiting: { template: "Pedi a remarcação à equipe. Ela confirma o valor final e te responde por aqui." }
+  output:
+    template: "{{ !steps.plan.output.ok ? '' : !steps.quote.output.ok ? '' : string(steps.team.output) }}"

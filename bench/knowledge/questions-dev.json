@@ -1,0 +1,14 @@
+[
+ {"id": "dv01", "doc": "convenios.md", "message": "meu plano é odontoprev master, serve?"},
+ {"id": "dv02", "doc": "convenios.md", "message": "preciso levar alguma coisa na consulta pelo convenio?"},
+ {"id": "dv03", "doc": "precos-particular.md", "message": "quanto sai uma limpeza sem plano?"},
+ {"id": "dv04", "doc": "precos-particular.md", "message": "restauração quanto custa?"},
+ {"id": "dv05", "doc": "pagamento.md", "message": "aceita cartão elo?"},
+ {"id": "dv06", "doc": "pagamento.md", "message": "o pagamento é antes ou depois da consulta?"},
+ {"id": "dv07", "doc": "cancelamento.md", "message": "se eu chegar atrasado 20 min ainda sou atendido?"},
+ {"id": "dv08", "doc": "localizacao.md", "message": "qual o endereço de vcs?"},
+ {"id": "dv09", "doc": "localizacao.md", "message": "domingo tem atendimento?"},
+ {"id": "dv10", "doc": "pos-extracao.md", "message": "o que posso comer depois de arrancar o dente?"},
+ {"id": "dv11", "doc": "clareamento.md", "message": "clareamento deixa os dentes sensiveis?"},
+ {"id": "dv12", "doc": "clareamento.md", "message": "posso tomar café durante o clareamento?"}
+]

@@ -1,0 +1,177 @@
+# Flight search, the traveler's core (RFC-0001, "Casos de referência").
+# One Generate call extracts the whole request; only what is missing is
+# asked. Choosing airports, scoring and the message are Starlark, the
+# scoring proven against the legacy platform's original (scoring_test.go).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: search-flights
+  namespace: traveler
+spec:
+  description: Searches flights between two cities on a date and recommends the best ones.
+  selector:
+    intent: flight-search
+    description: "Uma busca NOVA de passagens: o usuário diz para onde quer ir ou quer viajar (com ou sem datas, mesmo que a data esteja errada ou já tenha passado). Não inclui perguntas sobre voos já mostrados, nem perguntas de informação ou comparação sobre uma viagem, que não pedem que eu procure voos (quanto tempo dura o voo?, costuma ter escala?, qual companhia voa para lá?, qual aeroporto é melhor?)."
+  inputs:
+    profile:
+      type: map
+      description: the traveler's saved preferences (plugins/profile.yaml)
+      resolve:
+        - { id: saved, fromAction: profile/get, with: { user: "${ has(caller.userId) ? caller.userId : conversation.id }" } }
+        - { id: none, value: "{}" }
+    destination:
+      type: string
+      description: the city or airport the user wants to fly to, as written
+      resolve:
+        - { id: said, extract: {} }
+        - id: asked
+          ask: { text: "Para onde você quer voar?", minConfidence: 0.7, onLowConfidence: ask-user }
+    origin:
+      type: string
+      description: the city or airport the user flies from, as written
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message names where the trip starts" } }
+        - { id: saved, when: "has(inputs.profile.home_city) && inputs.profile.home_city != null", value: "inputs.profile.home_city" }
+        - { id: home, when: "has(caller.homeCity)", value: "caller.homeCity" }
+        - id: asked
+          ask: { text: "De onde você sai?", minConfidence: 0.7, onLowConfidence: ask-user }
+    departDate:
+      type: date
+      description: the day of the outbound flight
+      resolve:
+        - id: said
+          extract: { instructions: "resolve relative days (amanhã, sexta que vem) from STATE.now; a day without a year is its next occurrence; null when only a month or nothing is given" }
+        - id: asked
+          ask: { text: "Qual o dia da ida?", minConfidence: 0.7, onLowConfidence: ask-user }
+    returnDate:
+      type: date
+      description: the day of the return flight, for a round trip
+      resolve:
+        - { id: said, extract: { instructions: "a stay (uma semana, 10 dias) counts from the departure; null for a one-way trip" } }
+      onUnresolved:
+        - fallback: { useNull: true }
+    adults:
+      type: int
+      description: adults traveling, including the user
+      resolve:
+        - { id: said, extract: {} }
+        - { id: default, value: "1" }
+    childrenAges:
+      type: list<int>
+      description: ages of the children traveling; a baby under 1 year is 0
+      resolve:
+        - { id: said, extract: { instructions: "an empty list when no child is mentioned" } }
+        - { id: default, value: "[]" }
+    cabinClass:
+      type: string
+      description: the cabin, one of ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message asks for a cabin" } }
+        - { id: default, value: "'ECONOMY'" }
+    timeConstraint:
+      type: string
+      description: wishes about the flight time, in the user's words (de manhã, chegar até 15h, sem pernoite)
+      resolve:
+        - { id: said, extract: {} }
+        - { id: none, value: "''" }
+  preconditions:
+    - cel: "date(inputs.departDate, 'America/Sao_Paulo') >= startOfDay(event.time, 'America/Sao_Paulo')"
+      message: "Essa data de ida já passou. Para quando você quer a viagem?"
+    - cel: "inputs.returnDate == null || inputs.returnDate >= inputs.departDate"
+      message: "A volta precisa ser depois da ida."
+  steps:
+    - id: fromPlaces
+      act: booking/search-flight-destination
+      with: { query: "${ inputs.origin }" }
+    - id: toPlaces
+      act: booking/search-flight-destination
+      with: { query: "${ inputs.destination }" }
+    - id: route
+      compute:
+        starlark:
+          script: ../scripts/places.star
+          function: route
+          with:
+            from_places: "${ steps.fromPlaces.output }"
+            to_places: "${ steps.toPlaces.output }"
+            home_city: "${ has(inputs.profile.home_city) && inputs.profile.home_city != null ? inputs.profile.home_city : has(caller.homeCity) ? caller.homeCity : '' }"
+      onError:
+        - respond: { template: "Não encontrei aeroporto para {{ inputs.origin }} → {{ inputs.destination }}. Pode escrever a cidade de outro jeito?" }
+    - id: currency
+      compute:
+        starlark:
+          script: ../scripts/currency.star
+          function: currency
+          with:
+            home_city: "${ has(inputs.profile.home_city) && inputs.profile.home_city != null ? inputs.profile.home_city : has(caller.homeCity) ? caller.homeCity : '' }"
+            origin: "${ inputs.origin }"
+            round_trip: "${ inputs.returnDate != null }"
+    - id: offers
+      act: booking/search-flights
+      with:
+        fromId: "${ steps.route.output.fromId }"
+        toId: "${ steps.route.output.toId }"
+        departDate: "${ inputs.departDate }"
+        returnDate: "${ inputs.returnDate }"
+        adults: "${ inputs.adults }"
+        children: "${ size(inputs.childrenAges) == 0 ? dyn(null) : dyn(inputs.childrenAges.map(a, string(a)).join(',')) }"
+        cabinClass: "${ inputs.cabinClass }"
+        currency: "${ steps.currency.output }"
+      onError:
+        - respond: { template: "Não consegui buscar voos agora. Quer que eu tente de novo?" }
+    - id: ranked
+      compute:
+        starlark:
+          script: ../scripts/scoring.star
+          function: score_flights
+          with: { offers: "${ steps.offers.output }", prefs: "${ inputs.profile }", time_text: "${ inputs.timeConstraint }" }
+    - id: changes
+      compute:
+        starlark:
+          script: ../scripts/connections.star
+          function: airport_changes
+          with: { offers: "${ steps.offers.output }" }
+    - id: matrix
+      compute:
+        starlark:
+          script: ../scripts/connections.star
+          function: matrix_request
+          with: { detected: "${ steps.changes.output }" }
+    - id: drive
+      when: "size(steps.matrix.output.cells) > 0"
+      act: routes/drive-matrix
+      with: { origins: "${ steps.matrix.output.origins }", destinations: "${ steps.matrix.output.destinations }" }
+      onError:
+        - fallback: { useNull: true }  # drive times are then estimated
+    - id: risk
+      compute:
+        starlark:
+          script: ../scripts/connections.star
+          function: risk
+          with: { detected: "${ steps.changes.output }", request: "${ steps.matrix.output }", elements: "${ steps.drive.output }" }
+    - id: safe
+      compute:
+        starlark:
+          script: ../scripts/connections.star
+          function: with_risk
+          with: { ranked: "${ steps.ranked.output }", risk: "${ steps.risk.output }" }
+    - id: shown
+      compute:
+        starlark:
+          script: ../scripts/present.star
+          function: labeled
+          with: { ranked: "${ steps.safe.output }" }
+    - id: remember
+      when: "size(steps.shown.output) > 0"
+      act: memo/save-search
+      with: { conversation: "${ conversation.id }", results: "${ steps.shown.output }", at: "${ event.time }" }
+      idempotencyKey: "conversation.id + '@' + string(event.time)"
+    - id: message
+      compute:
+        starlark:
+          script: ../scripts/present.star
+          function: flights_message
+          with: { ranked: "${ steps.safe.output }" }
+  output:
+    template: "{{ steps.message.output }}"
+    value: "steps.safe.output"

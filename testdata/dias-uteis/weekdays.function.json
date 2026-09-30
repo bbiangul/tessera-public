@@ -1,0 +1,95 @@
+{
+  "apiVersion": "agents.tessera.dev/v1alpha1",
+  "kind": "Function",
+  "metadata": {
+    "name": "weekday-preferences",
+    "namespace": "clinica-bench"
+  },
+  "spec": {
+    "description": "Classify allowed weekdays with Jev; unknown never becomes unrestricted. Pass the actual user message, including relevant prior preferences.",
+    "inputs": {
+      "message": {
+        "type": "string",
+        "resolve": [
+          {
+            "id": "initial",
+            "value": "event.message"
+          }
+        ]
+      }
+    },
+    "steps": [
+      {
+        "id": "weekdays",
+        "decideBatch": {
+          "state": {
+            "message": "${ inputs.message }"
+          },
+          "questions": {
+            "0": {
+              "instructions": "Considere somente restrições de DIA DA SEMANA para o NOVO horário desejado na mensagem. Um horário em domingo atende a essas restrições? Ignore horário do dia, saudações, agenda antiga e dúvidas sobre funcionamento. Se nenhum dia da semana restringir o pedido, todos os dias atendem. Respeite exclusões, alternativas e grupos: fim de semana é sábado/domingo; dias úteis são segunda a sexta. Não deduza dia da semana de data numérica. Se o pedido escolher dias específicos, os outros NÃO atendem. Não deduza restrições do funcionamento de uma clínica ou empresa: domingos também são permitidos quando não excluídos. Uma exclusão proíbe somente os dias nomeados; todos os demais continuam permitidos. A mensagem contém falas do usuário em ordem cronológica. Perguntas sobre estacionamento, endereço ou outros fatos já foram respondidas e não restringem dias. Extraia apenas preferências explícitas para o novo horário; a última correção substitui a preferência anterior. Se a última preferência é qualquer sábado, domingo e todos os outros dias são excluídos.",
+              "yesNo": {
+                "ifTrue": "Esse dia é permitido pelo pedido.",
+                "ifFalse": "Esse dia é excluído pelas restrições do pedido."
+              }
+            },
+            "1": {
+              "instructions": "Considere somente restrições de DIA DA SEMANA para o NOVO horário desejado na mensagem. Um horário em segunda-feira atende a essas restrições? Ignore horário do dia, saudações, agenda antiga e dúvidas sobre funcionamento. Se nenhum dia da semana restringir o pedido, todos os dias atendem. Respeite exclusões, alternativas e grupos: fim de semana é sábado/domingo; dias úteis são segunda a sexta. Não deduza dia da semana de data numérica. Se o pedido escolher dias específicos, os outros NÃO atendem. Não deduza restrições do funcionamento de uma clínica ou empresa: domingos também são permitidos quando não excluídos. Uma exclusão proíbe somente os dias nomeados; todos os demais continuam permitidos. A mensagem contém falas do usuário em ordem cronológica. Perguntas sobre estacionamento, endereço ou outros fatos já foram respondidas e não restringem dias. Extraia apenas preferências explícitas para o novo horário; a última correção substitui a preferência anterior. Se a última preferência é qualquer sábado, domingo e todos os outros dias são excluídos.",
+              "yesNo": {
+                "ifTrue": "Esse dia é permitido pelo pedido.",
+                "ifFalse": "Esse dia é excluído pelas restrições do pedido."
+              }
+            },
+            "2": {
+              "instructions": "Considere somente restrições de DIA DA SEMANA para o NOVO horário desejado na mensagem. Um horário em terça-feira atende a essas restrições? Ignore horário do dia, saudações, agenda antiga e dúvidas sobre funcionamento. Se nenhum dia da semana restringir o pedido, todos os dias atendem. Respeite exclusões, alternativas e grupos: fim de semana é sábado/domingo; dias úteis são segunda a sexta. Não deduza dia da semana de data numérica. Se o pedido escolher dias específicos, os outros NÃO atendem. Não deduza restrições do funcionamento de uma clínica ou empresa: domingos também são permitidos quando não excluídos. Uma exclusão proíbe somente os dias nomeados; todos os demais continuam permitidos. A mensagem contém falas do usuário em ordem cronológica. Perguntas sobre estacionamento, endereço ou outros fatos já foram respondidas e não restringem dias. Extraia apenas preferências explícitas para o novo horário; a última correção substitui a preferência anterior. Se a última preferência é qualquer sábado, domingo e todos os outros dias são excluídos.",
+              "yesNo": {
+                "ifTrue": "Esse dia é permitido pelo pedido.",
+                "ifFalse": "Esse dia é excluído pelas restrições do pedido."
+              }
+            },
+            "3": {
+              "instructions": "Considere somente restrições de DIA DA SEMANA para o NOVO horário desejado na mensagem. Um horário em quarta-feira atende a essas restrições? Ignore horário do dia, saudações, agenda antiga e dúvidas sobre funcionamento. Se nenhum dia da semana restringir o pedido, todos os dias atendem. Respeite exclusões, alternativas e grupos: fim de semana é sábado/domingo; dias úteis são segunda a sexta. Não deduza dia da semana de data numérica. Se o pedido escolher dias específicos, os outros NÃO atendem. Não deduza restrições do funcionamento de uma clínica ou empresa: domingos também são permitidos quando não excluídos. Uma exclusão proíbe somente os dias nomeados; todos os demais continuam permitidos. A mensagem contém falas do usuário em ordem cronológica. Perguntas sobre estacionamento, endereço ou outros fatos já foram respondidas e não restringem dias. Extraia apenas preferências explícitas para o novo horário; a última correção substitui a preferência anterior. Se a última preferência é qualquer sábado, domingo e todos os outros dias são excluídos.",
+              "yesNo": {
+                "ifTrue": "Esse dia é permitido pelo pedido.",
+                "ifFalse": "Esse dia é excluído pelas restrições do pedido."
+              }
+            },
+            "4": {
+              "instructions": "Considere somente restrições de DIA DA SEMANA para o NOVO horário desejado na mensagem. Um horário em quinta-feira atende a essas restrições? Ignore horário do dia, saudações, agenda antiga e dúvidas sobre funcionamento. Se nenhum dia da semana restringir o pedido, todos os dias atendem. Respeite exclusões, alternativas e grupos: fim de semana é sábado/domingo; dias úteis são segunda a sexta. Não deduza dia da semana de data numérica. Se o pedido escolher dias específicos, os outros NÃO atendem. Não deduza restrições do funcionamento de uma clínica ou empresa: domingos também são permitidos quando não excluídos. Uma exclusão proíbe somente os dias nomeados; todos os demais continuam permitidos. A mensagem contém falas do usuário em ordem cronológica. Perguntas sobre estacionamento, endereço ou outros fatos já foram respondidas e não restringem dias. Extraia apenas preferências explícitas para o novo horário; a última correção substitui a preferência anterior. Se a última preferência é qualquer sábado, domingo e todos os outros dias são excluídos.",
+              "yesNo": {
+                "ifTrue": "Esse dia é permitido pelo pedido.",
+                "ifFalse": "Esse dia é excluído pelas restrições do pedido."
+              }
+            },
+            "5": {
+              "instructions": "Considere somente restrições de DIA DA SEMANA para o NOVO horário desejado na mensagem. Um horário em sexta-feira atende a essas restrições? Ignore horário do dia, saudações, agenda antiga e dúvidas sobre funcionamento. Se nenhum dia da semana restringir o pedido, todos os dias atendem. Respeite exclusões, alternativas e grupos: fim de semana é sábado/domingo; dias úteis são segunda a sexta. Não deduza dia da semana de data numérica. Se o pedido escolher dias específicos, os outros NÃO atendem. Não deduza restrições do funcionamento de uma clínica ou empresa: domingos também são permitidos quando não excluídos. Uma exclusão proíbe somente os dias nomeados; todos os demais continuam permitidos. A mensagem contém falas do usuário em ordem cronológica. Perguntas sobre estacionamento, endereço ou outros fatos já foram respondidas e não restringem dias. Extraia apenas preferências explícitas para o novo horário; a última correção substitui a preferência anterior. Se a última preferência é qualquer sábado, domingo e todos os outros dias são excluídos.",
+              "yesNo": {
+                "ifTrue": "Esse dia é permitido pelo pedido.",
+                "ifFalse": "Esse dia é excluído pelas restrições do pedido."
+              }
+            },
+            "6": {
+              "instructions": "Considere somente restrições de DIA DA SEMANA para o NOVO horário desejado na mensagem. Um horário em sábado atende a essas restrições? Ignore horário do dia, saudações, agenda antiga e dúvidas sobre funcionamento. Se nenhum dia da semana restringir o pedido, todos os dias atendem. Respeite exclusões, alternativas e grupos: fim de semana é sábado/domingo; dias úteis são segunda a sexta. Não deduza dia da semana de data numérica. Se o pedido escolher dias específicos, os outros NÃO atendem. Não deduza restrições do funcionamento de uma clínica ou empresa: domingos também são permitidos quando não excluídos. Uma exclusão proíbe somente os dias nomeados; todos os demais continuam permitidos. A mensagem contém falas do usuário em ordem cronológica. Perguntas sobre estacionamento, endereço ou outros fatos já foram respondidas e não restringem dias. Extraia apenas preferências explícitas para o novo horário; a última correção substitui a preferência anterior. Se a última preferência é qualquer sábado, domingo e todos os outros dias são excluídos.",
+              "yesNo": {
+                "ifTrue": "Esse dia é permitido pelo pedido.",
+                "ifFalse": "Esse dia é excluído pelas restrições do pedido."
+              }
+            },
+            "explicit": {
+              "instructions": "A mensagem especifica alguma restrição de DIA DA SEMANA para o NOVO horário desejado, nomeando dias (sábado, segunda etc.) ou grupos (dias úteis, fim de semana), inclusões ou exclusões? Uma data numérica como 08/10, horário, saudação, o dia da consulta antiga ou pergunta sobre funcionamento não é restrição de dia da semana para a nova vaga. A mensagem contém falas do usuário em ordem cronológica. Perguntas sobre estacionamento, endereço ou outros fatos já foram respondidas e não restringem dias. Extraia apenas preferências explícitas para o novo horário; a última correção substitui a preferência anterior. Se a última preferência é qualquer sábado, domingo e todos os outros dias são excluídos.",
+              "yesNo": {
+                "ifTrue": "Há restrição de dia da semana solicitada para a nova vaga.",
+                "ifFalse": "Não há essa restrição; uma data numérica sozinha não conta."
+              }
+            }
+          },
+          "minConfidence": 0.7,
+          "onLowConfidence": "continue"
+        }
+      }
+    ],
+    "output": {
+      "value": "steps.weekdays.output.answers.explicit.value == false ? {'known': true, 'restricted': false, 'allowed': [0,1,2,3,4,5,6]} : (steps.weekdays.output.answers.explicit.value == true && steps.weekdays.output.value != null ? {'known': true, 'restricted': true, 'allowed': [0,1,2,3,4,5,6].filter(d, steps.weekdays.output.answers[string(d)].value == true)} : {'known': false, 'restricted': null, 'allowed': []})"
+    }
+  }
+}

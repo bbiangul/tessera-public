@@ -1,0 +1,40 @@
+{
+  "apiVersion": "agents.tessera.dev/v1alpha1",
+  "kind": "Function",
+  "metadata": {
+    "name": "filter-days",
+    "namespace": "travel"
+  },
+  "spec": {
+    "description": "Filter a synthetic calendar by weekdays. No booking or effects.",
+    "selector": {
+      "intent": "filter-days",
+      "description": "Find or filter calendar days requested by the user for a new appointment, including any weekday preference."
+    },
+    "steps": [
+      {
+        "id": "mask",
+        "call": "weekday-preferences",
+        "with": {
+          "message": "${ event.message }"
+        }
+      },
+      {
+        "id": "result",
+        "branch": [
+          {
+            "when": "!steps.mask.output.known",
+            "call": "recover"
+          },
+          {
+            "else": true,
+            "call": "render",
+            "with": {
+              "mask": "${ steps.mask.output }"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

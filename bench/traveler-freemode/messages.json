@@ -1,0 +1,66 @@
+[
+ {
+  "id": "bag-general",
+  "message": "qual a franquia de bagagem da gol em geral?"
+ },
+ {
+  "id": "flight-time",
+  "message": "quanto tempo de voo de sp pra lisboa?"
+ },
+ {
+  "id": "best-season",
+  "message": "qual a melhor epoca pra ir pra jericoacoara?"
+ },
+ {
+  "id": "hotel-vs-flat",
+  "message": "hotel ou flat, qual compensa mais em sp?"
+ },
+ {
+  "id": "avg-price",
+  "message": "quanto custa em media uma diaria em gramado?"
+ },
+ {
+  "id": "visa",
+  "message": "preciso de visto pra ir pros eua?"
+ },
+ {
+  "id": "car",
+  "message": "voces alugam carro?"
+ },
+ {
+  "id": "pet",
+  "message": "da pra levar cachorro no aviao?"
+ },
+ {
+  "id": "hello",
+  "message": "oi, tudo bem?"
+ },
+ {
+  "id": "thanks",
+  "message": "obrigado pela ajuda!"
+ },
+ {
+  "id": "neighborhood",
+  "message": "qual o melhor bairro pra ficar em recife?"
+ },
+ {
+  "id": "advance",
+  "message": "vale a pena comprar passagem com antecedencia?"
+ },
+ {
+  "id": "package",
+  "message": "voces vendem pacote com hotel e voo junto?"
+ },
+ {
+  "id": "itinerary",
+  "message": "o que fazer em buenos aires em 3 dias?"
+ },
+ {
+  "id": "insurance",
+  "message": "quanto custa um seguro viagem?"
+ },
+ {
+  "id": "cancel-other",
+  "message": "posso cancelar uma passagem que comprei em outro site?"
+ }
+]

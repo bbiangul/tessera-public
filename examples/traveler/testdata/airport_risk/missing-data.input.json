@@ -1,0 +1,14 @@
+{
+ "airportChangeData": {
+  "nothing": true
+ },
+ "rawFlights": {
+  "data": {
+   "flightOffers": []
+  },
+  "status": true
+ },
+ "transferTimeData": {
+  "transferTimes": []
+ }
+}

@@ -1,0 +1,31 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: contradiction, namespace: learn }
+spec:
+  description: learn-001 contradiction; transcripts only, judged outside.
+  now: "2026-09-27T09:00:00-03:00"
+  scenarios:
+    - id: n1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto custa o invisalign agora?"
+        - human: "O Invisalign agora começa em R$ 11.500, o valor exato sai na avaliação."
+    - id: n2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "qual o preço do alinhador transparente?"
+        - human: "Hoje o Invisalign sai a partir de R$ 11.500."
+    - id: n3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto é a sedação?"
+        - human: "A sedação consciente com óxido nitroso custa R$ 250 a mais por sessão."
+    - id: n4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs fazem sedação com gás?"
+        - human: "Fazemos sim, óxido nitroso, R$ 250 por sessão a mais."

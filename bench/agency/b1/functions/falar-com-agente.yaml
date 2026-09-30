@@ -1,0 +1,21 @@
+# What needs a person of the agency (RFC-0009): changing, cancelling or
+# refunding a booking, a rental car, travel insurance, transfers, special
+# requests, complaints. The free mode starts it (Agent.spec.freeMode.functions);
+# the question goes to the atendimento queue and the answer comes back to
+# the customer as the team wrote it. The team's answers also teach the
+# agent (the licoes base, RFC-0008).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: falar-com-agente
+  namespace: traveler
+spec:
+  description: Passes a request only a person of the agency can handle to the team, and relays their answer.
+  steps:
+    - id: resposta
+      escalate:
+        queue: atendimento
+        task: answer
+        message: "Cliente pede: {{ event.message }}"
+        whileWaiting: { template: "Isso quem resolve é a nossa equipe de atendimento. Já passei para uma agente e te respondo por aqui assim que ela me retornar." }
+  output: { template: "{{ steps.resposta.output }}" }

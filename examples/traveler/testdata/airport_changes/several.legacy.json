@@ -1,0 +1,60 @@
+{
+ "affectedFlights": 4,
+ "airportChanges": [
+  {
+   "arrivalTime": "2026-10-13T10:00:00.000",
+   "departureTime": "2026-10-13T15:00:00.000",
+   "flightToken": "a",
+   "fromAirport": "LHR",
+   "layoverMinutes": 300,
+   "legIndex": 0,
+   "segmentIndex": 0,
+   "toAirport": "LGW"
+  },
+  {
+   "arrivalTime": "2026-10-13T06:30:00",
+   "departureTime": "2026-10-13T08:30:00",
+   "flightToken": "b",
+   "fromAirport": "JFK",
+   "layoverMinutes": 120,
+   "legIndex": 0,
+   "segmentIndex": 0,
+   "toAirport": "LGA"
+  },
+  {
+   "arrivalTime": "2026-10-13T10:00:00",
+   "departureTime": "2026-10-13T12:00:00",
+   "flightToken": "c",
+   "fromAirport": "LHR",
+   "layoverMinutes": 120,
+   "legIndex": 0,
+   "segmentIndex": 0,
+   "toAirport": "LGW"
+  },
+  {
+   "arrivalTime": "2026-10-12T09:00:00",
+   "departureTime": "2026-10-12T11:00:00",
+   "flightToken": "d",
+   "fromAirport": "BBB",
+   "layoverMinutes": 120,
+   "legIndex": 0,
+   "segmentIndex": 0,
+   "toAirport": "CCC"
+  }
+ ],
+ "totalChanges": 4,
+ "uniquePairs": [
+  {
+   "from": "BBB",
+   "to": "CCC"
+  },
+  {
+   "from": "JFK",
+   "to": "LGA"
+  },
+  {
+   "from": "LHR",
+   "to": "LGW"
+  }
+ ]
+}

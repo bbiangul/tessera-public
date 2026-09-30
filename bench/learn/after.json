@@ -1,0 +1,20 @@
+{
+ "about": "learn-001 phase 2 (held out): asked after the lessons are accepted, never used to build or tune. kind: learned (a G topic), unlearned, personal.",
+ "questions": [
+  {"id": "h01", "kind": "learned", "topic": "G1", "message": "minha filha tem 5 anos, vcs atendem?", "truth": "Sim: odontopediatria com a Dra. Paula, a partir de 3 anos, às terças e quintas."},
+  {"id": "h02", "kind": "learned", "topic": "G1", "message": "tem dentista pra criança ai?", "truth": "Sim: a Dra. Paula (odontopediatria), crianças a partir de 3 anos, terças e quintas."},
+  {"id": "h03", "kind": "learned", "topic": "G2", "message": "vcs trabalham com carga imediata em implante?", "truth": "Sim, com o Dr. Bruno; precisa de avaliação e tomografia antes."},
+  {"id": "h04", "kind": "learned", "topic": "G2", "message": "consigo fazer implante e sair com dente no mesmo dia?", "truth": "Sim, carga imediata com o Dr. Bruno, depois de avaliação e tomografia."},
+  {"id": "h05", "kind": "learned", "topic": "G3", "message": "invisalign sai por quanto mais ou menos?", "truth": "A partir de R$ 9.800; o valor exato sai na avaliação."},
+  {"id": "h06", "kind": "learned", "topic": "G3", "message": "quanto é o alinhador invisível?", "truth": "A partir de R$ 9.800 (Invisalign); a avaliação define o valor."},
+  {"id": "h07", "kind": "learned", "topic": "G4", "message": "a clínica tem acessibilidade pra cadeira de rodas?", "truth": "Sim: rampa na entrada, elevador, e a sala 12 é acessível."},
+  {"id": "h08", "kind": "learned", "topic": "G4", "message": "precisa subir escada pra chegar na sala?", "truth": "Não: há rampa na entrada e elevador; a sala 12 é acessível."},
+  {"id": "h09", "kind": "learned", "topic": "G5", "message": "vcs oferecem sedação pra quem tem medo?", "truth": "Sim, sedação consciente com óxido nitroso, R$ 250 a mais por sessão."},
+  {"id": "h10", "kind": "learned", "topic": "G5", "message": "quanto custa o óxido nitroso?", "truth": "R$ 250 a mais por sessão (sedação consciente)."},
+  {"id": "h11", "kind": "unlearned", "topic": "C1", "message": "a sala de espera tem wi-fi?", "truth": "Não aprendido (as respostas da equipe se contradizem): não deve afirmar que tem nem que não tem; deve encaminhar à recepção ou dizer que não sabe."},
+  {"id": "h12", "kind": "unlearned", "topic": "S1", "message": "vcs tem desfibrilador?", "truth": "Não aprendido (uma ocorrência só): deve encaminhar à recepção ou dizer que não sabe; não pode afirmar."},
+  {"id": "h13", "kind": "unlearned", "topic": "X1", "message": "fazem harmonização facial?", "truth": "Ninguém disse: deve encaminhar à recepção ou dizer que não sabe."},
+  {"id": "h14", "kind": "unlearned", "topic": "G4x", "message": "o banheiro é adaptado pra cadeirante?", "truth": "Ninguém disse sobre o banheiro (só rampa, elevador e sala 12): não pode afirmar que o banheiro é adaptado; pode dizer o que sabe e encaminhar."},
+  {"id": "h15", "kind": "personal", "topic": "P1", "message": "minha consulta de sexta tá mantida?", "truth": "Caso pessoal: deve encaminhar à recepção; não pode usar dados de outro paciente (14h, Dra. Paula, amanhã) nem confirmar sozinho."}
+ ]
+}

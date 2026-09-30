@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bbiangul/tessera/api/agents/v1alpha1/funnel",
+  "$ref": "#/$defs/Funnel",
+  "$defs": {
+    "Funnel": {
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "enum": [
+            "agents.tessera.dev/v1alpha1"
+          ],
+          "description": "APIVersion must be agents.tessera.dev/v1alpha1."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Funnel"
+          ],
+          "description": "Kind must be Funnel."
+        },
+        "metadata": {
+          "$ref": "#/$defs/ObjectMeta",
+          "description": "Metadata names the funnel."
+        },
+        "spec": {
+          "$ref": "#/$defs/FunnelSpec",
+          "description": "Spec lists the stages."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ],
+      "description": "Funnel follows the same subjects from one milestone to the next\n(RFC-0001, \"Funis e tempo por etapa\"): how many get from each stage to\nthe next, how long it takes, and who is stuck. Conversion is per cohort\nof subjects, never the ratio of two counts in a window."
+    },
+    "FunnelSpec": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description says what the funnel measures."
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Subject is the Subject kind followed."
+        },
+        "stages": {
+          "items": {
+            "$ref": "#/$defs/FunnelStage"
+          },
+          "type": "array",
+          "minItems": 2,
+          "description": "Stages in order; the first is the entry. A subject reaches a stage\nwith the first milestone of that name after it reached the previous."
+        },
+        "cohort": {
+          "type": "string",
+          "enum": [
+            "day",
+            "week",
+            "month"
+          ],
+          "description": "Cohort groups subjects by when they entered: day, week or month."
+        },
+        "dimensions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Dimensions are Subject attributes the funnel can be cut by."
+        },
+        "onStuck": {
+          "$ref": "#/$defs/OnStuck",
+          "description": "OnStuck starts a Function for each subject waiting for a stage past\n1.5 times its expected time, once per subject and stage (checked\nevery few minutes by the scheduler). It receives event.payload\n{funnel, stage, subject, since, days}; typically it escalates to the\nteam."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "subject",
+        "stages"
+      ],
+      "description": "FunnelSpec describes a funnel."
+    },
+    "FunnelStage": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Name of the stage."
+        },
+        "milestone": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Milestone that marks it."
+        },
+        "within": {
+          "type": "string",
+          "description": "Within is how long after the previous stage it still counts (e.g.\n14d, 36h). Until the window closes the subject is pending, not lost;\nwithout a window nobody is ever lost."
+        },
+        "expected": {
+          "type": "string",
+          "description": "Expected is how long this stage should take (e.g. 30d). Subjects\nwaiting for it past 1.5 times this are reported as stuck."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "milestone"
+      ],
+      "description": "FunnelStage is one stage."
+    },
+    "ObjectMeta": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Name of the resource, unique per kind within its namespace. Lowercase\nletters, digits and hyphens, starting and ending with a letter or digit."
+        },
+        "namespace": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Namespace the resource belongs to, usually one per customer."
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Labels are free-form key/value pairs for selecting and grouping."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "namespace"
+      ],
+      "description": "ObjectMeta identifies a resource."
+    },
+    "OnStuck": {
+      "properties": {
+        "function": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Function to start, in the same namespace."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "function"
+      ],
+      "description": "OnStuck names what runs for a stuck subject."
+    }
+  },
+  "title": "Funnel"
+}

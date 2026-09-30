@@ -1,0 +1,111 @@
+# The booking, end to end (RFC-0009): the customer's yes, the team's
+# reservation, the payment provider's webhook, the tickets, the check-in
+# reminder; and the ways it does not happen. Booking.com, the agency's
+# system and the web are sandboxes.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata:
+  name: booking
+  namespace: traveler
+spec:
+  description: A flight booked through the agency's team and followed to the check-in.
+  now: "2026-09-28T10:00:00-03:00"
+  sandboxes:
+    - plugin: booking
+      script: booking.sandbox.star
+      state:
+        searches: []
+        routes: [REC.AIRPORT]
+        places:
+          - { id: SAO.CITY, name: "São Paulo", cityName: "São Paulo", type: CITY }
+          - { id: GRU.AIRPORT, name: "Guarulhos International Airport", cityName: "São Paulo", type: AIRPORT }
+          - { id: REC.AIRPORT, name: "Recife International Airport", cityName: "Recife", type: AIRPORT }
+    - plugin: agency
+      script: agency.sandbox.star
+      state: { next: 101, bookings: [] }
+    - plugin: web
+      script: web.sandbox.star
+  scenarios:
+    - id: booked-paid-issued
+      caller: { userId: marina }
+      simulator: scripted
+      turns:
+        - user: "Passagem de São Paulo para Recife dia 20 de outubro, só ida"
+          expect: { routed: search-flights, status: Succeeded, says: ["São Paulo → Recife", "só ida, 20/10", "R$ 640"] }
+        - user: "Quero reservar o da GOL. Sou Marina Alves Costa, nascida em 12/03/1990, e-mail marina.costa@example.com"
+          expect: { routed: book-trip, status: Confirming, says: ["Posso pedir a reserva?", "Marina Alves Costa", "marina.costa@example.com", "Total: R$ 640"] }
+        - user: "sim"
+          expect: { status: WaitingForHuman, queue: emissao, says: ["Pedido registrado", "P101"] }
+        - human: { reserved: true, locator: RCF3K9, payment: "https://pagar.tessera-viagens.test/RCF3K9", note: "Tarifa garantida até amanhã às 18h." }
+          expect: { says: ["Reservado", "RCF3K9", "https://pagar.tessera-viagens.test/RCF3K9"] }
+        - trigger: { name: pagamento, payload: { bookingId: P101 } }
+          expect: { queue: emissao, says: ["Pagamento aprovado"] }
+        - human: { issued: true, eticket: "127-5566778899" }
+          expect: { says: ["Emitido", "RCF3K9", "127-5566778899"] }
+        - advance: 500h
+          expect: { says: ["check-in", "dois dias"] }
+      expect:
+        effects:
+          - { action: agency/request-booking, count: 1, where: "inputs.email == 'marina.costa@example.com' && inputs.total == 640" }
+          - { action: agency/update-booking, count: 2 }
+        milestones:
+          - { subject: viajante, name: pediu-reserva, count: 1 }
+          - { subject: viajante, name: reservou, count: 1 }
+          - { subject: viajante, name: pagou, count: 1 }
+          - { subject: viajante, name: emitiu, count: 1 }
+
+    - id: customer-says-no
+      caller: { userId: marina }
+      simulator: scripted
+      turns:
+        - user: "Passagem de São Paulo para Recife dia 20 de outubro, só ida"
+        - user: "Reserva o da GOL pra mim: Marina Alves Costa, 12/03/1990, marina.costa@example.com"
+          expect: { status: Confirming }
+        - user: "não, deixa pra lá"
+      expect:
+        never: [agency/request-booking]
+
+    - id: team-cannot-reserve
+      caller: { userId: marina }
+      simulator: scripted
+      turns:
+        - user: "Passagem de São Paulo para Recife dia 20 de outubro, só ida"
+        - user: "Reserva o da GOL: Marina Alves Costa, 12/03/1990, marina.costa@example.com"
+        - user: "sim"
+          expect: { status: WaitingForHuman }
+        - human: { reserved: false, note: "a tarifa esgotou" }
+          expect: { says: ["não conseguiu reservar", "a tarifa esgotou"], notSays: ["Reservado"] }
+      expect:
+        effects: [ { action: agency/update-booking, count: 0 } ]
+        milestones: [ { subject: viajante, name: reservou, count: 0 } ]
+
+    - id: payment-never-comes
+      caller: { userId: marina }
+      simulator: scripted
+      turns:
+        - user: "Passagem de São Paulo para Recife dia 20 de outubro, só ida"
+        - user: "Reserva o da GOL: Marina Alves Costa, 12/03/1990, marina.costa@example.com"
+        - user: "sim"
+        - human: { reserved: true, locator: RCF3K9, payment: "https://pagar.tessera-viagens.test/RCF3K9" }
+        - advance: 25h
+          expect: { says: ["venceu"], notSays: ["Emitido"] }
+      expect:
+        milestones: [ { subject: viajante, name: pagou, count: 0 } ]
+
+    - id: nothing-shown-yet
+      description: Asked to book before any search, nothing is requested; the agent looks for options first.
+      caller: { userId: marina }
+      simulator: scripted
+      turns:
+        - user: "pode reservar a opção 2 pra mim"
+      expect:
+        never: [agency/request-booking]
+
+    - id: bag-already-included
+      description: "agency-003: a bag was added (and charged) to a fare that includes one."
+      caller: { userId: marina }
+      simulator: scripted
+      turns:
+        - user: "Passagem de São Paulo para Recife dia 20 de outubro, só ida"
+        - user: "Quero o da Azul, com mala. Sou Marina Alves Costa, 12/03/1990, marina.costa@example.com"
+          expect: { status: Confirming, says: ["Total: R$ 720"], notSays: ["🧳"] }

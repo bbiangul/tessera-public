@@ -1,0 +1,21 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: filter-days, namespace: travel }
+spec:
+  description: Demonstrates filtering a fixed synthetic calendar by weekday.
+  selector:
+    intent: filter-days
+    description: Filter the demonstration calendar by requested weekdays, or request any day.
+  steps:
+    - id: mask
+      call: weekday-preferences
+      with: { message: "${ event.message }" }
+    - id: slots
+      compute:
+        cel: "['2026-10-02T10:00:00-03:00', '2026-10-03T10:00:00-03:00', '2026-10-04T10:00:00-03:00'].filter(s, timestamp(s).getDayOfWeek('America/Sao_Paulo') in steps.mask.output.allowed)"
+    - id: result
+      branch:
+        - when: "!steps.mask.output.known"
+          respond: { template: "Não entendi a preferência de dias. Pode esclarecer?" }
+        - else: true
+          respond: { template: "Dias do calendário de demonstração: {{ steps.slots.output.map(s, formatDate(timestamp(s), 'America/Sao_Paulo')).join(', ') }}" }

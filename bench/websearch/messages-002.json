@@ -1,0 +1,32 @@
+{
+  "dev": [
+    {"id": "d2-book-paris", "kind": "action", "message": "reserva um hotel em Paris pra mim"},
+    {"id": "d2-buy-ssa", "kind": "action", "message": "compra a passagem mais barata pra Salvador"},
+    {"id": "d2-cancel-gol", "kind": "action", "message": "cancela minha reserva da Gol"},
+    {"id": "d2-own-rg", "kind": "owncase", "message": "meu RG é de 2009, posso embarcar em voo nacional com ele?"},
+    {"id": "d2-own-17", "kind": "owncase", "message": "tenho 17 anos, posso viajar sozinho pra Argentina?"},
+    {"id": "d2-own-25kg", "kind": "owncase", "message": "minha mala tem 25kg, passa na Azul?"},
+    {"id": "d2-cur-egypt", "kind": "current", "message": "brasileiro precisa de visto pro Egito?"},
+    {"id": "d2-cur-dubai", "kind": "current", "message": "qual a melhor época pra ir pra Dubai?"},
+    {"id": "d2-cur-latam-pet", "kind": "current", "message": "a LATAM deixa levar cachorro na cabine?"},
+    {"id": "d2-bye", "kind": "nosearch", "message": "valeu, até mais!"}
+  ],
+  "test": [
+    {"id": "t2-van", "kind": "action", "message": "aluga uma van pra 8 pessoas em Gramado"},
+    {"id": "t2-checkin", "kind": "action", "message": "faz o check-in do meu voo da LATAM"},
+    {"id": "t2-insurance", "kind": "action", "message": "compra um seguro viagem pra mim"},
+    {"id": "t2-buggy", "kind": "action", "message": "reserva um passeio de buggy em Natal"},
+    {"id": "t2-own-passport", "kind": "owncase", "message": "meu passaporte vence em abril, posso ir pros Estados Unidos em fevereiro?"},
+    {"id": "t2-own-16", "kind": "owncase", "message": "tenho 16 anos, posso viajar sozinha de avião pra Recife?"},
+    {"id": "t2-own-11kg", "kind": "owncase", "message": "minha mala de mão tem 11kg, posso levar na Azul?"},
+    {"id": "t2-own-vaccine", "kind": "owncase", "message": "tomei a vacina de febre amarela há 15 anos, ainda vale pra ir pra Colômbia?"},
+    {"id": "t2-cur-morocco", "kind": "current", "message": "precisa de visto pra ir pro Marrocos?"},
+    {"id": "t2-cur-patagonia", "kind": "current", "message": "qual a melhor época pra ir pra Patagônia?"},
+    {"id": "t2-cur-bike", "kind": "current", "message": "a GOL permite levar bicicleta?"},
+    {"id": "t2-cur-rec-lis", "kind": "current", "message": "quanto tempo de voo de Recife pra Lisboa?"},
+    {"id": "t2-cur-japan-volt", "kind": "current", "message": "que voltagem usa no Japão?"},
+    {"id": "t2-cur-uruguay", "kind": "current", "message": "precisa de passaporte pra ir pro Uruguai?"},
+    {"id": "t2-hi", "kind": "nosearch", "message": "bom dia!"},
+    {"id": "t2-bye", "kind": "nosearch", "message": "tchau, obrigado"}
+  ]
+}

@@ -1,0 +1,12 @@
+{"id": "gd-01", "message": "qual bairro é melhor pra ficar em Salvador?", "want": "none"}
+{"id": "gd-02", "message": "quanto tempo dura o voo de São Paulo pra Nova York?", "want": "none"}
+{"id": "gd-03", "message": "vale mais a pena pousada ou hotel em Paraty?", "want": "none"}
+{"id": "gd-04", "message": "qual aeroporto de Londres é mais perto do centro?", "want": "none"}
+{"id": "gd-05", "message": "é melhor voar pra Orlando ou Miami pra ir pra Disney?", "want": "none"}
+{"id": "gd-06", "message": "Gramado é caro pra se hospedar?", "want": "none"}
+{"id": "gd-07", "message": "o voo pra Europa costuma ter escala?", "want": "none"}
+{"id": "gd-08", "message": "quero uma pousada em Paraty no carnaval", "want": "search-hotels"}
+{"id": "gd-09", "message": "passagem de São Paulo pra Nova York em dezembro", "want": "search-flights"}
+{"id": "gd-10", "message": "tem hotel perto do aeroporto de Guarulhos?", "want": "search-hotels"}
+{"id": "gd-11", "message": "quanto tá a passagem pra Orlando em julho?", "want": "search-flights"}
+{"id": "gd-12", "message": "me acha um hotel barato em Gramado", "want": "search-hotels"}

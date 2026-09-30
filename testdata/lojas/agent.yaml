@@ -1,0 +1,134 @@
+# A retail chain's opening agent: the team reports each step of a new
+# store's opening; the platform measures days to open and time per
+# phase (RFC-0001, "Métricas de negócio e experimentos").
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata: { name: implantacao, namespace: rede }
+spec:
+  description: Acompanha a abertura de novas lojas.
+  timezone: America/Sao_Paulo
+  messages:
+    notUnderstood: "Não entendi. Me diga qual loja e qual etapa foi concluída, por exemplo: a loja 12 concluiu a obra."
+    notAllowed: "Só a equipe de implantação registra etapas."
+    failed: "Algo deu errado. Alguém da implantação vai verificar."
+  humanInTheLoop: { queue: implantacao }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Subject
+metadata: { name: loja, namespace: rede }
+spec:
+  description: Uma loja em implantação, pelo seu número.
+  id: "inputs.unidade"
+  attributes:
+    regiao: { type: string, enum: [sul, sudeste, nordeste, centro-oeste, norte] }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Funnel
+metadata: { name: abertura, namespace: rede }
+spec:
+  description: Do contrato à inauguração, com o prazo esperado de cada fase.
+  subject: loja
+  cohort: month
+  dimensions: [regiao]
+  stages:
+    - { name: contrato,     milestone: contrato-assinado }
+    - { name: ponto,        milestone: ponto-aprovado,   expected: 30d }
+    - { name: projeto,      milestone: projeto-aprovado, expected: 20d }
+    - { name: obra,         milestone: obra-concluida,   expected: 60d }
+    - { name: treinamento,  milestone: equipe-treinada,  expected: 15d }
+    - { name: inauguracao,  milestone: loja-aberta,      expected: 10d }
+  onStuck: { function: avisar-atraso }   # past 1.5x expected: the team is told, once
+---
+# The ERP reports finished steps: POST /v1/hooks/erp-etapa with
+# {"unidade": "12", "etapa": "obra"}, signed with TESSERA_SECRET_ERP_HOOK
+# (docs/guides/authoring.md, "Webhooks").
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Trigger
+metadata: { name: erp-etapa, namespace: rede }
+spec:
+  function: registrar-etapa
+  webhook: { secret: ERP_HOOK }
+---
+# A store waiting for a step past 1.5 times the expected time: the
+# opening team gets a task, with the facts (Funnel abertura, onStuck).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: avisar-atraso, namespace: rede }
+spec:
+  description: Tells the opening team that a store is stuck in a step.
+  authorize: "has(caller.funnel)"
+  steps:
+    - id: tarefa
+      escalate:
+        queue: implantacao
+        task: answer
+        message: "A loja {{ event.payload.subject }} está há {{ event.payload.days }} dias esperando a etapa {{ event.payload.stage }}. O que houve?"
+  output: { template: "ok" }
+---
+# Every Monday at 9h the team gets the funnel in numbers.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Trigger
+metadata: { name: relatorio-segunda, namespace: rede }
+spec:
+  function: relatorio-semanal
+  schedule: { cron: "0 9 * * 1", maxDelay: 6h }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: relatorio-semanal, namespace: rede }
+spec:
+  description: Sends the opening team the funnel's numbers.
+  authorize: "has(caller.trigger)"
+  steps:
+    - { id: funil, act: metrics/funnel, with: { funnel: abertura } }
+    - id: texto
+      compute:
+        starlark:
+          script: scripts/relatorio.star
+          function: relatorio
+          with: { funil: "${ steps.funil.output }" }
+    - id: enviar
+      respond: { template: "{{ steps.texto.output }}", to: "queue:implantacao" }
+  output: { value: "steps.funil.output.totals" }
+---
+# The opening team answers within a working day; otherwise the board is
+# told. Counted in business hours in the Agent's time zone.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: HumanQueue
+metadata: { name: implantacao, namespace: rede }
+spec:
+  description: Equipe de implantação de lojas.
+  sla:
+    remind: 4h
+    escalate: 9h
+    escalateTo: diretoria
+    businessHours: { from: "09:00", to: "18:00" }
+  # Where the team hears about tasks: any plugin action (slack.yaml here).
+  # The web console lists them too; the link opens the task's own page.
+  notify:
+    - act: slack/post
+      with:
+        channel: "#implantacao"
+        text: "${ (inputs.stage == 'created' ? '' : inputs.stage == 'remind' ? '[lembrete] ' : '[escalado] ') + inputs.text + (inputs.link == '' ? '' : ' ' + inputs.link) }"
+---
+# When a store opens, the board hears it the moment the milestone is
+# recorded (by the team in chat or by the ERP), once per opening.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Trigger
+metadata: { name: inaugurou, namespace: rede }
+spec:
+  function: avisar-inauguracao
+  milestone: { subject: loja, name: loja-aberta }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: avisar-inauguracao, namespace: rede }
+spec:
+  description: Tells the board a store opened.
+  authorize: "has(caller.trigger)"
+  steps:
+    - id: aviso
+      respond:
+        to: "queue:diretoria"
+        template: "A loja {{ event.payload.id }} inaugurou. O tempo de cada fase está em tessera metrics funnel --funnel abertura."
+  output: { value: "true" }

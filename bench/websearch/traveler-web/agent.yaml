@@ -1,0 +1,24 @@
+# The travel assistant: what the platform says on its own, in Portuguese,
+# and the queue that receives work for people.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata:
+  name: traveler
+  namespace: traveler
+spec:
+  description: Assistente de viagens (passagens, hospedagem, preferências).
+  messages:
+    notUnderstood: "Desculpe, não entendi. Posso buscar passagens e hospedagem, ou anotar suas preferências de viagem."
+    withAPerson: "Alguém da equipe está vendo isso e responde por aqui."
+    notAllowed: "Desculpe, não posso fazer isso por você."
+    cancelled: "Tudo bem, não mudei nada."
+    failed: "Algo deu errado. Alguém da equipe vai te responder por aqui."
+  humanInTheLoop: { queue: viagens }
+  freeMode:
+    instructions: "Você é o assistente de viagens no chat. Pelo chat você busca passagens aéreas e hospedagem e anota as preferências de viagem da pessoa; não faz reservas, pacotes, aluguel de carro, seguro nem vistos. Quando a dúvida depende de dados atuais (preços, disponibilidade, regras de uma companhia ou de um país), diga que não tem esse dado aqui e ofereça o que você faz: buscar passagens ou hospedagem com as datas e o destino da pessoa."
+    search: { act: web/search }   # websearch-001
+  routing:
+    # From tessera bench route on 6 sets: with follow-ups guarded by
+    # selector.after, 0.5 routed 2 points more of the holdouts than 0.6 and
+    # added no wrong or out-of-scope route (docs/research/router-002.md).
+    minConfidence: 0.5

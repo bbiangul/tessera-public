@@ -1,0 +1,11 @@
+{
+  "apiVersion": "agents.tessera.dev/v1alpha1",
+  "kind": "HumanQueue",
+  "metadata": {
+    "name": "recepcao",
+    "namespace": "clinica-bench"
+  },
+  "spec": {
+    "description": "Equipe da recepção: conferir a agenda e resolver falhas sem repetir alterações de resultado desconhecido."
+  }
+}

@@ -1,0 +1,24 @@
+# Web search through your own SearXNG (tessera add web --provider searxng):
+# no API cost, no account. Set baseUrl to your instance, served over https,
+# with the json format enabled (search.formats: [html, json]).
+# The contract every provider keeps: search {query} -> [{site, title, url, snippet}].
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata:
+  name: web
+  version: 0.1.0
+spec:
+  egress:
+    hosts: [searxng.example.com]
+  connection:
+    baseUrl: https://searxng.example.com
+  actions:
+    search:
+      input: { query: string }
+      output: list
+      effect: read
+      http:
+        method: GET
+        path: /search
+        query: { q: "${ inputs.query }", format: json }
+        output: "sources.response.body.results.map(r, {'title': r.title, 'url': r.url, 'snippet': has(r.content) ? r.content : ''})"

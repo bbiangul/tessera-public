@@ -1,0 +1,25 @@
+# Slack, for the opening team: HumanQueue implantacao posts every task
+# (created, reminded, escalated) to a channel, with a signed link to answer
+# it (tessera serve --public-url). The bot token is a secret reference
+# (TESSERA_SECRET_SLACK_TOKEN when self-hosted), with the chat:write scope.
+# Slack answers 200 with {"ok": false} when it did not post: failWhen makes
+# that a failure, and the notification is tried again on the next tick.
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: slack, version: 0.1.0 }
+spec:
+  egress: { hosts: [slack.com] }
+  connection:
+    baseUrl: https://slack.com/api
+    auth: { header: Authorization, prefix: "Bearer ", secret: SLACK_TOKEN }
+  actions:
+    post:
+      input: { channel: string, text: string }
+      output: string
+      effect: external-message
+      http:
+        method: POST
+        path: /chat.postMessage
+        body: { channel: "${ inputs.channel }", text: "${ inputs.text }" }
+        failWhen: "!sources.response.body.ok"
+        output: sources.response.body.ts

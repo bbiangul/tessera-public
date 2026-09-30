@@ -1,0 +1,25 @@
+# Web search through Tavily (tessera add web --provider tavily): 1,000 free
+# searches a month, no card. The key is the secret TAVILY_API_KEY.
+# The contract every provider keeps: search {query} -> [{site, title, url, snippet}].
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata:
+  name: web
+  version: 0.1.0
+spec:
+  egress:
+    hosts: [api.tavily.com]
+  connection:
+    baseUrl: https://api.tavily.com
+    auth: { header: Authorization, prefix: "Bearer ", secret: TAVILY_API_KEY }
+  actions:
+    search:
+      input: { query: string }
+      output: list
+      effect: read
+      http:
+        method: POST
+        safe: true
+        path: /search
+        body: { query: "${ inputs.query }", max_results: 5 }
+        output: "sources.response.body.results.map(r, {'title': r.title, 'url': r.url, 'snippet': r.content})"

@@ -1,0 +1,2859 @@
+{
+ "today": "2026-10-02",
+ "timezone": "America/Sao_Paulo",
+ "seed": 57,
+ "tasks": [
+  {
+   "id": "b01",
+   "kind": "book-cooperative",
+   "patientId": "P01",
+   "patientName": "Alice",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D1-1005-08",
+     "dentistId": "D1",
+     "start": "2026-10-05T08:00:00-03:00",
+     "label": "segunda 05/10 às 8h"
+    },
+    {
+     "id": "D1-1005-10",
+     "dentistId": "D1",
+     "start": "2026-10-05T10:00:00-03:00",
+     "label": "segunda 05/10 às 10h"
+    },
+    {
+     "id": "D1-1005-14",
+     "dentistId": "D1",
+     "start": "2026-10-05T14:00:00-03:00",
+     "label": "segunda 05/10 às 14h"
+    },
+    {
+     "id": "D1-1006-08",
+     "dentistId": "D1",
+     "start": "2026-10-06T08:00:00-03:00",
+     "label": "terça 06/10 às 8h"
+    },
+    {
+     "id": "D1-1006-09",
+     "dentistId": "D1",
+     "start": "2026-10-06T09:00:00-03:00",
+     "label": "terça 06/10 às 9h"
+    },
+    {
+     "id": "D1-1006-14",
+     "dentistId": "D1",
+     "start": "2026-10-06T14:00:00-03:00",
+     "label": "terça 06/10 às 14h"
+    },
+    {
+     "id": "D1-1007-10",
+     "dentistId": "D1",
+     "start": "2026-10-07T10:00:00-03:00",
+     "label": "quarta 07/10 às 10h"
+    },
+    {
+     "id": "D1-1007-11",
+     "dentistId": "D1",
+     "start": "2026-10-07T11:00:00-03:00",
+     "label": "quarta 07/10 às 11h"
+    },
+    {
+     "id": "D1-1007-15",
+     "dentistId": "D1",
+     "start": "2026-10-07T15:00:00-03:00",
+     "label": "quarta 07/10 às 15h"
+    },
+    {
+     "id": "D1-1008-11",
+     "dentistId": "D1",
+     "start": "2026-10-08T11:00:00-03:00",
+     "label": "quinta 08/10 às 11h"
+    },
+    {
+     "id": "D1-1008-15",
+     "dentistId": "D1",
+     "start": "2026-10-08T15:00:00-03:00",
+     "label": "quinta 08/10 às 15h"
+    },
+    {
+     "id": "D1-1008-16",
+     "dentistId": "D1",
+     "start": "2026-10-08T16:00:00-03:00",
+     "label": "quinta 08/10 às 16h"
+    },
+    {
+     "id": "D1-1009-08",
+     "dentistId": "D1",
+     "start": "2026-10-09T08:00:00-03:00",
+     "label": "sexta 09/10 às 8h"
+    },
+    {
+     "id": "D1-1009-15",
+     "dentistId": "D1",
+     "start": "2026-10-09T15:00:00-03:00",
+     "label": "sexta 09/10 às 15h"
+    },
+    {
+     "id": "D1-1009-16",
+     "dentistId": "D1",
+     "start": "2026-10-09T16:00:00-03:00",
+     "label": "sexta 09/10 às 16h"
+    },
+    {
+     "id": "D1-1012-10",
+     "dentistId": "D1",
+     "start": "2026-10-12T10:00:00-03:00",
+     "label": "segunda 12/10 às 10h"
+    },
+    {
+     "id": "D1-1012-14",
+     "dentistId": "D1",
+     "start": "2026-10-12T14:00:00-03:00",
+     "label": "segunda 12/10 às 14h"
+    },
+    {
+     "id": "D1-1012-16",
+     "dentistId": "D1",
+     "start": "2026-10-12T16:00:00-03:00",
+     "label": "segunda 12/10 às 16h"
+    },
+    {
+     "id": "D1-1013-11",
+     "dentistId": "D1",
+     "start": "2026-10-13T11:00:00-03:00",
+     "label": "terça 13/10 às 11h"
+    },
+    {
+     "id": "D1-1013-15",
+     "dentistId": "D1",
+     "start": "2026-10-13T15:00:00-03:00",
+     "label": "terça 13/10 às 15h"
+    },
+    {
+     "id": "D1-1013-16",
+     "dentistId": "D1",
+     "start": "2026-10-13T16:00:00-03:00",
+     "label": "terça 13/10 às 16h"
+    },
+    {
+     "id": "D1-1014-09",
+     "dentistId": "D1",
+     "start": "2026-10-14T09:00:00-03:00",
+     "label": "quarta 14/10 às 9h"
+    },
+    {
+     "id": "D1-1014-15",
+     "dentistId": "D1",
+     "start": "2026-10-14T15:00:00-03:00",
+     "label": "quarta 14/10 às 15h"
+    },
+    {
+     "id": "D1-1014-16",
+     "dentistId": "D1",
+     "start": "2026-10-14T16:00:00-03:00",
+     "label": "quarta 14/10 às 16h"
+    }
+   ],
+   "goal": "Você é Alice (paciente P01). Quer marcar uma consulta nova com o dentista D1 para terça 13/10 às 11h. Sabe que pode haver um sinal e aceita pagar. Se oferecerem esse horário, confirme com um sim claro. Não aceite outro horário.",
+   "expected": {
+    "new:P01": [
+     "D1-1013-11"
+    ]
+   }
+  },
+  {
+   "id": "b02",
+   "kind": "book-cooperative",
+   "patientId": "P02",
+   "patientName": "Bento",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D2-1005-10",
+     "dentistId": "D2",
+     "start": "2026-10-05T10:00:00-03:00",
+     "label": "segunda 05/10 às 10h"
+    },
+    {
+     "id": "D2-1005-14",
+     "dentistId": "D2",
+     "start": "2026-10-05T14:00:00-03:00",
+     "label": "segunda 05/10 às 14h"
+    },
+    {
+     "id": "D2-1005-17",
+     "dentistId": "D2",
+     "start": "2026-10-05T17:00:00-03:00",
+     "label": "segunda 05/10 às 17h"
+    },
+    {
+     "id": "D2-1006-09",
+     "dentistId": "D2",
+     "start": "2026-10-06T09:00:00-03:00",
+     "label": "terça 06/10 às 9h"
+    },
+    {
+     "id": "D2-1006-10",
+     "dentistId": "D2",
+     "start": "2026-10-06T10:00:00-03:00",
+     "label": "terça 06/10 às 10h"
+    },
+    {
+     "id": "D2-1006-14",
+     "dentistId": "D2",
+     "start": "2026-10-06T14:00:00-03:00",
+     "label": "terça 06/10 às 14h"
+    },
+    {
+     "id": "D2-1007-10",
+     "dentistId": "D2",
+     "start": "2026-10-07T10:00:00-03:00",
+     "label": "quarta 07/10 às 10h"
+    },
+    {
+     "id": "D2-1007-11",
+     "dentistId": "D2",
+     "start": "2026-10-07T11:00:00-03:00",
+     "label": "quarta 07/10 às 11h"
+    },
+    {
+     "id": "D2-1007-14",
+     "dentistId": "D2",
+     "start": "2026-10-07T14:00:00-03:00",
+     "label": "quarta 07/10 às 14h"
+    },
+    {
+     "id": "D2-1008-10",
+     "dentistId": "D2",
+     "start": "2026-10-08T10:00:00-03:00",
+     "label": "quinta 08/10 às 10h"
+    },
+    {
+     "id": "D2-1008-14",
+     "dentistId": "D2",
+     "start": "2026-10-08T14:00:00-03:00",
+     "label": "quinta 08/10 às 14h"
+    },
+    {
+     "id": "D2-1008-16",
+     "dentistId": "D2",
+     "start": "2026-10-08T16:00:00-03:00",
+     "label": "quinta 08/10 às 16h"
+    },
+    {
+     "id": "D2-1009-09",
+     "dentistId": "D2",
+     "start": "2026-10-09T09:00:00-03:00",
+     "label": "sexta 09/10 às 9h"
+    },
+    {
+     "id": "D2-1009-14",
+     "dentistId": "D2",
+     "start": "2026-10-09T14:00:00-03:00",
+     "label": "sexta 09/10 às 14h"
+    },
+    {
+     "id": "D2-1009-16",
+     "dentistId": "D2",
+     "start": "2026-10-09T16:00:00-03:00",
+     "label": "sexta 09/10 às 16h"
+    },
+    {
+     "id": "D2-1012-10",
+     "dentistId": "D2",
+     "start": "2026-10-12T10:00:00-03:00",
+     "label": "segunda 12/10 às 10h"
+    },
+    {
+     "id": "D2-1012-14",
+     "dentistId": "D2",
+     "start": "2026-10-12T14:00:00-03:00",
+     "label": "segunda 12/10 às 14h"
+    },
+    {
+     "id": "D2-1012-16",
+     "dentistId": "D2",
+     "start": "2026-10-12T16:00:00-03:00",
+     "label": "segunda 12/10 às 16h"
+    },
+    {
+     "id": "D2-1013-09",
+     "dentistId": "D2",
+     "start": "2026-10-13T09:00:00-03:00",
+     "label": "terça 13/10 às 9h"
+    },
+    {
+     "id": "D2-1013-10",
+     "dentistId": "D2",
+     "start": "2026-10-13T10:00:00-03:00",
+     "label": "terça 13/10 às 10h"
+    },
+    {
+     "id": "D2-1013-11",
+     "dentistId": "D2",
+     "start": "2026-10-13T11:00:00-03:00",
+     "label": "terça 13/10 às 11h"
+    },
+    {
+     "id": "D2-1014-09",
+     "dentistId": "D2",
+     "start": "2026-10-14T09:00:00-03:00",
+     "label": "quarta 14/10 às 9h"
+    },
+    {
+     "id": "D2-1014-15",
+     "dentistId": "D2",
+     "start": "2026-10-14T15:00:00-03:00",
+     "label": "quarta 14/10 às 15h"
+    },
+    {
+     "id": "D2-1014-16",
+     "dentistId": "D2",
+     "start": "2026-10-14T16:00:00-03:00",
+     "label": "quarta 14/10 às 16h"
+    }
+   ],
+   "goal": "Você é Bento (paciente P02). Quer marcar uma consulta nova com o dentista D2 para sexta 09/10 às 14h. Sabe que pode haver um sinal e aceita pagar. Se oferecerem esse horário, confirme com um sim claro. Não aceite outro horário.",
+   "expected": {
+    "new:P02": [
+     "D2-1009-14"
+    ]
+   }
+  },
+  {
+   "id": "b03",
+   "kind": "book-cooperative",
+   "patientId": "P03",
+   "patientName": "Clara",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D3-1005-08",
+     "dentistId": "D3",
+     "start": "2026-10-05T08:00:00-03:00",
+     "label": "segunda 05/10 às 8h"
+    },
+    {
+     "id": "D3-1005-15",
+     "dentistId": "D3",
+     "start": "2026-10-05T15:00:00-03:00",
+     "label": "segunda 05/10 às 15h"
+    },
+    {
+     "id": "D3-1005-17",
+     "dentistId": "D3",
+     "start": "2026-10-05T17:00:00-03:00",
+     "label": "segunda 05/10 às 17h"
+    },
+    {
+     "id": "D3-1006-08",
+     "dentistId": "D3",
+     "start": "2026-10-06T08:00:00-03:00",
+     "label": "terça 06/10 às 8h"
+    },
+    {
+     "id": "D3-1006-11",
+     "dentistId": "D3",
+     "start": "2026-10-06T11:00:00-03:00",
+     "label": "terça 06/10 às 11h"
+    },
+    {
+     "id": "D3-1006-17",
+     "dentistId": "D3",
+     "start": "2026-10-06T17:00:00-03:00",
+     "label": "terça 06/10 às 17h"
+    },
+    {
+     "id": "D3-1007-08",
+     "dentistId": "D3",
+     "start": "2026-10-07T08:00:00-03:00",
+     "label": "quarta 07/10 às 8h"
+    },
+    {
+     "id": "D3-1007-14",
+     "dentistId": "D3",
+     "start": "2026-10-07T14:00:00-03:00",
+     "label": "quarta 07/10 às 14h"
+    },
+    {
+     "id": "D3-1007-16",
+     "dentistId": "D3",
+     "start": "2026-10-07T16:00:00-03:00",
+     "label": "quarta 07/10 às 16h"
+    },
+    {
+     "id": "D3-1008-11",
+     "dentistId": "D3",
+     "start": "2026-10-08T11:00:00-03:00",
+     "label": "quinta 08/10 às 11h"
+    },
+    {
+     "id": "D3-1008-14",
+     "dentistId": "D3",
+     "start": "2026-10-08T14:00:00-03:00",
+     "label": "quinta 08/10 às 14h"
+    },
+    {
+     "id": "D3-1008-15",
+     "dentistId": "D3",
+     "start": "2026-10-08T15:00:00-03:00",
+     "label": "quinta 08/10 às 15h"
+    },
+    {
+     "id": "D3-1009-08",
+     "dentistId": "D3",
+     "start": "2026-10-09T08:00:00-03:00",
+     "label": "sexta 09/10 às 8h"
+    },
+    {
+     "id": "D3-1009-11",
+     "dentistId": "D3",
+     "start": "2026-10-09T11:00:00-03:00",
+     "label": "sexta 09/10 às 11h"
+    },
+    {
+     "id": "D3-1009-15",
+     "dentistId": "D3",
+     "start": "2026-10-09T15:00:00-03:00",
+     "label": "sexta 09/10 às 15h"
+    },
+    {
+     "id": "D3-1012-08",
+     "dentistId": "D3",
+     "start": "2026-10-12T08:00:00-03:00",
+     "label": "segunda 12/10 às 8h"
+    },
+    {
+     "id": "D3-1012-10",
+     "dentistId": "D3",
+     "start": "2026-10-12T10:00:00-03:00",
+     "label": "segunda 12/10 às 10h"
+    },
+    {
+     "id": "D3-1012-17",
+     "dentistId": "D3",
+     "start": "2026-10-12T17:00:00-03:00",
+     "label": "segunda 12/10 às 17h"
+    },
+    {
+     "id": "D3-1013-10",
+     "dentistId": "D3",
+     "start": "2026-10-13T10:00:00-03:00",
+     "label": "terça 13/10 às 10h"
+    },
+    {
+     "id": "D3-1013-14",
+     "dentistId": "D3",
+     "start": "2026-10-13T14:00:00-03:00",
+     "label": "terça 13/10 às 14h"
+    },
+    {
+     "id": "D3-1013-16",
+     "dentistId": "D3",
+     "start": "2026-10-13T16:00:00-03:00",
+     "label": "terça 13/10 às 16h"
+    },
+    {
+     "id": "D3-1014-14",
+     "dentistId": "D3",
+     "start": "2026-10-14T14:00:00-03:00",
+     "label": "quarta 14/10 às 14h"
+    },
+    {
+     "id": "D3-1014-15",
+     "dentistId": "D3",
+     "start": "2026-10-14T15:00:00-03:00",
+     "label": "quarta 14/10 às 15h"
+    },
+    {
+     "id": "D3-1014-17",
+     "dentistId": "D3",
+     "start": "2026-10-14T17:00:00-03:00",
+     "label": "quarta 14/10 às 17h"
+    }
+   ],
+   "goal": "Você é Clara (paciente P03). Quer marcar uma consulta nova com o dentista D3 para quarta 14/10 às 15h. Sabe que pode haver um sinal e aceita pagar. Se oferecerem esse horário, confirme com um sim claro. Não aceite outro horário.",
+   "expected": {
+    "new:P03": [
+     "D3-1014-15"
+    ]
+   }
+  },
+  {
+   "id": "b04",
+   "kind": "book-cooperative",
+   "patientId": "P04",
+   "patientName": "Davi",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D1-1005-08",
+     "dentistId": "D1",
+     "start": "2026-10-05T08:00:00-03:00",
+     "label": "segunda 05/10 às 8h"
+    },
+    {
+     "id": "D1-1005-11",
+     "dentistId": "D1",
+     "start": "2026-10-05T11:00:00-03:00",
+     "label": "segunda 05/10 às 11h"
+    },
+    {
+     "id": "D1-1005-14",
+     "dentistId": "D1",
+     "start": "2026-10-05T14:00:00-03:00",
+     "label": "segunda 05/10 às 14h"
+    },
+    {
+     "id": "D1-1006-08",
+     "dentistId": "D1",
+     "start": "2026-10-06T08:00:00-03:00",
+     "label": "terça 06/10 às 8h"
+    },
+    {
+     "id": "D1-1006-09",
+     "dentistId": "D1",
+     "start": "2026-10-06T09:00:00-03:00",
+     "label": "terça 06/10 às 9h"
+    },
+    {
+     "id": "D1-1006-10",
+     "dentistId": "D1",
+     "start": "2026-10-06T10:00:00-03:00",
+     "label": "terça 06/10 às 10h"
+    },
+    {
+     "id": "D1-1007-10",
+     "dentistId": "D1",
+     "start": "2026-10-07T10:00:00-03:00",
+     "label": "quarta 07/10 às 10h"
+    },
+    {
+     "id": "D1-1007-15",
+     "dentistId": "D1",
+     "start": "2026-10-07T15:00:00-03:00",
+     "label": "quarta 07/10 às 15h"
+    },
+    {
+     "id": "D1-1007-16",
+     "dentistId": "D1",
+     "start": "2026-10-07T16:00:00-03:00",
+     "label": "quarta 07/10 às 16h"
+    },
+    {
+     "id": "D1-1008-08",
+     "dentistId": "D1",
+     "start": "2026-10-08T08:00:00-03:00",
+     "label": "quinta 08/10 às 8h"
+    },
+    {
+     "id": "D1-1008-10",
+     "dentistId": "D1",
+     "start": "2026-10-08T10:00:00-03:00",
+     "label": "quinta 08/10 às 10h"
+    },
+    {
+     "id": "D1-1008-17",
+     "dentistId": "D1",
+     "start": "2026-10-08T17:00:00-03:00",
+     "label": "quinta 08/10 às 17h"
+    },
+    {
+     "id": "D1-1009-09",
+     "dentistId": "D1",
+     "start": "2026-10-09T09:00:00-03:00",
+     "label": "sexta 09/10 às 9h"
+    },
+    {
+     "id": "D1-1009-16",
+     "dentistId": "D1",
+     "start": "2026-10-09T16:00:00-03:00",
+     "label": "sexta 09/10 às 16h"
+    },
+    {
+     "id": "D1-1009-17",
+     "dentistId": "D1",
+     "start": "2026-10-09T17:00:00-03:00",
+     "label": "sexta 09/10 às 17h"
+    },
+    {
+     "id": "D1-1012-08",
+     "dentistId": "D1",
+     "start": "2026-10-12T08:00:00-03:00",
+     "label": "segunda 12/10 às 8h"
+    },
+    {
+     "id": "D1-1012-15",
+     "dentistId": "D1",
+     "start": "2026-10-12T15:00:00-03:00",
+     "label": "segunda 12/10 às 15h"
+    },
+    {
+     "id": "D1-1012-17",
+     "dentistId": "D1",
+     "start": "2026-10-12T17:00:00-03:00",
+     "label": "segunda 12/10 às 17h"
+    },
+    {
+     "id": "D1-1013-08",
+     "dentistId": "D1",
+     "start": "2026-10-13T08:00:00-03:00",
+     "label": "terça 13/10 às 8h"
+    },
+    {
+     "id": "D1-1013-10",
+     "dentistId": "D1",
+     "start": "2026-10-13T10:00:00-03:00",
+     "label": "terça 13/10 às 10h"
+    },
+    {
+     "id": "D1-1013-16",
+     "dentistId": "D1",
+     "start": "2026-10-13T16:00:00-03:00",
+     "label": "terça 13/10 às 16h"
+    },
+    {
+     "id": "D1-1014-09",
+     "dentistId": "D1",
+     "start": "2026-10-14T09:00:00-03:00",
+     "label": "quarta 14/10 às 9h"
+    },
+    {
+     "id": "D1-1014-11",
+     "dentistId": "D1",
+     "start": "2026-10-14T11:00:00-03:00",
+     "label": "quarta 14/10 às 11h"
+    },
+    {
+     "id": "D1-1014-15",
+     "dentistId": "D1",
+     "start": "2026-10-14T15:00:00-03:00",
+     "label": "quarta 14/10 às 15h"
+    }
+   ],
+   "goal": "Você é Davi (paciente P04). Quer marcar uma consulta nova com o dentista D1 para terça 13/10 às 8h. Sabe que pode haver um sinal e aceita pagar. Se oferecerem esse horário, confirme com um sim claro. Não aceite outro horário.",
+   "expected": {
+    "new:P04": [
+     "D1-1013-08"
+    ]
+   }
+  },
+  {
+   "id": "b05",
+   "kind": "book-cooperative",
+   "patientId": "P05",
+   "patientName": "Eva",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D2-1005-08",
+     "dentistId": "D2",
+     "start": "2026-10-05T08:00:00-03:00",
+     "label": "segunda 05/10 às 8h"
+    },
+    {
+     "id": "D2-1005-11",
+     "dentistId": "D2",
+     "start": "2026-10-05T11:00:00-03:00",
+     "label": "segunda 05/10 às 11h"
+    },
+    {
+     "id": "D2-1005-15",
+     "dentistId": "D2",
+     "start": "2026-10-05T15:00:00-03:00",
+     "label": "segunda 05/10 às 15h"
+    },
+    {
+     "id": "D2-1006-08",
+     "dentistId": "D2",
+     "start": "2026-10-06T08:00:00-03:00",
+     "label": "terça 06/10 às 8h"
+    },
+    {
+     "id": "D2-1006-10",
+     "dentistId": "D2",
+     "start": "2026-10-06T10:00:00-03:00",
+     "label": "terça 06/10 às 10h"
+    },
+    {
+     "id": "D2-1006-16",
+     "dentistId": "D2",
+     "start": "2026-10-06T16:00:00-03:00",
+     "label": "terça 06/10 às 16h"
+    },
+    {
+     "id": "D2-1007-10",
+     "dentistId": "D2",
+     "start": "2026-10-07T10:00:00-03:00",
+     "label": "quarta 07/10 às 10h"
+    },
+    {
+     "id": "D2-1007-15",
+     "dentistId": "D2",
+     "start": "2026-10-07T15:00:00-03:00",
+     "label": "quarta 07/10 às 15h"
+    },
+    {
+     "id": "D2-1007-16",
+     "dentistId": "D2",
+     "start": "2026-10-07T16:00:00-03:00",
+     "label": "quarta 07/10 às 16h"
+    },
+    {
+     "id": "D2-1008-09",
+     "dentistId": "D2",
+     "start": "2026-10-08T09:00:00-03:00",
+     "label": "quinta 08/10 às 9h"
+    },
+    {
+     "id": "D2-1008-14",
+     "dentistId": "D2",
+     "start": "2026-10-08T14:00:00-03:00",
+     "label": "quinta 08/10 às 14h"
+    },
+    {
+     "id": "D2-1008-17",
+     "dentistId": "D2",
+     "start": "2026-10-08T17:00:00-03:00",
+     "label": "quinta 08/10 às 17h"
+    },
+    {
+     "id": "D2-1009-09",
+     "dentistId": "D2",
+     "start": "2026-10-09T09:00:00-03:00",
+     "label": "sexta 09/10 às 9h"
+    },
+    {
+     "id": "D2-1009-11",
+     "dentistId": "D2",
+     "start": "2026-10-09T11:00:00-03:00",
+     "label": "sexta 09/10 às 11h"
+    },
+    {
+     "id": "D2-1009-17",
+     "dentistId": "D2",
+     "start": "2026-10-09T17:00:00-03:00",
+     "label": "sexta 09/10 às 17h"
+    },
+    {
+     "id": "D2-1012-09",
+     "dentistId": "D2",
+     "start": "2026-10-12T09:00:00-03:00",
+     "label": "segunda 12/10 às 9h"
+    },
+    {
+     "id": "D2-1012-16",
+     "dentistId": "D2",
+     "start": "2026-10-12T16:00:00-03:00",
+     "label": "segunda 12/10 às 16h"
+    },
+    {
+     "id": "D2-1012-17",
+     "dentistId": "D2",
+     "start": "2026-10-12T17:00:00-03:00",
+     "label": "segunda 12/10 às 17h"
+    },
+    {
+     "id": "D2-1013-11",
+     "dentistId": "D2",
+     "start": "2026-10-13T11:00:00-03:00",
+     "label": "terça 13/10 às 11h"
+    },
+    {
+     "id": "D2-1013-14",
+     "dentistId": "D2",
+     "start": "2026-10-13T14:00:00-03:00",
+     "label": "terça 13/10 às 14h"
+    },
+    {
+     "id": "D2-1013-16",
+     "dentistId": "D2",
+     "start": "2026-10-13T16:00:00-03:00",
+     "label": "terça 13/10 às 16h"
+    },
+    {
+     "id": "D2-1014-11",
+     "dentistId": "D2",
+     "start": "2026-10-14T11:00:00-03:00",
+     "label": "quarta 14/10 às 11h"
+    },
+    {
+     "id": "D2-1014-16",
+     "dentistId": "D2",
+     "start": "2026-10-14T16:00:00-03:00",
+     "label": "quarta 14/10 às 16h"
+    },
+    {
+     "id": "D2-1014-17",
+     "dentistId": "D2",
+     "start": "2026-10-14T17:00:00-03:00",
+     "label": "quarta 14/10 às 17h"
+    }
+   ],
+   "goal": "Você é Eva (paciente P05). Quer marcar uma consulta nova com o dentista D2 para terça 06/10 às 10h. Sabe que pode haver um sinal e aceita pagar. Se oferecerem esse horário, confirme com um sim claro. Não aceite outro horário.",
+   "expected": {
+    "new:P05": [
+     "D2-1006-10"
+    ]
+   }
+  },
+  {
+   "id": "b06",
+   "kind": "book-cooperative",
+   "patientId": "P06",
+   "patientName": "Felipe",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D3-1005-08",
+     "dentistId": "D3",
+     "start": "2026-10-05T08:00:00-03:00",
+     "label": "segunda 05/10 às 8h"
+    },
+    {
+     "id": "D3-1005-09",
+     "dentistId": "D3",
+     "start": "2026-10-05T09:00:00-03:00",
+     "label": "segunda 05/10 às 9h"
+    },
+    {
+     "id": "D3-1005-16",
+     "dentistId": "D3",
+     "start": "2026-10-05T16:00:00-03:00",
+     "label": "segunda 05/10 às 16h"
+    },
+    {
+     "id": "D3-1006-08",
+     "dentistId": "D3",
+     "start": "2026-10-06T08:00:00-03:00",
+     "label": "terça 06/10 às 8h"
+    },
+    {
+     "id": "D3-1006-09",
+     "dentistId": "D3",
+     "start": "2026-10-06T09:00:00-03:00",
+     "label": "terça 06/10 às 9h"
+    },
+    {
+     "id": "D3-1006-11",
+     "dentistId": "D3",
+     "start": "2026-10-06T11:00:00-03:00",
+     "label": "terça 06/10 às 11h"
+    },
+    {
+     "id": "D3-1007-08",
+     "dentistId": "D3",
+     "start": "2026-10-07T08:00:00-03:00",
+     "label": "quarta 07/10 às 8h"
+    },
+    {
+     "id": "D3-1007-11",
+     "dentistId": "D3",
+     "start": "2026-10-07T11:00:00-03:00",
+     "label": "quarta 07/10 às 11h"
+    },
+    {
+     "id": "D3-1007-16",
+     "dentistId": "D3",
+     "start": "2026-10-07T16:00:00-03:00",
+     "label": "quarta 07/10 às 16h"
+    },
+    {
+     "id": "D3-1008-08",
+     "dentistId": "D3",
+     "start": "2026-10-08T08:00:00-03:00",
+     "label": "quinta 08/10 às 8h"
+    },
+    {
+     "id": "D3-1008-09",
+     "dentistId": "D3",
+     "start": "2026-10-08T09:00:00-03:00",
+     "label": "quinta 08/10 às 9h"
+    },
+    {
+     "id": "D3-1008-14",
+     "dentistId": "D3",
+     "start": "2026-10-08T14:00:00-03:00",
+     "label": "quinta 08/10 às 14h"
+    },
+    {
+     "id": "D3-1009-14",
+     "dentistId": "D3",
+     "start": "2026-10-09T14:00:00-03:00",
+     "label": "sexta 09/10 às 14h"
+    },
+    {
+     "id": "D3-1009-15",
+     "dentistId": "D3",
+     "start": "2026-10-09T15:00:00-03:00",
+     "label": "sexta 09/10 às 15h"
+    },
+    {
+     "id": "D3-1009-17",
+     "dentistId": "D3",
+     "start": "2026-10-09T17:00:00-03:00",
+     "label": "sexta 09/10 às 17h"
+    },
+    {
+     "id": "D3-1012-10",
+     "dentistId": "D3",
+     "start": "2026-10-12T10:00:00-03:00",
+     "label": "segunda 12/10 às 10h"
+    },
+    {
+     "id": "D3-1012-11",
+     "dentistId": "D3",
+     "start": "2026-10-12T11:00:00-03:00",
+     "label": "segunda 12/10 às 11h"
+    },
+    {
+     "id": "D3-1012-15",
+     "dentistId": "D3",
+     "start": "2026-10-12T15:00:00-03:00",
+     "label": "segunda 12/10 às 15h"
+    },
+    {
+     "id": "D3-1013-11",
+     "dentistId": "D3",
+     "start": "2026-10-13T11:00:00-03:00",
+     "label": "terça 13/10 às 11h"
+    },
+    {
+     "id": "D3-1013-15",
+     "dentistId": "D3",
+     "start": "2026-10-13T15:00:00-03:00",
+     "label": "terça 13/10 às 15h"
+    },
+    {
+     "id": "D3-1013-16",
+     "dentistId": "D3",
+     "start": "2026-10-13T16:00:00-03:00",
+     "label": "terça 13/10 às 16h"
+    },
+    {
+     "id": "D3-1014-11",
+     "dentistId": "D3",
+     "start": "2026-10-14T11:00:00-03:00",
+     "label": "quarta 14/10 às 11h"
+    },
+    {
+     "id": "D3-1014-14",
+     "dentistId": "D3",
+     "start": "2026-10-14T14:00:00-03:00",
+     "label": "quarta 14/10 às 14h"
+    },
+    {
+     "id": "D3-1014-16",
+     "dentistId": "D3",
+     "start": "2026-10-14T16:00:00-03:00",
+     "label": "quarta 14/10 às 16h"
+    }
+   ],
+   "goal": "Você é Felipe (paciente P06). Quer marcar uma consulta nova com o dentista D3 para terça 06/10 às 11h. Sabe que pode haver um sinal e aceita pagar. Se oferecerem esse horário, confirme com um sim claro. Não aceite outro horário.",
+   "expected": {
+    "new:P06": [
+     "D3-1006-11"
+    ]
+   }
+  },
+  {
+   "id": "b07",
+   "kind": "book-cooperative",
+   "patientId": "P07",
+   "patientName": "Giovana",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D1-1005-10",
+     "dentistId": "D1",
+     "start": "2026-10-05T10:00:00-03:00",
+     "label": "segunda 05/10 às 10h"
+    },
+    {
+     "id": "D1-1005-15",
+     "dentistId": "D1",
+     "start": "2026-10-05T15:00:00-03:00",
+     "label": "segunda 05/10 às 15h"
+    },
+    {
+     "id": "D1-1005-16",
+     "dentistId": "D1",
+     "start": "2026-10-05T16:00:00-03:00",
+     "label": "segunda 05/10 às 16h"
+    },
+    {
+     "id": "D1-1006-11",
+     "dentistId": "D1",
+     "start": "2026-10-06T11:00:00-03:00",
+     "label": "terça 06/10 às 11h"
+    },
+    {
+     "id": "D1-1006-15",
+     "dentistId": "D1",
+     "start": "2026-10-06T15:00:00-03:00",
+     "label": "terça 06/10 às 15h"
+    },
+    {
+     "id": "D1-1006-17",
+     "dentistId": "D1",
+     "start": "2026-10-06T17:00:00-03:00",
+     "label": "terça 06/10 às 17h"
+    },
+    {
+     "id": "D1-1007-11",
+     "dentistId": "D1",
+     "start": "2026-10-07T11:00:00-03:00",
+     "label": "quarta 07/10 às 11h"
+    },
+    {
+     "id": "D1-1007-15",
+     "dentistId": "D1",
+     "start": "2026-10-07T15:00:00-03:00",
+     "label": "quarta 07/10 às 15h"
+    },
+    {
+     "id": "D1-1007-17",
+     "dentistId": "D1",
+     "start": "2026-10-07T17:00:00-03:00",
+     "label": "quarta 07/10 às 17h"
+    },
+    {
+     "id": "D1-1008-08",
+     "dentistId": "D1",
+     "start": "2026-10-08T08:00:00-03:00",
+     "label": "quinta 08/10 às 8h"
+    },
+    {
+     "id": "D1-1008-11",
+     "dentistId": "D1",
+     "start": "2026-10-08T11:00:00-03:00",
+     "label": "quinta 08/10 às 11h"
+    },
+    {
+     "id": "D1-1008-15",
+     "dentistId": "D1",
+     "start": "2026-10-08T15:00:00-03:00",
+     "label": "quinta 08/10 às 15h"
+    },
+    {
+     "id": "D1-1009-08",
+     "dentistId": "D1",
+     "start": "2026-10-09T08:00:00-03:00",
+     "label": "sexta 09/10 às 8h"
+    },
+    {
+     "id": "D1-1009-11",
+     "dentistId": "D1",
+     "start": "2026-10-09T11:00:00-03:00",
+     "label": "sexta 09/10 às 11h"
+    },
+    {
+     "id": "D1-1009-16",
+     "dentistId": "D1",
+     "start": "2026-10-09T16:00:00-03:00",
+     "label": "sexta 09/10 às 16h"
+    },
+    {
+     "id": "D1-1012-09",
+     "dentistId": "D1",
+     "start": "2026-10-12T09:00:00-03:00",
+     "label": "segunda 12/10 às 9h"
+    },
+    {
+     "id": "D1-1012-11",
+     "dentistId": "D1",
+     "start": "2026-10-12T11:00:00-03:00",
+     "label": "segunda 12/10 às 11h"
+    },
+    {
+     "id": "D1-1012-15",
+     "dentistId": "D1",
+     "start": "2026-10-12T15:00:00-03:00",
+     "label": "segunda 12/10 às 15h"
+    },
+    {
+     "id": "D1-1013-08",
+     "dentistId": "D1",
+     "start": "2026-10-13T08:00:00-03:00",
+     "label": "terça 13/10 às 8h"
+    },
+    {
+     "id": "D1-1013-10",
+     "dentistId": "D1",
+     "start": "2026-10-13T10:00:00-03:00",
+     "label": "terça 13/10 às 10h"
+    },
+    {
+     "id": "D1-1013-17",
+     "dentistId": "D1",
+     "start": "2026-10-13T17:00:00-03:00",
+     "label": "terça 13/10 às 17h"
+    },
+    {
+     "id": "D1-1014-08",
+     "dentistId": "D1",
+     "start": "2026-10-14T08:00:00-03:00",
+     "label": "quarta 14/10 às 8h"
+    },
+    {
+     "id": "D1-1014-15",
+     "dentistId": "D1",
+     "start": "2026-10-14T15:00:00-03:00",
+     "label": "quarta 14/10 às 15h"
+    },
+    {
+     "id": "D1-1014-17",
+     "dentistId": "D1",
+     "start": "2026-10-14T17:00:00-03:00",
+     "label": "quarta 14/10 às 17h"
+    }
+   ],
+   "goal": "Você é Giovana (paciente P07). Quer marcar uma consulta nova com o dentista D1 para quarta 14/10 às 17h. Sabe que pode haver um sinal e aceita pagar. Se oferecerem esse horário, confirme com um sim claro. Não aceite outro horário.",
+   "expected": {
+    "new:P07": [
+     "D1-1014-17"
+    ]
+   }
+  },
+  {
+   "id": "b08",
+   "kind": "book-cooperative",
+   "patientId": "P08",
+   "patientName": "Hugo",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D2-1005-08",
+     "dentistId": "D2",
+     "start": "2026-10-05T08:00:00-03:00",
+     "label": "segunda 05/10 às 8h"
+    },
+    {
+     "id": "D2-1005-09",
+     "dentistId": "D2",
+     "start": "2026-10-05T09:00:00-03:00",
+     "label": "segunda 05/10 às 9h"
+    },
+    {
+     "id": "D2-1005-15",
+     "dentistId": "D2",
+     "start": "2026-10-05T15:00:00-03:00",
+     "label": "segunda 05/10 às 15h"
+    },
+    {
+     "id": "D2-1006-10",
+     "dentistId": "D2",
+     "start": "2026-10-06T10:00:00-03:00",
+     "label": "terça 06/10 às 10h"
+    },
+    {
+     "id": "D2-1006-11",
+     "dentistId": "D2",
+     "start": "2026-10-06T11:00:00-03:00",
+     "label": "terça 06/10 às 11h"
+    },
+    {
+     "id": "D2-1006-15",
+     "dentistId": "D2",
+     "start": "2026-10-06T15:00:00-03:00",
+     "label": "terça 06/10 às 15h"
+    },
+    {
+     "id": "D2-1007-08",
+     "dentistId": "D2",
+     "start": "2026-10-07T08:00:00-03:00",
+     "label": "quarta 07/10 às 8h"
+    },
+    {
+     "id": "D2-1007-09",
+     "dentistId": "D2",
+     "start": "2026-10-07T09:00:00-03:00",
+     "label": "quarta 07/10 às 9h"
+    },
+    {
+     "id": "D2-1007-11",
+     "dentistId": "D2",
+     "start": "2026-10-07T11:00:00-03:00",
+     "label": "quarta 07/10 às 11h"
+    },
+    {
+     "id": "D2-1008-08",
+     "dentistId": "D2",
+     "start": "2026-10-08T08:00:00-03:00",
+     "label": "quinta 08/10 às 8h"
+    },
+    {
+     "id": "D2-1008-10",
+     "dentistId": "D2",
+     "start": "2026-10-08T10:00:00-03:00",
+     "label": "quinta 08/10 às 10h"
+    },
+    {
+     "id": "D2-1008-16",
+     "dentistId": "D2",
+     "start": "2026-10-08T16:00:00-03:00",
+     "label": "quinta 08/10 às 16h"
+    },
+    {
+     "id": "D2-1009-09",
+     "dentistId": "D2",
+     "start": "2026-10-09T09:00:00-03:00",
+     "label": "sexta 09/10 às 9h"
+    },
+    {
+     "id": "D2-1009-10",
+     "dentistId": "D2",
+     "start": "2026-10-09T10:00:00-03:00",
+     "label": "sexta 09/10 às 10h"
+    },
+    {
+     "id": "D2-1009-15",
+     "dentistId": "D2",
+     "start": "2026-10-09T15:00:00-03:00",
+     "label": "sexta 09/10 às 15h"
+    },
+    {
+     "id": "D2-1012-08",
+     "dentistId": "D2",
+     "start": "2026-10-12T08:00:00-03:00",
+     "label": "segunda 12/10 às 8h"
+    },
+    {
+     "id": "D2-1012-16",
+     "dentistId": "D2",
+     "start": "2026-10-12T16:00:00-03:00",
+     "label": "segunda 12/10 às 16h"
+    },
+    {
+     "id": "D2-1012-17",
+     "dentistId": "D2",
+     "start": "2026-10-12T17:00:00-03:00",
+     "label": "segunda 12/10 às 17h"
+    },
+    {
+     "id": "D2-1013-08",
+     "dentistId": "D2",
+     "start": "2026-10-13T08:00:00-03:00",
+     "label": "terça 13/10 às 8h"
+    },
+    {
+     "id": "D2-1013-11",
+     "dentistId": "D2",
+     "start": "2026-10-13T11:00:00-03:00",
+     "label": "terça 13/10 às 11h"
+    },
+    {
+     "id": "D2-1013-15",
+     "dentistId": "D2",
+     "start": "2026-10-13T15:00:00-03:00",
+     "label": "terça 13/10 às 15h"
+    },
+    {
+     "id": "D2-1014-10",
+     "dentistId": "D2",
+     "start": "2026-10-14T10:00:00-03:00",
+     "label": "quarta 14/10 às 10h"
+    },
+    {
+     "id": "D2-1014-11",
+     "dentistId": "D2",
+     "start": "2026-10-14T11:00:00-03:00",
+     "label": "quarta 14/10 às 11h"
+    },
+    {
+     "id": "D2-1014-16",
+     "dentistId": "D2",
+     "start": "2026-10-14T16:00:00-03:00",
+     "label": "quarta 14/10 às 16h"
+    }
+   ],
+   "goal": "Você é Hugo (paciente P08). Quer marcar uma consulta nova com o dentista D2 para quarta 14/10 às 11h. Sabe que pode haver um sinal e aceita pagar. Se oferecerem esse horário, confirme com um sim claro. Não aceite outro horário.",
+   "expected": {
+    "new:P08": [
+     "D2-1014-11"
+    ]
+   }
+  },
+  {
+   "id": "b09",
+   "kind": "book-cooperative",
+   "patientId": "P09",
+   "patientName": "Iris",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D3-1005-09",
+     "dentistId": "D3",
+     "start": "2026-10-05T09:00:00-03:00",
+     "label": "segunda 05/10 às 9h"
+    },
+    {
+     "id": "D3-1005-16",
+     "dentistId": "D3",
+     "start": "2026-10-05T16:00:00-03:00",
+     "label": "segunda 05/10 às 16h"
+    },
+    {
+     "id": "D3-1005-17",
+     "dentistId": "D3",
+     "start": "2026-10-05T17:00:00-03:00",
+     "label": "segunda 05/10 às 17h"
+    },
+    {
+     "id": "D3-1006-08",
+     "dentistId": "D3",
+     "start": "2026-10-06T08:00:00-03:00",
+     "label": "terça 06/10 às 8h"
+    },
+    {
+     "id": "D3-1006-11",
+     "dentistId": "D3",
+     "start": "2026-10-06T11:00:00-03:00",
+     "label": "terça 06/10 às 11h"
+    },
+    {
+     "id": "D3-1006-14",
+     "dentistId": "D3",
+     "start": "2026-10-06T14:00:00-03:00",
+     "label": "terça 06/10 às 14h"
+    },
+    {
+     "id": "D3-1007-09",
+     "dentistId": "D3",
+     "start": "2026-10-07T09:00:00-03:00",
+     "label": "quarta 07/10 às 9h"
+    },
+    {
+     "id": "D3-1007-11",
+     "dentistId": "D3",
+     "start": "2026-10-07T11:00:00-03:00",
+     "label": "quarta 07/10 às 11h"
+    },
+    {
+     "id": "D3-1007-15",
+     "dentistId": "D3",
+     "start": "2026-10-07T15:00:00-03:00",
+     "label": "quarta 07/10 às 15h"
+    },
+    {
+     "id": "D3-1008-08",
+     "dentistId": "D3",
+     "start": "2026-10-08T08:00:00-03:00",
+     "label": "quinta 08/10 às 8h"
+    },
+    {
+     "id": "D3-1008-09",
+     "dentistId": "D3",
+     "start": "2026-10-08T09:00:00-03:00",
+     "label": "quinta 08/10 às 9h"
+    },
+    {
+     "id": "D3-1008-11",
+     "dentistId": "D3",
+     "start": "2026-10-08T11:00:00-03:00",
+     "label": "quinta 08/10 às 11h"
+    },
+    {
+     "id": "D3-1009-08",
+     "dentistId": "D3",
+     "start": "2026-10-09T08:00:00-03:00",
+     "label": "sexta 09/10 às 8h"
+    },
+    {
+     "id": "D3-1009-10",
+     "dentistId": "D3",
+     "start": "2026-10-09T10:00:00-03:00",
+     "label": "sexta 09/10 às 10h"
+    },
+    {
+     "id": "D3-1009-14",
+     "dentistId": "D3",
+     "start": "2026-10-09T14:00:00-03:00",
+     "label": "sexta 09/10 às 14h"
+    },
+    {
+     "id": "D3-1012-14",
+     "dentistId": "D3",
+     "start": "2026-10-12T14:00:00-03:00",
+     "label": "segunda 12/10 às 14h"
+    },
+    {
+     "id": "D3-1012-15",
+     "dentistId": "D3",
+     "start": "2026-10-12T15:00:00-03:00",
+     "label": "segunda 12/10 às 15h"
+    },
+    {
+     "id": "D3-1012-17",
+     "dentistId": "D3",
+     "start": "2026-10-12T17:00:00-03:00",
+     "label": "segunda 12/10 às 17h"
+    },
+    {
+     "id": "D3-1013-10",
+     "dentistId": "D3",
+     "start": "2026-10-13T10:00:00-03:00",
+     "label": "terça 13/10 às 10h"
+    },
+    {
+     "id": "D3-1013-15",
+     "dentistId": "D3",
+     "start": "2026-10-13T15:00:00-03:00",
+     "label": "terça 13/10 às 15h"
+    },
+    {
+     "id": "D3-1013-17",
+     "dentistId": "D3",
+     "start": "2026-10-13T17:00:00-03:00",
+     "label": "terça 13/10 às 17h"
+    },
+    {
+     "id": "D3-1014-09",
+     "dentistId": "D3",
+     "start": "2026-10-14T09:00:00-03:00",
+     "label": "quarta 14/10 às 9h"
+    },
+    {
+     "id": "D3-1014-10",
+     "dentistId": "D3",
+     "start": "2026-10-14T10:00:00-03:00",
+     "label": "quarta 14/10 às 10h"
+    },
+    {
+     "id": "D3-1014-17",
+     "dentistId": "D3",
+     "start": "2026-10-14T17:00:00-03:00",
+     "label": "quarta 14/10 às 17h"
+    }
+   ],
+   "goal": "Você é Iris (paciente P09). Quer marcar uma consulta nova com o dentista D3 para terça 06/10 às 8h. Sabe que pode haver um sinal e aceita pagar. Se oferecerem esse horário, confirme com um sim claro. Não aceite outro horário.",
+   "expected": {
+    "new:P09": [
+     "D3-1006-08"
+    ]
+   }
+  },
+  {
+   "id": "b10",
+   "kind": "book-change-of-mind",
+   "patientId": "P10",
+   "patientName": "Jonas",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D1-1005-09",
+     "dentistId": "D1",
+     "start": "2026-10-05T09:00:00-03:00",
+     "label": "segunda 05/10 às 9h"
+    },
+    {
+     "id": "D1-1005-14",
+     "dentistId": "D1",
+     "start": "2026-10-05T14:00:00-03:00",
+     "label": "segunda 05/10 às 14h"
+    },
+    {
+     "id": "D1-1005-15",
+     "dentistId": "D1",
+     "start": "2026-10-05T15:00:00-03:00",
+     "label": "segunda 05/10 às 15h"
+    },
+    {
+     "id": "D1-1006-09",
+     "dentistId": "D1",
+     "start": "2026-10-06T09:00:00-03:00",
+     "label": "terça 06/10 às 9h"
+    },
+    {
+     "id": "D1-1006-11",
+     "dentistId": "D1",
+     "start": "2026-10-06T11:00:00-03:00",
+     "label": "terça 06/10 às 11h"
+    },
+    {
+     "id": "D1-1006-17",
+     "dentistId": "D1",
+     "start": "2026-10-06T17:00:00-03:00",
+     "label": "terça 06/10 às 17h"
+    },
+    {
+     "id": "D1-1007-08",
+     "dentistId": "D1",
+     "start": "2026-10-07T08:00:00-03:00",
+     "label": "quarta 07/10 às 8h"
+    },
+    {
+     "id": "D1-1007-09",
+     "dentistId": "D1",
+     "start": "2026-10-07T09:00:00-03:00",
+     "label": "quarta 07/10 às 9h"
+    },
+    {
+     "id": "D1-1007-10",
+     "dentistId": "D1",
+     "start": "2026-10-07T10:00:00-03:00",
+     "label": "quarta 07/10 às 10h"
+    },
+    {
+     "id": "D1-1008-09",
+     "dentistId": "D1",
+     "start": "2026-10-08T09:00:00-03:00",
+     "label": "quinta 08/10 às 9h"
+    },
+    {
+     "id": "D1-1008-10",
+     "dentistId": "D1",
+     "start": "2026-10-08T10:00:00-03:00",
+     "label": "quinta 08/10 às 10h"
+    },
+    {
+     "id": "D1-1008-15",
+     "dentistId": "D1",
+     "start": "2026-10-08T15:00:00-03:00",
+     "label": "quinta 08/10 às 15h"
+    },
+    {
+     "id": "D1-1009-10",
+     "dentistId": "D1",
+     "start": "2026-10-09T10:00:00-03:00",
+     "label": "sexta 09/10 às 10h"
+    },
+    {
+     "id": "D1-1009-11",
+     "dentistId": "D1",
+     "start": "2026-10-09T11:00:00-03:00",
+     "label": "sexta 09/10 às 11h"
+    },
+    {
+     "id": "D1-1009-16",
+     "dentistId": "D1",
+     "start": "2026-10-09T16:00:00-03:00",
+     "label": "sexta 09/10 às 16h"
+    },
+    {
+     "id": "D1-1012-09",
+     "dentistId": "D1",
+     "start": "2026-10-12T09:00:00-03:00",
+     "label": "segunda 12/10 às 9h"
+    },
+    {
+     "id": "D1-1012-14",
+     "dentistId": "D1",
+     "start": "2026-10-12T14:00:00-03:00",
+     "label": "segunda 12/10 às 14h"
+    },
+    {
+     "id": "D1-1012-17",
+     "dentistId": "D1",
+     "start": "2026-10-12T17:00:00-03:00",
+     "label": "segunda 12/10 às 17h"
+    },
+    {
+     "id": "D1-1013-10",
+     "dentistId": "D1",
+     "start": "2026-10-13T10:00:00-03:00",
+     "label": "terça 13/10 às 10h"
+    },
+    {
+     "id": "D1-1013-16",
+     "dentistId": "D1",
+     "start": "2026-10-13T16:00:00-03:00",
+     "label": "terça 13/10 às 16h"
+    },
+    {
+     "id": "D1-1013-17",
+     "dentistId": "D1",
+     "start": "2026-10-13T17:00:00-03:00",
+     "label": "terça 13/10 às 17h"
+    },
+    {
+     "id": "D1-1014-09",
+     "dentistId": "D1",
+     "start": "2026-10-14T09:00:00-03:00",
+     "label": "quarta 14/10 às 9h"
+    },
+    {
+     "id": "D1-1014-15",
+     "dentistId": "D1",
+     "start": "2026-10-14T15:00:00-03:00",
+     "label": "quarta 14/10 às 15h"
+    },
+    {
+     "id": "D1-1014-17",
+     "dentistId": "D1",
+     "start": "2026-10-14T17:00:00-03:00",
+     "label": "quarta 14/10 às 17h"
+    }
+   ],
+   "goal": "Você é Jonas (paciente P10). Peça para marcar uma consulta nova com o dentista D1 para quarta 14/10 às 15h. Quando propuserem esse horário e pedirem confirmação, NÃO confirme: diga que mudou de ideia e prefere terça 06/10 às 17h. Confirme só esse segundo horário. Aceite pagar o sinal, se houver.",
+   "expected": {
+    "new:P10": [
+     "D1-1006-17"
+    ]
+   }
+  },
+  {
+   "id": "b11",
+   "kind": "book-change-of-mind",
+   "patientId": "P11",
+   "patientName": "Lara",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D2-1005-09",
+     "dentistId": "D2",
+     "start": "2026-10-05T09:00:00-03:00",
+     "label": "segunda 05/10 às 9h"
+    },
+    {
+     "id": "D2-1005-11",
+     "dentistId": "D2",
+     "start": "2026-10-05T11:00:00-03:00",
+     "label": "segunda 05/10 às 11h"
+    },
+    {
+     "id": "D2-1005-15",
+     "dentistId": "D2",
+     "start": "2026-10-05T15:00:00-03:00",
+     "label": "segunda 05/10 às 15h"
+    },
+    {
+     "id": "D2-1006-09",
+     "dentistId": "D2",
+     "start": "2026-10-06T09:00:00-03:00",
+     "label": "terça 06/10 às 9h"
+    },
+    {
+     "id": "D2-1006-14",
+     "dentistId": "D2",
+     "start": "2026-10-06T14:00:00-03:00",
+     "label": "terça 06/10 às 14h"
+    },
+    {
+     "id": "D2-1006-15",
+     "dentistId": "D2",
+     "start": "2026-10-06T15:00:00-03:00",
+     "label": "terça 06/10 às 15h"
+    },
+    {
+     "id": "D2-1007-10",
+     "dentistId": "D2",
+     "start": "2026-10-07T10:00:00-03:00",
+     "label": "quarta 07/10 às 10h"
+    },
+    {
+     "id": "D2-1007-11",
+     "dentistId": "D2",
+     "start": "2026-10-07T11:00:00-03:00",
+     "label": "quarta 07/10 às 11h"
+    },
+    {
+     "id": "D2-1007-15",
+     "dentistId": "D2",
+     "start": "2026-10-07T15:00:00-03:00",
+     "label": "quarta 07/10 às 15h"
+    },
+    {
+     "id": "D2-1008-10",
+     "dentistId": "D2",
+     "start": "2026-10-08T10:00:00-03:00",
+     "label": "quinta 08/10 às 10h"
+    },
+    {
+     "id": "D2-1008-11",
+     "dentistId": "D2",
+     "start": "2026-10-08T11:00:00-03:00",
+     "label": "quinta 08/10 às 11h"
+    },
+    {
+     "id": "D2-1008-16",
+     "dentistId": "D2",
+     "start": "2026-10-08T16:00:00-03:00",
+     "label": "quinta 08/10 às 16h"
+    },
+    {
+     "id": "D2-1009-08",
+     "dentistId": "D2",
+     "start": "2026-10-09T08:00:00-03:00",
+     "label": "sexta 09/10 às 8h"
+    },
+    {
+     "id": "D2-1009-15",
+     "dentistId": "D2",
+     "start": "2026-10-09T15:00:00-03:00",
+     "label": "sexta 09/10 às 15h"
+    },
+    {
+     "id": "D2-1009-17",
+     "dentistId": "D2",
+     "start": "2026-10-09T17:00:00-03:00",
+     "label": "sexta 09/10 às 17h"
+    },
+    {
+     "id": "D2-1012-10",
+     "dentistId": "D2",
+     "start": "2026-10-12T10:00:00-03:00",
+     "label": "segunda 12/10 às 10h"
+    },
+    {
+     "id": "D2-1012-11",
+     "dentistId": "D2",
+     "start": "2026-10-12T11:00:00-03:00",
+     "label": "segunda 12/10 às 11h"
+    },
+    {
+     "id": "D2-1012-16",
+     "dentistId": "D2",
+     "start": "2026-10-12T16:00:00-03:00",
+     "label": "segunda 12/10 às 16h"
+    },
+    {
+     "id": "D2-1013-09",
+     "dentistId": "D2",
+     "start": "2026-10-13T09:00:00-03:00",
+     "label": "terça 13/10 às 9h"
+    },
+    {
+     "id": "D2-1013-10",
+     "dentistId": "D2",
+     "start": "2026-10-13T10:00:00-03:00",
+     "label": "terça 13/10 às 10h"
+    },
+    {
+     "id": "D2-1013-16",
+     "dentistId": "D2",
+     "start": "2026-10-13T16:00:00-03:00",
+     "label": "terça 13/10 às 16h"
+    },
+    {
+     "id": "D2-1014-10",
+     "dentistId": "D2",
+     "start": "2026-10-14T10:00:00-03:00",
+     "label": "quarta 14/10 às 10h"
+    },
+    {
+     "id": "D2-1014-15",
+     "dentistId": "D2",
+     "start": "2026-10-14T15:00:00-03:00",
+     "label": "quarta 14/10 às 15h"
+    },
+    {
+     "id": "D2-1014-16",
+     "dentistId": "D2",
+     "start": "2026-10-14T16:00:00-03:00",
+     "label": "quarta 14/10 às 16h"
+    }
+   ],
+   "goal": "Você é Lara (paciente P11). Peça para marcar uma consulta nova com o dentista D2 para terça 06/10 às 14h. Quando propuserem esse horário e pedirem confirmação, NÃO confirme: diga que mudou de ideia e prefere quarta 14/10 às 16h. Confirme só esse segundo horário. Aceite pagar o sinal, se houver.",
+   "expected": {
+    "new:P11": [
+     "D2-1014-16"
+    ]
+   }
+  },
+  {
+   "id": "b12",
+   "kind": "book-change-of-mind",
+   "patientId": "P12",
+   "patientName": "Mateus",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D3-1005-08",
+     "dentistId": "D3",
+     "start": "2026-10-05T08:00:00-03:00",
+     "label": "segunda 05/10 às 8h"
+    },
+    {
+     "id": "D3-1005-15",
+     "dentistId": "D3",
+     "start": "2026-10-05T15:00:00-03:00",
+     "label": "segunda 05/10 às 15h"
+    },
+    {
+     "id": "D3-1005-17",
+     "dentistId": "D3",
+     "start": "2026-10-05T17:00:00-03:00",
+     "label": "segunda 05/10 às 17h"
+    },
+    {
+     "id": "D3-1006-09",
+     "dentistId": "D3",
+     "start": "2026-10-06T09:00:00-03:00",
+     "label": "terça 06/10 às 9h"
+    },
+    {
+     "id": "D3-1006-14",
+     "dentistId": "D3",
+     "start": "2026-10-06T14:00:00-03:00",
+     "label": "terça 06/10 às 14h"
+    },
+    {
+     "id": "D3-1006-15",
+     "dentistId": "D3",
+     "start": "2026-10-06T15:00:00-03:00",
+     "label": "terça 06/10 às 15h"
+    },
+    {
+     "id": "D3-1007-10",
+     "dentistId": "D3",
+     "start": "2026-10-07T10:00:00-03:00",
+     "label": "quarta 07/10 às 10h"
+    },
+    {
+     "id": "D3-1007-15",
+     "dentistId": "D3",
+     "start": "2026-10-07T15:00:00-03:00",
+     "label": "quarta 07/10 às 15h"
+    },
+    {
+     "id": "D3-1007-16",
+     "dentistId": "D3",
+     "start": "2026-10-07T16:00:00-03:00",
+     "label": "quarta 07/10 às 16h"
+    },
+    {
+     "id": "D3-1008-15",
+     "dentistId": "D3",
+     "start": "2026-10-08T15:00:00-03:00",
+     "label": "quinta 08/10 às 15h"
+    },
+    {
+     "id": "D3-1008-16",
+     "dentistId": "D3",
+     "start": "2026-10-08T16:00:00-03:00",
+     "label": "quinta 08/10 às 16h"
+    },
+    {
+     "id": "D3-1008-17",
+     "dentistId": "D3",
+     "start": "2026-10-08T17:00:00-03:00",
+     "label": "quinta 08/10 às 17h"
+    },
+    {
+     "id": "D3-1009-09",
+     "dentistId": "D3",
+     "start": "2026-10-09T09:00:00-03:00",
+     "label": "sexta 09/10 às 9h"
+    },
+    {
+     "id": "D3-1009-10",
+     "dentistId": "D3",
+     "start": "2026-10-09T10:00:00-03:00",
+     "label": "sexta 09/10 às 10h"
+    },
+    {
+     "id": "D3-1009-16",
+     "dentistId": "D3",
+     "start": "2026-10-09T16:00:00-03:00",
+     "label": "sexta 09/10 às 16h"
+    },
+    {
+     "id": "D3-1012-08",
+     "dentistId": "D3",
+     "start": "2026-10-12T08:00:00-03:00",
+     "label": "segunda 12/10 às 8h"
+    },
+    {
+     "id": "D3-1012-11",
+     "dentistId": "D3",
+     "start": "2026-10-12T11:00:00-03:00",
+     "label": "segunda 12/10 às 11h"
+    },
+    {
+     "id": "D3-1012-16",
+     "dentistId": "D3",
+     "start": "2026-10-12T16:00:00-03:00",
+     "label": "segunda 12/10 às 16h"
+    },
+    {
+     "id": "D3-1013-09",
+     "dentistId": "D3",
+     "start": "2026-10-13T09:00:00-03:00",
+     "label": "terça 13/10 às 9h"
+    },
+    {
+     "id": "D3-1013-11",
+     "dentistId": "D3",
+     "start": "2026-10-13T11:00:00-03:00",
+     "label": "terça 13/10 às 11h"
+    },
+    {
+     "id": "D3-1013-15",
+     "dentistId": "D3",
+     "start": "2026-10-13T15:00:00-03:00",
+     "label": "terça 13/10 às 15h"
+    },
+    {
+     "id": "D3-1014-09",
+     "dentistId": "D3",
+     "start": "2026-10-14T09:00:00-03:00",
+     "label": "quarta 14/10 às 9h"
+    },
+    {
+     "id": "D3-1014-15",
+     "dentistId": "D3",
+     "start": "2026-10-14T15:00:00-03:00",
+     "label": "quarta 14/10 às 15h"
+    },
+    {
+     "id": "D3-1014-16",
+     "dentistId": "D3",
+     "start": "2026-10-14T16:00:00-03:00",
+     "label": "quarta 14/10 às 16h"
+    }
+   ],
+   "goal": "Você é Mateus (paciente P12). Peça para marcar uma consulta nova com o dentista D3 para quarta 14/10 às 15h. Quando propuserem esse horário e pedirem confirmação, NÃO confirme: diga que mudou de ideia e prefere quarta 07/10 às 15h. Confirme só esse segundo horário. Aceite pagar o sinal, se houver.",
+   "expected": {
+    "new:P12": [
+     "D3-1007-15"
+    ]
+   }
+  },
+  {
+   "id": "b13",
+   "kind": "book-change-of-mind",
+   "patientId": "P13",
+   "patientName": "Nina",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D1-1005-11",
+     "dentistId": "D1",
+     "start": "2026-10-05T11:00:00-03:00",
+     "label": "segunda 05/10 às 11h"
+    },
+    {
+     "id": "D1-1005-15",
+     "dentistId": "D1",
+     "start": "2026-10-05T15:00:00-03:00",
+     "label": "segunda 05/10 às 15h"
+    },
+    {
+     "id": "D1-1005-16",
+     "dentistId": "D1",
+     "start": "2026-10-05T16:00:00-03:00",
+     "label": "segunda 05/10 às 16h"
+    },
+    {
+     "id": "D1-1006-11",
+     "dentistId": "D1",
+     "start": "2026-10-06T11:00:00-03:00",
+     "label": "terça 06/10 às 11h"
+    },
+    {
+     "id": "D1-1006-15",
+     "dentistId": "D1",
+     "start": "2026-10-06T15:00:00-03:00",
+     "label": "terça 06/10 às 15h"
+    },
+    {
+     "id": "D1-1006-16",
+     "dentistId": "D1",
+     "start": "2026-10-06T16:00:00-03:00",
+     "label": "terça 06/10 às 16h"
+    },
+    {
+     "id": "D1-1007-08",
+     "dentistId": "D1",
+     "start": "2026-10-07T08:00:00-03:00",
+     "label": "quarta 07/10 às 8h"
+    },
+    {
+     "id": "D1-1007-16",
+     "dentistId": "D1",
+     "start": "2026-10-07T16:00:00-03:00",
+     "label": "quarta 07/10 às 16h"
+    },
+    {
+     "id": "D1-1007-17",
+     "dentistId": "D1",
+     "start": "2026-10-07T17:00:00-03:00",
+     "label": "quarta 07/10 às 17h"
+    },
+    {
+     "id": "D1-1008-09",
+     "dentistId": "D1",
+     "start": "2026-10-08T09:00:00-03:00",
+     "label": "quinta 08/10 às 9h"
+    },
+    {
+     "id": "D1-1008-14",
+     "dentistId": "D1",
+     "start": "2026-10-08T14:00:00-03:00",
+     "label": "quinta 08/10 às 14h"
+    },
+    {
+     "id": "D1-1008-17",
+     "dentistId": "D1",
+     "start": "2026-10-08T17:00:00-03:00",
+     "label": "quinta 08/10 às 17h"
+    },
+    {
+     "id": "D1-1009-11",
+     "dentistId": "D1",
+     "start": "2026-10-09T11:00:00-03:00",
+     "label": "sexta 09/10 às 11h"
+    },
+    {
+     "id": "D1-1009-14",
+     "dentistId": "D1",
+     "start": "2026-10-09T14:00:00-03:00",
+     "label": "sexta 09/10 às 14h"
+    },
+    {
+     "id": "D1-1009-17",
+     "dentistId": "D1",
+     "start": "2026-10-09T17:00:00-03:00",
+     "label": "sexta 09/10 às 17h"
+    },
+    {
+     "id": "D1-1012-08",
+     "dentistId": "D1",
+     "start": "2026-10-12T08:00:00-03:00",
+     "label": "segunda 12/10 às 8h"
+    },
+    {
+     "id": "D1-1012-14",
+     "dentistId": "D1",
+     "start": "2026-10-12T14:00:00-03:00",
+     "label": "segunda 12/10 às 14h"
+    },
+    {
+     "id": "D1-1012-16",
+     "dentistId": "D1",
+     "start": "2026-10-12T16:00:00-03:00",
+     "label": "segunda 12/10 às 16h"
+    },
+    {
+     "id": "D1-1013-14",
+     "dentistId": "D1",
+     "start": "2026-10-13T14:00:00-03:00",
+     "label": "terça 13/10 às 14h"
+    },
+    {
+     "id": "D1-1013-15",
+     "dentistId": "D1",
+     "start": "2026-10-13T15:00:00-03:00",
+     "label": "terça 13/10 às 15h"
+    },
+    {
+     "id": "D1-1013-16",
+     "dentistId": "D1",
+     "start": "2026-10-13T16:00:00-03:00",
+     "label": "terça 13/10 às 16h"
+    },
+    {
+     "id": "D1-1014-09",
+     "dentistId": "D1",
+     "start": "2026-10-14T09:00:00-03:00",
+     "label": "quarta 14/10 às 9h"
+    },
+    {
+     "id": "D1-1014-10",
+     "dentistId": "D1",
+     "start": "2026-10-14T10:00:00-03:00",
+     "label": "quarta 14/10 às 10h"
+    },
+    {
+     "id": "D1-1014-16",
+     "dentistId": "D1",
+     "start": "2026-10-14T16:00:00-03:00",
+     "label": "quarta 14/10 às 16h"
+    }
+   ],
+   "goal": "Você é Nina (paciente P13). Peça para marcar uma consulta nova com o dentista D1 para terça 06/10 às 11h. Quando propuserem esse horário e pedirem confirmação, NÃO confirme: diga que mudou de ideia e prefere quarta 07/10 às 17h. Confirme só esse segundo horário. Aceite pagar o sinal, se houver.",
+   "expected": {
+    "new:P13": [
+     "D1-1007-17"
+    ]
+   }
+  },
+  {
+   "id": "b14",
+   "kind": "book-declines-deposit",
+   "patientId": "P14",
+   "patientName": "Otávio",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D2-1005-11",
+     "dentistId": "D2",
+     "start": "2026-10-05T11:00:00-03:00",
+     "label": "segunda 05/10 às 11h"
+    },
+    {
+     "id": "D2-1005-15",
+     "dentistId": "D2",
+     "start": "2026-10-05T15:00:00-03:00",
+     "label": "segunda 05/10 às 15h"
+    },
+    {
+     "id": "D2-1005-17",
+     "dentistId": "D2",
+     "start": "2026-10-05T17:00:00-03:00",
+     "label": "segunda 05/10 às 17h"
+    },
+    {
+     "id": "D2-1006-10",
+     "dentistId": "D2",
+     "start": "2026-10-06T10:00:00-03:00",
+     "label": "terça 06/10 às 10h"
+    },
+    {
+     "id": "D2-1006-11",
+     "dentistId": "D2",
+     "start": "2026-10-06T11:00:00-03:00",
+     "label": "terça 06/10 às 11h"
+    },
+    {
+     "id": "D2-1006-16",
+     "dentistId": "D2",
+     "start": "2026-10-06T16:00:00-03:00",
+     "label": "terça 06/10 às 16h"
+    },
+    {
+     "id": "D2-1007-08",
+     "dentistId": "D2",
+     "start": "2026-10-07T08:00:00-03:00",
+     "label": "quarta 07/10 às 8h"
+    },
+    {
+     "id": "D2-1007-14",
+     "dentistId": "D2",
+     "start": "2026-10-07T14:00:00-03:00",
+     "label": "quarta 07/10 às 14h"
+    },
+    {
+     "id": "D2-1007-15",
+     "dentistId": "D2",
+     "start": "2026-10-07T15:00:00-03:00",
+     "label": "quarta 07/10 às 15h"
+    },
+    {
+     "id": "D2-1008-08",
+     "dentistId": "D2",
+     "start": "2026-10-08T08:00:00-03:00",
+     "label": "quinta 08/10 às 8h"
+    },
+    {
+     "id": "D2-1008-09",
+     "dentistId": "D2",
+     "start": "2026-10-08T09:00:00-03:00",
+     "label": "quinta 08/10 às 9h"
+    },
+    {
+     "id": "D2-1008-16",
+     "dentistId": "D2",
+     "start": "2026-10-08T16:00:00-03:00",
+     "label": "quinta 08/10 às 16h"
+    },
+    {
+     "id": "D2-1009-10",
+     "dentistId": "D2",
+     "start": "2026-10-09T10:00:00-03:00",
+     "label": "sexta 09/10 às 10h"
+    },
+    {
+     "id": "D2-1009-11",
+     "dentistId": "D2",
+     "start": "2026-10-09T11:00:00-03:00",
+     "label": "sexta 09/10 às 11h"
+    },
+    {
+     "id": "D2-1009-17",
+     "dentistId": "D2",
+     "start": "2026-10-09T17:00:00-03:00",
+     "label": "sexta 09/10 às 17h"
+    },
+    {
+     "id": "D2-1012-09",
+     "dentistId": "D2",
+     "start": "2026-10-12T09:00:00-03:00",
+     "label": "segunda 12/10 às 9h"
+    },
+    {
+     "id": "D2-1012-10",
+     "dentistId": "D2",
+     "start": "2026-10-12T10:00:00-03:00",
+     "label": "segunda 12/10 às 10h"
+    },
+    {
+     "id": "D2-1012-11",
+     "dentistId": "D2",
+     "start": "2026-10-12T11:00:00-03:00",
+     "label": "segunda 12/10 às 11h"
+    },
+    {
+     "id": "D2-1013-10",
+     "dentistId": "D2",
+     "start": "2026-10-13T10:00:00-03:00",
+     "label": "terça 13/10 às 10h"
+    },
+    {
+     "id": "D2-1013-11",
+     "dentistId": "D2",
+     "start": "2026-10-13T11:00:00-03:00",
+     "label": "terça 13/10 às 11h"
+    },
+    {
+     "id": "D2-1013-14",
+     "dentistId": "D2",
+     "start": "2026-10-13T14:00:00-03:00",
+     "label": "terça 13/10 às 14h"
+    },
+    {
+     "id": "D2-1014-09",
+     "dentistId": "D2",
+     "start": "2026-10-14T09:00:00-03:00",
+     "label": "quarta 14/10 às 9h"
+    },
+    {
+     "id": "D2-1014-10",
+     "dentistId": "D2",
+     "start": "2026-10-14T10:00:00-03:00",
+     "label": "quarta 14/10 às 10h"
+    },
+    {
+     "id": "D2-1014-11",
+     "dentistId": "D2",
+     "start": "2026-10-14T11:00:00-03:00",
+     "label": "quarta 14/10 às 11h"
+    }
+   ],
+   "goal": "Você é Otávio (paciente P14). Quer marcar uma consulta nova com o dentista D2 para terça 06/10 às 16h, mas NÃO aceita pagar sinal nem nenhum valor antecipado. Se falarem de sinal ou pagamento, recuse com um não claro e encerre.",
+   "expected": {
+    "new:P14": []
+   }
+  },
+  {
+   "id": "b15",
+   "kind": "book-declines-deposit",
+   "patientId": "P15",
+   "patientName": "Pietra",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D3-1005-10",
+     "dentistId": "D3",
+     "start": "2026-10-05T10:00:00-03:00",
+     "label": "segunda 05/10 às 10h"
+    },
+    {
+     "id": "D3-1005-14",
+     "dentistId": "D3",
+     "start": "2026-10-05T14:00:00-03:00",
+     "label": "segunda 05/10 às 14h"
+    },
+    {
+     "id": "D3-1005-15",
+     "dentistId": "D3",
+     "start": "2026-10-05T15:00:00-03:00",
+     "label": "segunda 05/10 às 15h"
+    },
+    {
+     "id": "D3-1006-08",
+     "dentistId": "D3",
+     "start": "2026-10-06T08:00:00-03:00",
+     "label": "terça 06/10 às 8h"
+    },
+    {
+     "id": "D3-1006-15",
+     "dentistId": "D3",
+     "start": "2026-10-06T15:00:00-03:00",
+     "label": "terça 06/10 às 15h"
+    },
+    {
+     "id": "D3-1006-17",
+     "dentistId": "D3",
+     "start": "2026-10-06T17:00:00-03:00",
+     "label": "terça 06/10 às 17h"
+    },
+    {
+     "id": "D3-1007-11",
+     "dentistId": "D3",
+     "start": "2026-10-07T11:00:00-03:00",
+     "label": "quarta 07/10 às 11h"
+    },
+    {
+     "id": "D3-1007-14",
+     "dentistId": "D3",
+     "start": "2026-10-07T14:00:00-03:00",
+     "label": "quarta 07/10 às 14h"
+    },
+    {
+     "id": "D3-1007-15",
+     "dentistId": "D3",
+     "start": "2026-10-07T15:00:00-03:00",
+     "label": "quarta 07/10 às 15h"
+    },
+    {
+     "id": "D3-1008-10",
+     "dentistId": "D3",
+     "start": "2026-10-08T10:00:00-03:00",
+     "label": "quinta 08/10 às 10h"
+    },
+    {
+     "id": "D3-1008-14",
+     "dentistId": "D3",
+     "start": "2026-10-08T14:00:00-03:00",
+     "label": "quinta 08/10 às 14h"
+    },
+    {
+     "id": "D3-1008-15",
+     "dentistId": "D3",
+     "start": "2026-10-08T15:00:00-03:00",
+     "label": "quinta 08/10 às 15h"
+    },
+    {
+     "id": "D3-1009-11",
+     "dentistId": "D3",
+     "start": "2026-10-09T11:00:00-03:00",
+     "label": "sexta 09/10 às 11h"
+    },
+    {
+     "id": "D3-1009-14",
+     "dentistId": "D3",
+     "start": "2026-10-09T14:00:00-03:00",
+     "label": "sexta 09/10 às 14h"
+    },
+    {
+     "id": "D3-1009-16",
+     "dentistId": "D3",
+     "start": "2026-10-09T16:00:00-03:00",
+     "label": "sexta 09/10 às 16h"
+    },
+    {
+     "id": "D3-1012-14",
+     "dentistId": "D3",
+     "start": "2026-10-12T14:00:00-03:00",
+     "label": "segunda 12/10 às 14h"
+    },
+    {
+     "id": "D3-1012-16",
+     "dentistId": "D3",
+     "start": "2026-10-12T16:00:00-03:00",
+     "label": "segunda 12/10 às 16h"
+    },
+    {
+     "id": "D3-1012-17",
+     "dentistId": "D3",
+     "start": "2026-10-12T17:00:00-03:00",
+     "label": "segunda 12/10 às 17h"
+    },
+    {
+     "id": "D3-1013-08",
+     "dentistId": "D3",
+     "start": "2026-10-13T08:00:00-03:00",
+     "label": "terça 13/10 às 8h"
+    },
+    {
+     "id": "D3-1013-11",
+     "dentistId": "D3",
+     "start": "2026-10-13T11:00:00-03:00",
+     "label": "terça 13/10 às 11h"
+    },
+    {
+     "id": "D3-1013-14",
+     "dentistId": "D3",
+     "start": "2026-10-13T14:00:00-03:00",
+     "label": "terça 13/10 às 14h"
+    },
+    {
+     "id": "D3-1014-09",
+     "dentistId": "D3",
+     "start": "2026-10-14T09:00:00-03:00",
+     "label": "quarta 14/10 às 9h"
+    },
+    {
+     "id": "D3-1014-14",
+     "dentistId": "D3",
+     "start": "2026-10-14T14:00:00-03:00",
+     "label": "quarta 14/10 às 14h"
+    },
+    {
+     "id": "D3-1014-17",
+     "dentistId": "D3",
+     "start": "2026-10-14T17:00:00-03:00",
+     "label": "quarta 14/10 às 17h"
+    }
+   ],
+   "goal": "Você é Pietra (paciente P15). Quer marcar uma consulta nova com o dentista D3 para segunda 12/10 às 14h, mas NÃO aceita pagar sinal nem nenhum valor antecipado. Se falarem de sinal ou pagamento, recuse com um não claro e encerre.",
+   "expected": {
+    "new:P15": []
+   }
+  },
+  {
+   "id": "b16",
+   "kind": "book-declines-deposit",
+   "patientId": "P16",
+   "patientName": "Renan",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D1-1005-08",
+     "dentistId": "D1",
+     "start": "2026-10-05T08:00:00-03:00",
+     "label": "segunda 05/10 às 8h"
+    },
+    {
+     "id": "D1-1005-16",
+     "dentistId": "D1",
+     "start": "2026-10-05T16:00:00-03:00",
+     "label": "segunda 05/10 às 16h"
+    },
+    {
+     "id": "D1-1005-17",
+     "dentistId": "D1",
+     "start": "2026-10-05T17:00:00-03:00",
+     "label": "segunda 05/10 às 17h"
+    },
+    {
+     "id": "D1-1006-09",
+     "dentistId": "D1",
+     "start": "2026-10-06T09:00:00-03:00",
+     "label": "terça 06/10 às 9h"
+    },
+    {
+     "id": "D1-1006-14",
+     "dentistId": "D1",
+     "start": "2026-10-06T14:00:00-03:00",
+     "label": "terça 06/10 às 14h"
+    },
+    {
+     "id": "D1-1006-15",
+     "dentistId": "D1",
+     "start": "2026-10-06T15:00:00-03:00",
+     "label": "terça 06/10 às 15h"
+    },
+    {
+     "id": "D1-1007-10",
+     "dentistId": "D1",
+     "start": "2026-10-07T10:00:00-03:00",
+     "label": "quarta 07/10 às 10h"
+    },
+    {
+     "id": "D1-1007-14",
+     "dentistId": "D1",
+     "start": "2026-10-07T14:00:00-03:00",
+     "label": "quarta 07/10 às 14h"
+    },
+    {
+     "id": "D1-1007-15",
+     "dentistId": "D1",
+     "start": "2026-10-07T15:00:00-03:00",
+     "label": "quarta 07/10 às 15h"
+    },
+    {
+     "id": "D1-1008-14",
+     "dentistId": "D1",
+     "start": "2026-10-08T14:00:00-03:00",
+     "label": "quinta 08/10 às 14h"
+    },
+    {
+     "id": "D1-1008-15",
+     "dentistId": "D1",
+     "start": "2026-10-08T15:00:00-03:00",
+     "label": "quinta 08/10 às 15h"
+    },
+    {
+     "id": "D1-1008-16",
+     "dentistId": "D1",
+     "start": "2026-10-08T16:00:00-03:00",
+     "label": "quinta 08/10 às 16h"
+    },
+    {
+     "id": "D1-1009-09",
+     "dentistId": "D1",
+     "start": "2026-10-09T09:00:00-03:00",
+     "label": "sexta 09/10 às 9h"
+    },
+    {
+     "id": "D1-1009-11",
+     "dentistId": "D1",
+     "start": "2026-10-09T11:00:00-03:00",
+     "label": "sexta 09/10 às 11h"
+    },
+    {
+     "id": "D1-1009-14",
+     "dentistId": "D1",
+     "start": "2026-10-09T14:00:00-03:00",
+     "label": "sexta 09/10 às 14h"
+    },
+    {
+     "id": "D1-1012-09",
+     "dentistId": "D1",
+     "start": "2026-10-12T09:00:00-03:00",
+     "label": "segunda 12/10 às 9h"
+    },
+    {
+     "id": "D1-1012-15",
+     "dentistId": "D1",
+     "start": "2026-10-12T15:00:00-03:00",
+     "label": "segunda 12/10 às 15h"
+    },
+    {
+     "id": "D1-1012-17",
+     "dentistId": "D1",
+     "start": "2026-10-12T17:00:00-03:00",
+     "label": "segunda 12/10 às 17h"
+    },
+    {
+     "id": "D1-1013-08",
+     "dentistId": "D1",
+     "start": "2026-10-13T08:00:00-03:00",
+     "label": "terça 13/10 às 8h"
+    },
+    {
+     "id": "D1-1013-14",
+     "dentistId": "D1",
+     "start": "2026-10-13T14:00:00-03:00",
+     "label": "terça 13/10 às 14h"
+    },
+    {
+     "id": "D1-1013-15",
+     "dentistId": "D1",
+     "start": "2026-10-13T15:00:00-03:00",
+     "label": "terça 13/10 às 15h"
+    },
+    {
+     "id": "D1-1014-09",
+     "dentistId": "D1",
+     "start": "2026-10-14T09:00:00-03:00",
+     "label": "quarta 14/10 às 9h"
+    },
+    {
+     "id": "D1-1014-14",
+     "dentistId": "D1",
+     "start": "2026-10-14T14:00:00-03:00",
+     "label": "quarta 14/10 às 14h"
+    },
+    {
+     "id": "D1-1014-15",
+     "dentistId": "D1",
+     "start": "2026-10-14T15:00:00-03:00",
+     "label": "quarta 14/10 às 15h"
+    }
+   ],
+   "goal": "Você é Renan (paciente P16). Quer marcar uma consulta nova com o dentista D1 para terça 06/10 às 15h, mas NÃO aceita pagar sinal nem nenhum valor antecipado. Se falarem de sinal ou pagamento, recuse com um não claro e encerre.",
+   "expected": {
+    "new:P16": []
+   }
+  },
+  {
+   "id": "b17",
+   "kind": "book-someone-else",
+   "patientId": "P17",
+   "patientName": "Sara",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D2-1005-09",
+     "dentistId": "D2",
+     "start": "2026-10-05T09:00:00-03:00",
+     "label": "segunda 05/10 às 9h"
+    },
+    {
+     "id": "D2-1005-10",
+     "dentistId": "D2",
+     "start": "2026-10-05T10:00:00-03:00",
+     "label": "segunda 05/10 às 10h"
+    },
+    {
+     "id": "D2-1005-11",
+     "dentistId": "D2",
+     "start": "2026-10-05T11:00:00-03:00",
+     "label": "segunda 05/10 às 11h"
+    },
+    {
+     "id": "D2-1006-09",
+     "dentistId": "D2",
+     "start": "2026-10-06T09:00:00-03:00",
+     "label": "terça 06/10 às 9h"
+    },
+    {
+     "id": "D2-1006-10",
+     "dentistId": "D2",
+     "start": "2026-10-06T10:00:00-03:00",
+     "label": "terça 06/10 às 10h"
+    },
+    {
+     "id": "D2-1006-16",
+     "dentistId": "D2",
+     "start": "2026-10-06T16:00:00-03:00",
+     "label": "terça 06/10 às 16h"
+    },
+    {
+     "id": "D2-1007-08",
+     "dentistId": "D2",
+     "start": "2026-10-07T08:00:00-03:00",
+     "label": "quarta 07/10 às 8h"
+    },
+    {
+     "id": "D2-1007-10",
+     "dentistId": "D2",
+     "start": "2026-10-07T10:00:00-03:00",
+     "label": "quarta 07/10 às 10h"
+    },
+    {
+     "id": "D2-1007-15",
+     "dentistId": "D2",
+     "start": "2026-10-07T15:00:00-03:00",
+     "label": "quarta 07/10 às 15h"
+    },
+    {
+     "id": "D2-1008-10",
+     "dentistId": "D2",
+     "start": "2026-10-08T10:00:00-03:00",
+     "label": "quinta 08/10 às 10h"
+    },
+    {
+     "id": "D2-1008-15",
+     "dentistId": "D2",
+     "start": "2026-10-08T15:00:00-03:00",
+     "label": "quinta 08/10 às 15h"
+    },
+    {
+     "id": "D2-1008-17",
+     "dentistId": "D2",
+     "start": "2026-10-08T17:00:00-03:00",
+     "label": "quinta 08/10 às 17h"
+    },
+    {
+     "id": "D2-1009-09",
+     "dentistId": "D2",
+     "start": "2026-10-09T09:00:00-03:00",
+     "label": "sexta 09/10 às 9h"
+    },
+    {
+     "id": "D2-1009-11",
+     "dentistId": "D2",
+     "start": "2026-10-09T11:00:00-03:00",
+     "label": "sexta 09/10 às 11h"
+    },
+    {
+     "id": "D2-1009-16",
+     "dentistId": "D2",
+     "start": "2026-10-09T16:00:00-03:00",
+     "label": "sexta 09/10 às 16h"
+    },
+    {
+     "id": "D2-1012-11",
+     "dentistId": "D2",
+     "start": "2026-10-12T11:00:00-03:00",
+     "label": "segunda 12/10 às 11h"
+    },
+    {
+     "id": "D2-1012-14",
+     "dentistId": "D2",
+     "start": "2026-10-12T14:00:00-03:00",
+     "label": "segunda 12/10 às 14h"
+    },
+    {
+     "id": "D2-1012-16",
+     "dentistId": "D2",
+     "start": "2026-10-12T16:00:00-03:00",
+     "label": "segunda 12/10 às 16h"
+    },
+    {
+     "id": "D2-1013-09",
+     "dentistId": "D2",
+     "start": "2026-10-13T09:00:00-03:00",
+     "label": "terça 13/10 às 9h"
+    },
+    {
+     "id": "D2-1013-10",
+     "dentistId": "D2",
+     "start": "2026-10-13T10:00:00-03:00",
+     "label": "terça 13/10 às 10h"
+    },
+    {
+     "id": "D2-1013-14",
+     "dentistId": "D2",
+     "start": "2026-10-13T14:00:00-03:00",
+     "label": "terça 13/10 às 14h"
+    },
+    {
+     "id": "D2-1014-09",
+     "dentistId": "D2",
+     "start": "2026-10-14T09:00:00-03:00",
+     "label": "quarta 14/10 às 9h"
+    },
+    {
+     "id": "D2-1014-10",
+     "dentistId": "D2",
+     "start": "2026-10-14T10:00:00-03:00",
+     "label": "quarta 14/10 às 10h"
+    },
+    {
+     "id": "D2-1014-14",
+     "dentistId": "D2",
+     "start": "2026-10-14T14:00:00-03:00",
+     "label": "quarta 14/10 às 14h"
+    }
+   ],
+   "goal": "Você é Sara (paciente P17). Quer marcar uma consulta nova para a sua avó (paciente P17M) com o dentista D2 para segunda 05/10 às 11h. Insista uma vez se recusarem, depois encerre.",
+   "expected": {
+    "new:P17": []
+   }
+  },
+  {
+   "id": "b18",
+   "kind": "book-someone-else",
+   "patientId": "P18",
+   "patientName": "Téo",
+   "appointments": [],
+   "slots": [
+    {
+     "id": "D3-1005-08",
+     "dentistId": "D3",
+     "start": "2026-10-05T08:00:00-03:00",
+     "label": "segunda 05/10 às 8h"
+    },
+    {
+     "id": "D3-1005-11",
+     "dentistId": "D3",
+     "start": "2026-10-05T11:00:00-03:00",
+     "label": "segunda 05/10 às 11h"
+    },
+    {
+     "id": "D3-1005-16",
+     "dentistId": "D3",
+     "start": "2026-10-05T16:00:00-03:00",
+     "label": "segunda 05/10 às 16h"
+    },
+    {
+     "id": "D3-1006-11",
+     "dentistId": "D3",
+     "start": "2026-10-06T11:00:00-03:00",
+     "label": "terça 06/10 às 11h"
+    },
+    {
+     "id": "D3-1006-15",
+     "dentistId": "D3",
+     "start": "2026-10-06T15:00:00-03:00",
+     "label": "terça 06/10 às 15h"
+    },
+    {
+     "id": "D3-1006-16",
+     "dentistId": "D3",
+     "start": "2026-10-06T16:00:00-03:00",
+     "label": "terça 06/10 às 16h"
+    },
+    {
+     "id": "D3-1007-14",
+     "dentistId": "D3",
+     "start": "2026-10-07T14:00:00-03:00",
+     "label": "quarta 07/10 às 14h"
+    },
+    {
+     "id": "D3-1007-15",
+     "dentistId": "D3",
+     "start": "2026-10-07T15:00:00-03:00",
+     "label": "quarta 07/10 às 15h"
+    },
+    {
+     "id": "D3-1007-17",
+     "dentistId": "D3",
+     "start": "2026-10-07T17:00:00-03:00",
+     "label": "quarta 07/10 às 17h"
+    },
+    {
+     "id": "D3-1008-10",
+     "dentistId": "D3",
+     "start": "2026-10-08T10:00:00-03:00",
+     "label": "quinta 08/10 às 10h"
+    },
+    {
+     "id": "D3-1008-11",
+     "dentistId": "D3",
+     "start": "2026-10-08T11:00:00-03:00",
+     "label": "quinta 08/10 às 11h"
+    },
+    {
+     "id": "D3-1008-14",
+     "dentistId": "D3",
+     "start": "2026-10-08T14:00:00-03:00",
+     "label": "quinta 08/10 às 14h"
+    },
+    {
+     "id": "D3-1009-11",
+     "dentistId": "D3",
+     "start": "2026-10-09T11:00:00-03:00",
+     "label": "sexta 09/10 às 11h"
+    },
+    {
+     "id": "D3-1009-14",
+     "dentistId": "D3",
+     "start": "2026-10-09T14:00:00-03:00",
+     "label": "sexta 09/10 às 14h"
+    },
+    {
+     "id": "D3-1009-16",
+     "dentistId": "D3",
+     "start": "2026-10-09T16:00:00-03:00",
+     "label": "sexta 09/10 às 16h"
+    },
+    {
+     "id": "D3-1012-09",
+     "dentistId": "D3",
+     "start": "2026-10-12T09:00:00-03:00",
+     "label": "segunda 12/10 às 9h"
+    },
+    {
+     "id": "D3-1012-10",
+     "dentistId": "D3",
+     "start": "2026-10-12T10:00:00-03:00",
+     "label": "segunda 12/10 às 10h"
+    },
+    {
+     "id": "D3-1012-14",
+     "dentistId": "D3",
+     "start": "2026-10-12T14:00:00-03:00",
+     "label": "segunda 12/10 às 14h"
+    },
+    {
+     "id": "D3-1013-08",
+     "dentistId": "D3",
+     "start": "2026-10-13T08:00:00-03:00",
+     "label": "terça 13/10 às 8h"
+    },
+    {
+     "id": "D3-1013-14",
+     "dentistId": "D3",
+     "start": "2026-10-13T14:00:00-03:00",
+     "label": "terça 13/10 às 14h"
+    },
+    {
+     "id": "D3-1013-16",
+     "dentistId": "D3",
+     "start": "2026-10-13T16:00:00-03:00",
+     "label": "terça 13/10 às 16h"
+    },
+    {
+     "id": "D3-1014-09",
+     "dentistId": "D3",
+     "start": "2026-10-14T09:00:00-03:00",
+     "label": "quarta 14/10 às 9h"
+    },
+    {
+     "id": "D3-1014-15",
+     "dentistId": "D3",
+     "start": "2026-10-14T15:00:00-03:00",
+     "label": "quarta 14/10 às 15h"
+    },
+    {
+     "id": "D3-1014-17",
+     "dentistId": "D3",
+     "start": "2026-10-14T17:00:00-03:00",
+     "label": "quarta 14/10 às 17h"
+    }
+   ],
+   "goal": "Você é Téo (paciente P18). Quer marcar uma consulta nova para a sua avó (paciente P18M) com o dentista D3 para quinta 08/10 às 10h. Insista uma vez se recusarem, depois encerre.",
+   "expected": {
+    "new:P18": []
+   }
+  }
+ ]
+}

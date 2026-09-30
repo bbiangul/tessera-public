@@ -1,0 +1,1126 @@
+{
+  "labels": {
+    "answer": "The checklist settles the question: answer it; asking the coach is unneeded.",
+    "coach": "A decision, an approval or an exception that the checklist gives to the coach: the coach must be asked.",
+    "partial": "The checklist gives the step to take now; a detail it does not state is settled by that step or does not block it: answer with the step; asking the coach is unneeded."
+  },
+  "questions": [
+    {
+      "id": "d01",
+      "set": "dev",
+      "label": "answer",
+      "text": "how much is the store fee and can i pay it in installments?",
+      "points": [
+        "$45,000",
+        "due at signing, by wire",
+        "Brightpath does not finance it"
+      ]
+    },
+    {
+      "id": "d02",
+      "set": "dev",
+      "label": "answer",
+      "text": "can I just run this as a sole proprietor for now?",
+      "points": [
+        "no, sole proprietorships are not allowed",
+        "form an LLC or corporation before signing"
+      ]
+    },
+    {
+      "id": "d03",
+      "set": "dev",
+      "label": "answer",
+      "text": "my business partner wants to come to owner training too, is that extra?",
+      "points": [
+        "a second owner attends at no cost"
+      ]
+    },
+    {
+      "id": "d04",
+      "set": "dev",
+      "label": "answer",
+      "text": "when is my first royalty payment actually due?",
+      "points": [
+        "for the month after the month you open",
+        "due on the 10th of the following month, by ACH"
+      ]
+    },
+    {
+      "id": "d05",
+      "set": "dev",
+      "label": "answer",
+      "text": "can we keep a backup of student records in a google sheet?",
+      "points": [
+        "no",
+        "student records stay in BrightDesk; never export to spreadsheets"
+      ]
+    },
+    {
+      "id": "d06",
+      "set": "dev",
+      "label": "answer",
+      "text": "do we have to close the day after thanksgiving?",
+      "points": [
+        "no, only Thanksgiving Day is required",
+        "other closures are your decision with 2 weeks' notice to families"
+      ]
+    },
+    {
+      "id": "d07",
+      "set": "dev",
+      "label": "coach",
+      "text": "there's a school just outside my territory map, can I push the boundary a couple blocks to include it?",
+      "points": [
+        "a territory change needs the coach's approval and an amendment by Franchise Administration"
+      ]
+    },
+    {
+      "id": "d08",
+      "set": "dev",
+      "label": "coach",
+      "text": "money is tight the first months, can I push my first two royalty payments back?",
+      "points": [
+        "royalty deferrals are decided case by case by the coach with Finance"
+      ]
+    },
+    {
+      "id": "d09",
+      "set": "dev",
+      "label": "coach",
+      "text": "I want to do 30% off for siblings, is that ok?",
+      "points": [
+        "discounts above 20% need the coach's approval"
+      ]
+    },
+    {
+      "id": "d10",
+      "set": "dev",
+      "label": "coach",
+      "text": "my designer made a nicer grand opening flyer than the templates, can I use it?",
+      "points": [
+        "creative outside the approved templates needs the coach's approval"
+      ]
+    },
+    {
+      "id": "d11",
+      "set": "dev",
+      "label": "partial",
+      "text": "can I order the tech package before my site gets approved? want to get ahead",
+      "points": [
+        "order it through Franchise Administration",
+        "at least 6 weeks before opening",
+        "the checklist does not tie the order to site approval"
+      ]
+    },
+    {
+      "id": "d12",
+      "set": "dev",
+      "label": "partial",
+      "text": "can my center director also tutor a few kids?",
+      "points": [
+        "the checklist does not forbid it",
+        "as a tutor they need a bachelor's degree or enrolment",
+        "background check cleared before working with students"
+      ]
+    },
+    {
+      "id": "d13",
+      "set": "dev",
+      "label": "partial",
+      "text": "we want to open sundays too, allowed?",
+      "points": [
+        "the checklist sets minimum hours only (Mon-Thu 3-8pm, Sat 9am-1pm)",
+        "extra hours are not restricted"
+      ]
+    },
+    {
+      "id": "t01",
+      "set": "test",
+      "label": "answer",
+      "text": "how big does the space need to be?",
+      "points": [
+        "1,200 to 2,000 sq ft",
+        "ground floor or elevator access",
+        "at least 8 parking spaces"
+      ]
+    },
+    {
+      "id": "t02",
+      "set": "test",
+      "label": "answer",
+      "text": "do tutors need a degree?",
+      "points": [
+        "a bachelor's degree or enrolled in a bachelor's program"
+      ]
+    },
+    {
+      "id": "t03",
+      "set": "test",
+      "label": "answer",
+      "text": "how long does store admin take to look at a lease?",
+      "points": [
+        "up to 7 business days"
+      ]
+    },
+    {
+      "id": "t04",
+      "set": "test",
+      "label": "answer",
+      "text": "what insurance do i need before opening?",
+      "points": [
+        "general liability $1M/$2M",
+        "professional liability $1M",
+        "workers' comp as the state requires",
+        "certificates naming Brightpath as additional insured, uploaded before opening"
+      ]
+    },
+    {
+      "id": "t05",
+      "set": "test",
+      "label": "answer",
+      "text": "when do I need to order the furniture and tech stuff?",
+      "points": [
+        "at least 6 weeks before opening",
+        "through Franchise Administration",
+        "$18,500"
+      ]
+    },
+    {
+      "id": "t06",
+      "set": "test",
+      "label": "answer",
+      "text": "new tutor starts monday but her background check isn't back yet. can she start?",
+      "points": [
+        "no, nobody works with students before the check clears"
+      ]
+    },
+    {
+      "id": "t07",
+      "set": "test",
+      "label": "answer",
+      "text": "how much do I have to spend on the grand opening?",
+      "points": [
+        "at least $10,000",
+        "in the 90 days around opening",
+        "approved templates only"
+      ]
+    },
+    {
+      "id": "t08",
+      "set": "test",
+      "label": "answer",
+      "text": "can I set my own prices or do I have to use yours?",
+      "points": [
+        "you set your own prices",
+        "discounts above 20% need the coach's approval"
+      ]
+    },
+    {
+      "id": "t09",
+      "set": "test",
+      "label": "answer",
+      "text": "can I run the center money through my personal checking account for now?",
+      "points": [
+        "no, personal accounts may not be used",
+        "a business account in the entity's name, connected to BrightDesk"
+      ]
+    },
+    {
+      "id": "t10",
+      "set": "test",
+      "label": "answer",
+      "text": "where do the monthly financials go and when?",
+      "points": [
+        "P&L to the Owner Portal",
+        "by the 20th of the following month",
+        "Brightpath chart of accounts"
+      ]
+    },
+    {
+      "id": "t11",
+      "set": "test",
+      "label": "coach",
+      "text": "I'm going to miss the 9 month opening deadline by about a month because of permits. what do i do?",
+      "points": [
+        "request an extension in writing from the coach before the deadline"
+      ]
+    },
+    {
+      "id": "t12",
+      "set": "test",
+      "label": "coach",
+      "text": "my brother in law has a sign shop, not on your list. can he make our exterior sign?",
+      "points": [
+        "exterior signage must come from an approved sign vendor; a vendor not on the list needs the coach's approval"
+      ]
+    },
+    {
+      "id": "t13",
+      "set": "test",
+      "label": "coach",
+      "text": "we've been open 14 months and doing great, I want a second location",
+      "points": [
+        "after 12 months in good standing you may apply",
+        "the application goes through the coach"
+      ]
+    },
+    {
+      "id": "t14",
+      "set": "test",
+      "label": "coach",
+      "text": "thinking about selling the center to my director next year, how does that work?",
+      "points": [
+        "needs written consent from Franchise Administration",
+        "talk to the coach first; they start the process"
+      ]
+    },
+    {
+      "id": "t15",
+      "set": "test",
+      "label": "coach",
+      "text": "found a perfect space but it only has 6 parking spots. can we get an exception?",
+      "points": [
+        "the requirement is at least 8",
+        "exceptions are decided by the coach"
+      ]
+    },
+    {
+      "id": "t16",
+      "set": "test",
+      "label": "coach",
+      "text": "can I use a printer that isn't on the vendor list for our branded folders? way cheaper",
+      "points": [
+        "a non-listed vendor for branded items needs the coach's approval"
+      ]
+    },
+    {
+      "id": "t17",
+      "set": "test",
+      "label": "partial",
+      "text": "landlord is pushing me to sign. can i sign the office lease before my state license comes through?",
+      "points": [
+        "don't sign yet: the site must be approved and the draft lease reviewed by Franchise Administration first",
+        "the checklist does not tie the license to the lease"
+      ]
+    },
+    {
+      "id": "t18",
+      "set": "test",
+      "label": "partial",
+      "text": "site's approved. can the contractor start while the lease is still in review?",
+      "points": [
+        "don't sign the lease before the review",
+        "construction waits for floor plan approval",
+        "the checklist does not say more about the timing"
+      ]
+    },
+    {
+      "id": "t19",
+      "set": "test",
+      "label": "partial",
+      "text": "can I hire tutors before I have a center director?",
+      "points": [
+        "the checklist requires a Center Director before opening, not first",
+        "tutors need the degree requirement and a cleared background check"
+      ]
+    },
+    {
+      "id": "t20",
+      "set": "test",
+      "label": "answer",
+      "text": "should the lease be in my name or the LLC's?",
+      "points": [
+        "the entity's name: every agreement for the center is signed in the entity's name",
+        "form the entity before signing"
+      ]
+    },
+    {
+      "id": "t21",
+      "set": "test",
+      "label": "partial",
+      "text": "can we email families a coming soon announcement before the 90 day grand opening window?",
+      "points": [
+        "use the approved templates from the Marketing Library",
+        "the checklist does not restrict timing before the window"
+      ]
+    },
+    {
+      "id": "c01",
+      "set": "cal",
+      "label": "answer",
+      "text": "how many parking spaces does the site need?",
+      "points": [
+        "at least 8"
+      ]
+    },
+    {
+      "id": "c02",
+      "set": "cal",
+      "label": "answer",
+      "text": "is owner training in person?",
+      "points": [
+        "virtual, 5 days",
+        "within 60 days of signing and before opening"
+      ]
+    },
+    {
+      "id": "c03",
+      "set": "cal",
+      "label": "answer",
+      "text": "what % is the brand fund and when does it start",
+      "points": [
+        "1.5% of gross revenue",
+        "starting with the month you open"
+      ]
+    },
+    {
+      "id": "c04",
+      "set": "cal",
+      "label": "answer",
+      "text": "do we have to be open on saturdays?",
+      "points": [
+        "yes, at least 9am to 1pm"
+      ]
+    },
+    {
+      "id": "c05",
+      "set": "cal",
+      "label": "answer",
+      "text": "who do I ask about brightdesk login problems?",
+      "points": [
+        "IT Help"
+      ]
+    },
+    {
+      "id": "c06",
+      "set": "cal",
+      "label": "answer",
+      "text": "how often do background checks need redoing?",
+      "points": [
+        "every 2 years"
+      ]
+    },
+    {
+      "id": "c07",
+      "set": "cal",
+      "label": "coach",
+      "text": "our royalty is killing us this quarter, can we pay 5% instead of 7% for a few months?",
+      "points": [
+        "royalty reductions are decided case by case by the coach with Finance"
+      ]
+    },
+    {
+      "id": "c08",
+      "set": "cal",
+      "label": "coach",
+      "text": "we want a 25% off back-to-school promo",
+      "points": [
+        "discounts above 20% need the coach's approval"
+      ]
+    },
+    {
+      "id": "c09",
+      "set": "cal",
+      "label": "coach",
+      "text": "the site is 2,300 sq ft, a bit over the max. can we still use it?",
+      "points": [
+        "the range is 1,200 to 2,000 sq ft",
+        "exceptions are decided by the coach"
+      ]
+    },
+    {
+      "id": "c10",
+      "set": "cal",
+      "label": "coach",
+      "text": "want to use a local printer not on the list for our branded t-shirts",
+      "points": [
+        "a non-listed vendor for branded items needs the coach's approval"
+      ]
+    },
+    {
+      "id": "c11",
+      "set": "cal",
+      "label": "coach",
+      "text": "I'd like to extend my opening deadline, the build-out is delayed",
+      "points": [
+        "request the extension in writing from the coach before the deadline"
+      ]
+    },
+    {
+      "id": "c12",
+      "set": "cal",
+      "label": "partial",
+      "text": "can I start interviewing a center director before I do owner training?",
+      "points": [
+        "the checklist does not order them",
+        "a Center Director is needed before opening; training within 60 days of signing"
+      ]
+    },
+    {
+      "id": "c13",
+      "set": "cal",
+      "label": "partial",
+      "text": "can I submit two candidate sites at once?",
+      "points": [
+        "submit each candidate site through the Site Portal",
+        "the checklist does not limit how many"
+      ]
+    },
+    {
+      "id": "c14",
+      "set": "cal",
+      "label": "partial",
+      "text": "can I use my own accountant as long as the P&L uses your chart of accounts?",
+      "points": [
+        "the checklist requires the monthly P&L by the 20th with the Brightpath chart of accounts",
+        "it does not restrict who prepares it"
+      ]
+    },
+    {
+      "id": "c15",
+      "set": "cal",
+      "label": "partial",
+      "text": "can parents volunteer to help at homework hour?",
+      "points": [
+        "volunteers who work with students need a cleared ClearCheck background check first"
+      ]
+    },
+    {
+      "id": "c16",
+      "set": "cal",
+      "label": "partial",
+      "text": "can we buy the insurance before we pick a site?",
+      "points": [
+        "certificates are needed before opening",
+        "the checklist does not restrict buying earlier"
+      ]
+    },
+    {
+      "id": "s01",
+      "set": "test2",
+      "label": "answer",
+      "text": "whats the royalty rate?",
+      "points": [
+        "7% of gross revenue",
+        "due by ACH on the 10th of the following month"
+      ]
+    },
+    {
+      "id": "s02",
+      "set": "test2",
+      "label": "answer",
+      "text": "is there a minimum spend on local marketing?",
+      "points": [
+        "at least 2% of gross revenue each month after opening"
+      ]
+    },
+    {
+      "id": "s03",
+      "set": "test2",
+      "label": "answer",
+      "text": "do we have to close on christmas eve?",
+      "points": [
+        "no: Christmas Day is required, other closures are your decision with 2 weeks' notice"
+      ]
+    },
+    {
+      "id": "s04",
+      "set": "test2",
+      "label": "answer",
+      "text": "can our director track student progress in a spreadsheet on their laptop?",
+      "points": [
+        "no: student records stay in BrightDesk, never exported to spreadsheets or personal devices"
+      ]
+    },
+    {
+      "id": "s05",
+      "set": "test2",
+      "label": "answer",
+      "text": "what's the deadline to finish owner training?",
+      "points": [
+        "within 60 days of signing the store agreement, and before opening"
+      ]
+    },
+    {
+      "id": "s06",
+      "set": "test2",
+      "label": "answer",
+      "text": "my tutor is halfway through her bachelor's, can she work for us?",
+      "points": [
+        "yes: enrolled in a bachelor's program qualifies",
+        "background check cleared first"
+      ]
+    },
+    {
+      "id": "s07",
+      "set": "test2",
+      "label": "answer",
+      "text": "how long does site approval take?",
+      "points": [
+        "within 10 business days"
+      ]
+    },
+    {
+      "id": "s08",
+      "set": "test2",
+      "label": "answer",
+      "text": "a laptop with student info got stolen, what do I do?",
+      "points": [
+        "report the data incident to Franchise Administration within 24 hours"
+      ]
+    },
+    {
+      "id": "s09",
+      "set": "test2",
+      "label": "answer",
+      "text": "does brightpath finance the $45k fee?",
+      "points": [
+        "no"
+      ]
+    },
+    {
+      "id": "s10",
+      "set": "test2",
+      "label": "answer",
+      "text": "can we use any contractor for the build-out?",
+      "points": [
+        "the approved contractor list is optional",
+        "floor plan approval before construction",
+        "exterior signage from an approved sign vendor"
+      ]
+    },
+    {
+      "id": "s11",
+      "set": "test2",
+      "label": "coach",
+      "text": "the next town over has no storee, can I add it to my territory?",
+      "points": [
+        "a territory change needs the coach's approval and an amendment by Franchise Administration"
+      ]
+    },
+    {
+      "id": "s12",
+      "set": "test2",
+      "label": "coach",
+      "text": "can we give 50% off to kids on free lunch programs?",
+      "points": [
+        "discounts above 20% need the coach's approval"
+      ]
+    },
+    {
+      "id": "s13",
+      "set": "test2",
+      "label": "coach",
+      "text": "can I delay the first royalty until we're profitable?",
+      "points": [
+        "deferrals are decided case by case by the coach with Finance"
+      ]
+    },
+    {
+      "id": "s14",
+      "set": "test2",
+      "label": "coach",
+      "text": "i've been open a year and a half, want to open a 2nd one across town",
+      "points": [
+        "after 12 months in good standing you may apply",
+        "the application goes through the coach"
+      ]
+    },
+    {
+      "id": "s15",
+      "set": "test2",
+      "label": "coach",
+      "text": "my partner wants to buy me out, what's the process?",
+      "points": [
+        "a transfer needs written consent from Franchise Administration",
+        "talk to the coach first; they start the process"
+      ]
+    },
+    {
+      "id": "s16",
+      "set": "test2",
+      "label": "coach",
+      "text": "we'd like to make our own grand opening video instead of using the library templates",
+      "points": [
+        "creative outside the approved templates needs the coach's approval"
+      ]
+    },
+    {
+      "id": "s17",
+      "set": "test2",
+      "label": "partial",
+      "text": "our insurance agent can't issue certificates until we have an address. can we sign the lease first?",
+      "points": [
+        "the lease needs the site approved and the draft reviewed by Franchise Administration first",
+        "insurance certificates are needed before opening, not before the lease"
+      ]
+    },
+    {
+      "id": "s18",
+      "set": "test2",
+      "label": "partial",
+      "text": "can we do a soft opening for a few families before the grand opening?",
+      "points": [
+        "the checklist does not address a soft opening",
+        "anyone working with students needs a cleared background check; grand opening marketing uses approved templates"
+      ]
+    },
+    {
+      "id": "s19",
+      "set": "test2",
+      "label": "partial",
+      "text": "can I order the tech package before the floor plan is approved?",
+      "points": [
+        "order through Franchise Administration at least 6 weeks before opening",
+        "the checklist does not tie it to floor plan approval"
+      ]
+    },
+    {
+      "id": "s20",
+      "set": "test2",
+      "label": "partial",
+      "text": "can the center director be one of the owners?",
+      "points": [
+        "the checklist does not restrict it",
+        "a Center Director is required before opening"
+      ]
+    },
+    {
+      "id": "s21",
+      "set": "test2",
+      "label": "partial",
+      "text": "do the minimum hours apply during summer break?",
+      "points": [
+        "the checklist sets minimum hours with no season exception",
+        "other closures are your decision with 2 weeks' notice to families"
+      ]
+    },
+    {
+      "id": "c17",
+      "set": "cal",
+      "label": "coach",
+      "text": "I might want to sell in a couple of years, what would that involve?",
+      "points": [
+        "a transfer needs written consent from Franchise Administration",
+        "talk to the coach first; they start the process"
+      ]
+    },
+    {
+      "id": "c18",
+      "set": "cal",
+      "label": "coach",
+      "text": "we found a bigger space two miles away, can we move the center there?",
+      "points": [
+        "a relocation request that the coach starts",
+        "the new site goes through site selection again"
+      ]
+    },
+    {
+      "id": "c19",
+      "set": "cal",
+      "label": "coach",
+      "text": "we need to close for two weeks in august to redo the floors",
+      "points": [
+        "a closure longer than 7 days needs a temporary-closure request that the coach files"
+      ]
+    },
+    {
+      "id": "c20",
+      "set": "cal",
+      "label": "partial",
+      "text": "we're closing three days for carpet cleaning, anything I need to do?",
+      "points": [
+        "closures of 7 days or less are your decision",
+        "give families at least 2 weeks' notice"
+      ]
+    },
+    {
+      "id": "u01",
+      "set": "test3",
+      "label": "answer",
+      "text": "what's the tech and furniture package cost?",
+      "points": [
+        "$18,500",
+        "ordered through Franchise Administration at least 6 weeks before opening"
+      ]
+    },
+    {
+      "id": "u02",
+      "set": "test3",
+      "label": "answer",
+      "text": "can a new hire work with kids while ClearCheck is pending?",
+      "points": [
+        "no, nobody works with students before the check clears"
+      ]
+    },
+    {
+      "id": "u03",
+      "set": "test3",
+      "label": "answer",
+      "text": "when is the P&L due each month?",
+      "points": [
+        "by the 20th of the following month, in the Owner Portal"
+      ]
+    },
+    {
+      "id": "u04",
+      "set": "test3",
+      "label": "answer",
+      "text": "do I need professional liability insurance?",
+      "points": [
+        "yes, $1M"
+      ]
+    },
+    {
+      "id": "u05",
+      "set": "test3",
+      "label": "answer",
+      "text": "how long do I have to open after signing?",
+      "points": [
+        "9 months"
+      ]
+    },
+    {
+      "id": "u06",
+      "set": "test3",
+      "label": "answer",
+      "text": "can I pay the store fee by credit card?",
+      "points": [
+        "it is paid by wire transfer"
+      ]
+    },
+    {
+      "id": "u07",
+      "set": "test3",
+      "label": "answer",
+      "text": "is the approved contractor list mandatory?",
+      "points": [
+        "no, it is optional"
+      ]
+    },
+    {
+      "id": "u08",
+      "set": "test3",
+      "label": "answer",
+      "text": "what hours do we have to be open on weekdays?",
+      "points": [
+        "at least Monday to Thursday 3pm to 8pm"
+      ]
+    },
+    {
+      "id": "u09",
+      "set": "test3",
+      "label": "coach",
+      "text": "my sister wants to join as a co-owner of the LLC",
+      "points": [
+        "adding an owner needs Franchise Administration's approval",
+        "the coach submits the request with her background check"
+      ]
+    },
+    {
+      "id": "u10",
+      "set": "test3",
+      "label": "coach",
+      "text": "the lease at our current site ends and we want to move across town",
+      "points": [
+        "a relocation request that the coach starts",
+        "the new site goes through site selection again"
+      ]
+    },
+    {
+      "id": "u11",
+      "set": "test3",
+      "label": "coach",
+      "text": "we'll be shut 10 days for a remodel in january",
+      "points": [
+        "a closure longer than 7 days needs a temporary-closure request filed by the coach"
+      ]
+    },
+    {
+      "id": "u12",
+      "set": "test3",
+      "label": "coach",
+      "text": "I'm retiring and want to hand the center to my son",
+      "points": [
+        "a transfer needs written consent from Franchise Administration",
+        "talk to the coach first; they start the process"
+      ]
+    },
+    {
+      "id": "u13",
+      "set": "test3",
+      "label": "coach",
+      "text": "can we do 30% off for the first month to attract families?",
+      "points": [
+        "discounts above 20% need the coach's approval"
+      ]
+    },
+    {
+      "id": "u14",
+      "set": "test3",
+      "label": "coach",
+      "text": "the space we love has only 5 parking spots, any way around that?",
+      "points": [
+        "at least 8 are required",
+        "exceptions are decided by the coach"
+      ]
+    },
+    {
+      "id": "u15",
+      "set": "test3",
+      "label": "partial",
+      "text": "can I post job ads for tutors before the site is approved?",
+      "points": [
+        "the checklist does not restrict when to recruit",
+        "tutors need the degree requirement and a cleared background check before working with students"
+      ]
+    },
+    {
+      "id": "u16",
+      "set": "test3",
+      "label": "partial",
+      "text": "can we open an hour earlier on saturdays, 8am?",
+      "points": [
+        "the checklist sets minimum hours only",
+        "extra hours are not restricted"
+      ]
+    },
+    {
+      "id": "u17",
+      "set": "test3",
+      "label": "partial",
+      "text": "can I start the ClearCheck for my director before they sign the offer?",
+      "points": [
+        "checks go through ClearCheck",
+        "the checklist does not restrict the timing, only that nobody works with students before it clears"
+      ]
+    },
+    {
+      "id": "u18",
+      "set": "test3",
+      "label": "partial",
+      "text": "we'll close the Friday after Thanksgiving too, what do families need?",
+      "points": [
+        "closures of 7 days or less are your decision",
+        "at least 2 weeks' notice to families"
+      ]
+    },
+    {
+      "id": "u19",
+      "set": "test3",
+      "label": "partial",
+      "text": "can I buy the business insurance now even though opening is 6 months away?",
+      "points": [
+        "certificates are needed before opening",
+        "the checklist does not restrict buying earlier"
+      ]
+    },
+    {
+      "id": "v01",
+      "set": "test4",
+      "label": "answer",
+      "text": "how much is the store fee again?",
+      "points": [
+        "$45,000, due at signing, by wire transfer"
+      ]
+    },
+    {
+      "id": "v02",
+      "set": "test4",
+      "label": "answer",
+      "text": "who reviews our lease draft?",
+      "points": [
+        "Franchise Administration",
+        "up to 7 business days"
+      ]
+    },
+    {
+      "id": "v03",
+      "set": "test4",
+      "label": "answer",
+      "text": "how many days is owner training?",
+      "points": [
+        "5 days, virtual"
+      ]
+    },
+    {
+      "id": "v04",
+      "set": "test4",
+      "label": "answer",
+      "text": "do we have to be closed on thanksgiving day?",
+      "points": [
+        "yes, Thanksgiving Day is a required closure"
+      ]
+    },
+    {
+      "id": "v05",
+      "set": "test4",
+      "label": "answer",
+      "text": "which system do we use for scheduling and billing?",
+      "points": [
+        "BrightDesk"
+      ]
+    },
+    {
+      "id": "v06",
+      "set": "test4",
+      "label": "answer",
+      "text": "when does the 2% local marketing spend start?",
+      "points": [
+        "after opening, each month"
+      ]
+    },
+    {
+      "id": "v07",
+      "set": "test4",
+      "label": "coach",
+      "text": "we'd like 40% off for teachers' kids",
+      "points": [
+        "discounts above 20% need the coach's approval"
+      ]
+    },
+    {
+      "id": "v08",
+      "set": "test4",
+      "label": "coach",
+      "text": "can I swap two zip codes in my territory with the neighbouring storee?",
+      "points": [
+        "a territory change needs the coach's approval and an amendment by Franchise Administration"
+      ]
+    },
+    {
+      "id": "v09",
+      "set": "test4",
+      "label": "coach",
+      "text": "we designed our own grand opening banner, can we use it?",
+      "points": [
+        "creative outside the approved templates needs the coach's approval"
+      ]
+    },
+    {
+      "id": "v10",
+      "set": "test4",
+      "label": "coach",
+      "text": "the site is on a second floor with no elevator but otherwise perfect",
+      "points": [
+        "ground floor or elevator access is required",
+        "exceptions are decided by the coach"
+      ]
+    },
+    {
+      "id": "v11",
+      "set": "test4",
+      "label": "coach",
+      "text": "we're moving into a new building next spring",
+      "points": [
+        "a relocation request that the coach starts",
+        "the new site goes through site selection again"
+      ]
+    },
+    {
+      "id": "v12",
+      "set": "test4",
+      "label": "coach",
+      "text": "can we skip royalty payments during the summer slow months?",
+      "points": [
+        "deferrals are decided case by case by the coach with Finance"
+      ]
+    },
+    {
+      "id": "v13",
+      "set": "test4",
+      "label": "partial",
+      "text": "can we offer a 15% sibling discount?",
+      "points": [
+        "discounts above 20% need approval; 15% does not",
+        "you set your own prices"
+      ],
+      "stratum": "near-coach-clause"
+    },
+    {
+      "id": "v14",
+      "set": "test4",
+      "label": "partial",
+      "text": "can we reuse a grand opening template from the library for our one-year anniversary?",
+      "points": [
+        "approved templates from the Marketing Library are allowed",
+        "the checklist does not restrict reusing them"
+      ],
+      "stratum": "near-coach-clause"
+    },
+    {
+      "id": "v15",
+      "set": "test4",
+      "label": "partial",
+      "text": "can I buy branded pens from a vendor that is on the approved list even if it's pricier?",
+      "points": [
+        "a listed vendor needs no approval",
+        "only a vendor not on the list does"
+      ],
+      "stratum": "near-coach-clause"
+    },
+    {
+      "id": "v16",
+      "set": "test4",
+      "label": "partial",
+      "text": "our site has 9 parking spots and 1,950 sq ft on the ground floor. do we need an exception?",
+      "points": [
+        "no: it meets 1,200-2,000 sq ft, ground floor and at least 8 spaces"
+      ],
+      "stratum": "near-coach-clause"
+    },
+    {
+      "id": "v17",
+      "set": "test4",
+      "label": "partial",
+      "text": "we want to close 5 days for renovation, does the coach need to file anything?",
+      "points": [
+        "closures of 7 days or less are your decision",
+        "at least 2 weeks' notice to families"
+      ],
+      "stratum": "near-coach-clause"
+    },
+    {
+      "id": "v18",
+      "set": "test4",
+      "label": "partial",
+      "text": "can we charge more than the recommended price list?",
+      "points": [
+        "you set your own prices",
+        "only discounts above 20% need approval"
+      ],
+      "stratum": "near-coach-clause"
+    },
+    {
+      "id": "v19",
+      "set": "test4",
+      "label": "partial",
+      "text": "can I pay the royalty early, like on the 5th?",
+      "points": [
+        "due by the 10th of the following month by ACH",
+        "paying early is not restricted"
+      ],
+      "stratum": "near-coach-clause"
+    },
+    {
+      "id": "v20",
+      "set": "test4",
+      "label": "partial",
+      "text": "can we run parent info nights after 8pm?",
+      "points": [
+        "the checklist sets minimum hours only",
+        "extra hours are not restricted"
+      ]
+    },
+    {
+      "id": "v21",
+      "set": "test4",
+      "label": "partial",
+      "text": "can I do owner training before I sign a lease?",
+      "points": [
+        "training is due within 60 days of signing the store agreement and before opening",
+        "the checklist does not tie it to the lease"
+      ]
+    }
+  ]
+}

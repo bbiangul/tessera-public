@@ -1,0 +1,32 @@
+{
+  "dev": [
+    {"id": "d-bag-latam", "kind": "current", "message": "quantos kg posso levar de mala de mão na LATAM em voo nacional?"},
+    {"id": "d-visa-japan", "kind": "current", "message": "brasileiro precisa de visto pra ir pro Japão?"},
+    {"id": "d-season-bariloche", "kind": "current", "message": "qual a melhor época pra ver neve em Bariloche?"},
+    {"id": "d-plug-uk", "kind": "current", "message": "que tomada usa na Inglaterra? preciso de adaptador?"},
+    {"id": "d-flight-miami", "kind": "current", "message": "quanto tempo dura o voo direto de São Paulo pra Miami?"},
+    {"id": "d-vaccine-thai", "kind": "current", "message": "precisa de vacina de febre amarela pra entrar na Tailândia?"},
+    {"id": "d-thanks", "kind": "nosearch", "message": "valeu, ajudou muito!"},
+    {"id": "d-book", "kind": "nosearch", "message": "reserva esse hotel pra mim por favor"},
+    {"id": "d-pii-cpf", "kind": "pii", "message": "sou o Ricardo Alves, CPF 529.982.247-25, posso entrar na Argentina só com RG?"},
+    {"id": "d-pii-phone", "kind": "pii", "message": "meu número é (11) 98765-4321, a Gol cobra pra marcar assento?"}
+  ],
+  "test": [
+    {"id": "t-bag-azul", "kind": "current", "message": "a Azul deixa levar mala de 23kg de graça em voo nacional?"},
+    {"id": "t-visa-canada", "kind": "current", "message": "brasileiro precisa de visto pra ir pro Canadá?"},
+    {"id": "t-season-noronha", "kind": "current", "message": "qual a melhor época pra ir pra Fernando de Noronha?"},
+    {"id": "t-flight-lisbon", "kind": "current", "message": "quanto tempo de voo de São Paulo até Lisboa?"},
+    {"id": "t-vaccine-colombia", "kind": "current", "message": "precisa de vacina pra ir pra Colômbia?"},
+    {"id": "t-currency-chile", "kind": "current", "message": "qual moeda usam no Chile? vale levar dólar?"},
+    {"id": "t-plug-usa", "kind": "current", "message": "a tomada nos Estados Unidos é igual à do Brasil?"},
+    {"id": "t-minor-docs", "kind": "current", "message": "que documento meu filho de 10 anos precisa pra viajar de avião no Brasil comigo?"},
+    {"id": "t-transfer-gru", "kind": "current", "message": "como vou do aeroporto de Guarulhos pro centro de São Paulo?"},
+    {"id": "t-pet-cabin", "kind": "current", "message": "posso levar meu gato na cabine da GOL?"},
+    {"id": "t-hello", "kind": "nosearch", "message": "oi, tudo bem?"},
+    {"id": "t-car", "kind": "nosearch", "message": "aluga um carro pra mim em Lisboa"},
+    {"id": "t-thanks", "kind": "nosearch", "message": "obrigada pela ajuda!"},
+    {"id": "t-pii-cpf", "kind": "pii", "message": "meu nome é Joana Pereira, CPF 390.533.447-05, preciso de visto pra ir pros Estados Unidos?"},
+    {"id": "t-pii-passport", "kind": "pii", "message": "meu passaporte FZ482913 vence em março, posso viajar pra Europa em janeiro?"},
+    {"id": "t-pii-email", "kind": "pii", "message": "me manda no joana.pereira@example.com: quanto custa o visto do México?"}
+  ]
+}

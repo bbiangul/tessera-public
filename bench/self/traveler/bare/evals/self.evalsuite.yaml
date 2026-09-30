@@ -1,0 +1,80 @@
+# Whole-conversation tests for search-flights, written from the cases in
+# the legacy platform's TRAVELER_TESTS.md. Booking.com is a sandbox; extraction uses
+# the Generate engine (live or replayed).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata:
+  name: self
+  namespace: traveler
+spec:
+  description: Messages about the agent itself (self-001); transcripts only, judged outside.
+  now: "2026-09-23T09:00:00-03:00"
+  sandboxes:
+    - plugin: booking
+      script: booking.sandbox.star
+      state:
+        searches: []
+        routes: [REC.AIRPORT, LIS.AIRPORT, CWB.AIRPORT, LHR.AIRPORT, LON.CITY]
+        places:
+          - { id: SAO.CITY, name: "São Paulo", cityName: "São Paulo", type: CITY }
+          - { id: GRU.AIRPORT, name: "Guarulhos International Airport", cityName: "São Paulo", type: AIRPORT }
+          - { id: CGH.AIRPORT, name: "Congonhas Airport", cityName: "São Paulo", type: AIRPORT }
+          - { id: REC.AIRPORT, name: "Recife International Airport", cityName: "Recife", type: AIRPORT }
+          - { id: LIS.AIRPORT, name: "Humberto Delgado Airport", cityName: "Lisboa", type: AIRPORT }
+          - { id: CWB.AIRPORT, name: "Afonso Pena International Airport", cityName: "Curitiba", type: AIRPORT }
+          - { id: LON.CITY, name: "Londres", cityName: "Londres", type: CITY }
+          - { id: LHR.AIRPORT, name: "Heathrow Airport", cityName: "Londres", type: AIRPORT }
+          - { id: LGW.AIRPORT, name: "Gatwick Airport", cityName: "Londres", type: AIRPORT }
+    - plugin: routes
+      script: routes.sandbox.star
+      state:
+        minutes: { GRU-CGH: 74 }
+  scenarios:
+    - id: what-do
+      simulator: scripted
+      turns:
+        - user: "oi! o que você faz?"
+    - id: how-help
+      simulator: scripted
+      turns:
+        - user: "como vc pode me ajudar exatamente?"
+    - id: hotel
+      simulator: scripted
+      turns:
+        - user: "vocês também veem hotel ou só passagem?"
+    - id: prefs
+      simulator: scripted
+      turns:
+        - user: "você consegue guardar minhas preferências de viagem?"
+    - id: bag
+      simulator: scripted
+      turns:
+        - user: "consegue me dizer quanto custa despachar mala?"
+    - id: book
+      simulator: scripted
+      turns:
+        - user: "você faz a reserva do voo pra mim?"
+    - id: car
+      simulator: scripted
+      turns:
+        - user: "rola alugar um carro com vocês?"
+    - id: cancel
+      simulator: scripted
+      turns:
+        - user: "quero cancelar uma passagem que comprei, consigo por aqui?"
+    - id: alert
+      simulator: scripted
+      turns:
+        - user: "vc me avisa se o preço da passagem pra recife baixar?"
+    - id: needs
+      simulator: scripted
+      turns:
+        - user: "o que você precisa saber pra buscar um voo pra mim?"
+    - id: human
+      simulator: scripted
+      turns:
+        - user: "você é uma pessoa ou um robô?"
+    - id: insurance
+      simulator: scripted
+      turns:
+        - user: "vocês vendem seguro viagem?"

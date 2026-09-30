@@ -1,0 +1,238 @@
+{
+ "rawFlights": {
+  "status": true,
+  "data": {
+   "flightOffers": [
+    {
+     "token": "t-infant",
+     "tripType": "ONEWAY",
+     "priceBreakdown": {
+      "total": {
+       "units": 1200,
+       "currencyCode": "BRL"
+      }
+     },
+     "segments": [
+      {
+       "departureAirport": {
+        "code": "GRU"
+       },
+       "arrivalAirport": {
+        "code": "REC"
+       },
+       "departureTime": "2026-10-12T09:00:00",
+       "arrivalTime": "2026-10-12T12:15:00",
+       "totalTime": 11700,
+       "legs": [
+        {
+         "departureAirport": {
+          "code": "GRU"
+         },
+         "arrivalAirport": {
+          "code": "REC"
+         },
+         "departureTime": "2026-10-12T09:00:00",
+         "arrivalTime": "2026-10-12T12:15:00",
+         "carriersData": [
+          {
+           "code": "LA",
+           "name": "LATAM"
+          }
+         ],
+         "flightInfo": {
+          "flightNumber": "LA100"
+         }
+        }
+       ]
+      }
+     ],
+     "brandedFareInfo": {
+      "fareName": "Light",
+      "cabinBaggageExcluded": false,
+      "checkinBaggageExcluded": true,
+      "features": [
+       {
+        "featureName": "PERSONAL_BAGGAGE",
+        "category": "BAGGAGE",
+        "availability": "INCLUDED",
+        "label": "1 personal item"
+       }
+      ]
+     },
+     "travellerPrices": [
+      {
+       "travellerType": "ADULT",
+       "travellerPriceBreakdown": {
+        "total": {
+         "units": 1200
+        }
+       }
+      }
+     ],
+     "unifiedPriceBreakdown": {
+      "items": [
+       {
+        "scope": "FLIGHT_ADULT",
+        "price": {
+         "units": 1050
+        }
+       },
+       {
+        "items": [
+         {
+          "scope": "FLIGHT_INFANT",
+          "price": {
+           "units": 150
+          }
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "token": "t-gol-noon",
+     "tripType": "ONEWAY",
+     "priceBreakdown": {
+      "total": {
+       "units": 640,
+       "currencyCode": "BRL"
+      }
+     },
+     "segments": [
+      {
+       "departureAirport": {
+        "code": "GRU"
+       },
+       "arrivalAirport": {
+        "code": "REC"
+       },
+       "departureTime": "2026-10-12T12:40:00",
+       "arrivalTime": "2026-10-12T15:55:00",
+       "totalTime": 11700,
+       "legs": [
+        {
+         "departureAirport": {
+          "code": "GRU"
+         },
+         "arrivalAirport": {
+          "code": "REC"
+         },
+         "departureTime": "2026-10-12T12:40:00",
+         "arrivalTime": "2026-10-12T15:55:00",
+         "carriersData": [
+          {
+           "code": "G3",
+           "name": "GOL"
+          }
+         ],
+         "flightInfo": {
+          "flightNumber": "G3100"
+         }
+        }
+       ]
+      }
+     ],
+     "brandedFareInfo": {
+      "fareName": "Light",
+      "cabinBaggageExcluded": false,
+      "checkinBaggageExcluded": true,
+      "features": [
+       {
+        "featureName": "PERSONAL_BAGGAGE",
+        "category": "BAGGAGE",
+        "availability": "INCLUDED",
+        "label": "1 personal item"
+       }
+      ]
+     },
+     "travellerPrices": [
+      {
+       "travellerType": "ADULT",
+       "travellerPriceBreakdown": {
+        "total": {
+         "units": 640
+        }
+       }
+      }
+     ]
+    },
+    {
+     "token": "t-azul-pm",
+     "tripType": "ONEWAY",
+     "priceBreakdown": {
+      "total": {
+       "units": 720,
+       "currencyCode": "BRL"
+      }
+     },
+     "segments": [
+      {
+       "departureAirport": {
+        "code": "GRU"
+       },
+       "arrivalAirport": {
+        "code": "REC"
+       },
+       "departureTime": "2026-10-12T16:05:00",
+       "arrivalTime": "2026-10-12T19:30:00",
+       "totalTime": 12300,
+       "legs": [
+        {
+         "departureAirport": {
+          "code": "GRU"
+         },
+         "arrivalAirport": {
+          "code": "REC"
+         },
+         "departureTime": "2026-10-12T16:05:00",
+         "arrivalTime": "2026-10-12T19:30:00",
+         "carriersData": [
+          {
+           "code": "AD",
+           "name": "Azul"
+          }
+         ],
+         "flightInfo": {
+          "flightNumber": "AD100"
+         }
+        }
+       ]
+      }
+     ],
+     "brandedFareInfo": {
+      "fareName": "Plus",
+      "cabinBaggageExcluded": false,
+      "checkinBaggageExcluded": false,
+      "features": [
+       {
+        "featureName": "PERSONAL_BAGGAGE",
+        "category": "BAGGAGE",
+        "availability": "INCLUDED",
+        "label": "1 personal item"
+       },
+       {
+        "featureName": "CHECKED",
+        "category": "BAGGAGE",
+        "availability": "INCLUDED",
+        "label": "1 checked bag 23kg"
+       }
+      ]
+     },
+     "travellerPrices": [
+      {
+       "travellerType": "ADULT",
+       "travellerPriceBreakdown": {
+        "total": {
+         "units": 720
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "userPrefs": {},
+ "timeConstraint": ""
+}

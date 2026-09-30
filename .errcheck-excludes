@@ -1,0 +1,9 @@
+// Writing to the CLI's own output: a failed terminal write has no recovery.
+fmt.Fprint
+fmt.Fprintf
+fmt.Fprintln
+// Closing files, bodies and rows that were only read. Code that writes a file
+// checks Close explicitly (see Cassette.Save).
+(*os.File).Close
+(io.Closer).Close
+(*database/sql.Rows).Close

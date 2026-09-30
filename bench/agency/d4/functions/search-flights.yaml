@@ -1,0 +1,302 @@
+# Flight search, the traveler's core (RFC-0001, "Casos de referência";
+# RFC-0009, the agency). One Generate call extracts the whole request; what
+# the message leaves out comes from the trip being planned (plugins/trip.yaml),
+# then the profile, then a question. The answer starts with what was
+# assumed, shows both legs of a round trip and the group's total. Choosing
+# airports, scoring and the message are Starlark, the scoring proven
+# against the legacy platform's original (scoring_test.go).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: search-flights
+  namespace: traveler
+spec:
+  description: Searches flights for the trip (one way or round trip, for the whole group) and recommends the best ones.
+  selector:
+    intent: flight-search
+    description: "Uma busca NOVA de passagens: o usuário diz para onde quer ir ou quer viajar (com ou sem datas, mesmo que a data esteja errada ou já tenha passado). Não inclui perguntas sobre voos já mostrados, nem perguntas de informação ou comparação sobre uma viagem, que não pedem que eu procure voos (quanto tempo dura o voo?, costuma ter escala?, qual companhia voa para lá?, qual aeroporto é melhor?), nem o total da viagem com hotel (pacote, cotação completa)."
+  inputs:
+    profile:
+      type: map
+      description: the traveler's saved preferences (plugins/profile.yaml)
+      resolve:
+        - { id: saved, fromAction: profile/get, with: { user: "${ has(caller.userId) ? caller.userId : conversation.id }" } }
+        - { id: none, value: "{}" }
+    trip:
+      type: map
+      description: the trip being planned in this conversation, when it was touched in the last 14 days
+      resolve:
+        - { id: saved, fromAction: trip/get, with: { conversation: "${ conversation.id }" } }
+        - id: fresh
+          when: "sources.saved.output != null && timestamp(sources.saved.output.updated_at) > event.time - duration('336h')"
+          value: "sources.saved.output"
+        - { id: none, value: "{}" }
+    newDates:
+      type: bool
+      description: whether the message gives a new departure day or a new period for the trip
+      resolve:
+        - { id: said, extract: { instructions: "true when the message gives a departure or check-in day, a month, a holiday or another period for the trip (dia 15, em dezembro, no feriado, semana que vem); false when it gives no date, gives only the return or check-out day, or refers to dates already given (nas mesmas datas, nessas datas, no mesmo período)" } }
+        - { id: default, value: "false" }
+    oneWay:
+      type: bool
+      description: whether the user asks for a one-way flight only
+      resolve:
+        - { id: said, extract: { instructions: "true only when the message says one way (só ida, sem volta); false otherwise" } }
+        - { id: default, value: "false" }
+    accepts:
+      type: bool
+      description: whether the message only accepts what the agent just offered (sim, pode ver, pode sim, quero), without naming a destination
+      resolve:
+        - { id: said, extract: { instructions: "true only when the message accepts an offer without naming a destination; false otherwise" } }
+        - { id: default, value: "false" }
+    destination:
+      type: string
+      description: "the city or airport the user wants to fly to, as written, with the airport when the user names one (Londres Heathrow); when the message compares two destinations, the first one named; expand only abbreviations and nicknames (SP → São Paulo, Rio → Rio de Janeiro, BH → Belo Horizonte, POA → Porto Alegre, Floripa → Florianópolis)"
+      resolve:
+        - { id: said, extract: { conversation: true } }
+        - { id: offered, when: "inputs.accepts && has(inputs.trip.other) && inputs.trip.other != null && inputs.trip.other != ''", value: "inputs.trip.other" }
+        - { id: trip, when: "has(inputs.trip.destination) && inputs.trip.destination != null", value: "inputs.trip.destination" }
+        - id: asked
+          ask: { text: "Para onde você quer voar?", minConfidence: 0.7, onLowConfidence: ask-user }
+    otherDestination:
+      type: string
+      description: the second destination, when the user compares two or asks for both (Salvador ou Porto Seguro), its full name
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message names two destinations to compare or asks for both" } }
+        - { id: none, value: "''" }
+    origin:
+      type: string
+      description: "the city or airport the user flies from, as written, with the airport when the user names one (São Paulo Congonhas); expand only abbreviations (SP → São Paulo, sp → São Paulo, BH → Belo Horizonte, POA → Porto Alegre)"
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "null unless the message names where the trip starts" } }
+        - { id: trip, when: "has(inputs.trip.origin) && inputs.trip.origin != null", value: "inputs.trip.origin" }
+        - { id: saved, when: "has(inputs.profile.home_city) && inputs.profile.home_city != null", value: "inputs.profile.home_city" }
+        - { id: home, when: "has(caller.homeCity)", value: "caller.homeCity" }
+        - id: asked
+          ask: { text: "De onde você sai?", minConfidence: 0.7, onLowConfidence: ask-user }
+    departDate:
+      type: date
+      description: the day of the outbound flight
+      resolve:
+        - id: said
+          extract: { conversation: true, future: true, instructions: "the outbound day as YYYY-MM-DD: 'dia 20 de outubro', '15/11' and 'amanhã' each give a day; resolve relative days from STATE.now; a day without a year is its next occurrence; null only when the message gives no day of departure (only a month, or nothing)" }
+        - id: trip
+          when: "!inputs.newDates && has(inputs.trip.depart) && inputs.trip.depart != null && date(inputs.trip.depart, 'America/Sao_Paulo') >= startOfDay(event.time, 'America/Sao_Paulo')"
+          value: "inputs.trip.depart"
+        - id: asked
+          ask: { text: "Qual o dia da ida? E a volta, se for ida e volta.", minConfidence: 0.7, onLowConfidence: ask-user }
+    returnDay:
+      type: int
+      description: "the day of the month of the return, when the message gives only the day, without a month (volta no dia 11: 11)"
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message gives the return as a day of the month without a month" } }
+      onUnresolved:
+        - fallback: { useNull: true }
+    returnDate:
+      type: date
+      description: the day of the return flight, for a round trip
+      resolve:
+        - { id: said, extract: { conversation: true, future: true, instructions: "a stay (uma semana, 10 dias) counts from the departure; null for a one-way trip, when no return is given, or when only a day of the month is given without a month" } }
+        - id: day
+          when: "inputs.returnDay != null && inputs.returnDay >= 1 && inputs.returnDay <= 31"
+          value: "inputs.departDate.substring(0, 8) + (inputs.returnDay < 10 ? '0' : '') + string(inputs.returnDay) > inputs.departDate ? inputs.departDate.substring(0, 8) + (inputs.returnDay < 10 ? '0' : '') + string(inputs.returnDay) : (int(inputs.departDate.substring(5, 7)) == 12 ? string(int(inputs.departDate.substring(0, 4)) + 1) + '-01-' : inputs.departDate.substring(0, 5) + (int(inputs.departDate.substring(5, 7)) < 9 ? '0' : '') + string(int(inputs.departDate.substring(5, 7)) + 1) + '-') + (inputs.returnDay < 10 ? '0' : '') + string(inputs.returnDay)"
+        - id: trip
+          when: "!inputs.oneWay && has(inputs.trip.return_date) && inputs.trip.return_date != null && inputs.trip.return_date > inputs.departDate"
+          value: "inputs.trip.return_date"
+      onUnresolved:
+        - fallback: { useNull: true }
+    childrenAges:
+      type: list<int>
+      description: ages of the children traveling; a baby under 1 year is 0
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "null when the message mentions no child" } }
+        - { id: trip, when: "has(inputs.trip.children) && inputs.trip.children != null", value: "inputs.trip.children" }
+        - { id: default, value: "[]" }
+    partySize:
+      type: int
+      description: "how many people travel in total, when the message counts them (nós 3, somos 4, 2 pessoas, pra dois)"
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "null unless the message gives a number of people" } }
+      onUnresolved:
+        - fallback: { useNull: true }
+    adults:
+      type: int
+      description: "adults traveling, including the user, when the message says who goes (eu e minha esposa: 2; só eu: 1)"
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "count only adults; null unless the message says how many adults or who the adults are" } }
+        - { id: counted, when: "inputs.partySize != null && inputs.partySize - size(inputs.childrenAges) >= 1", value: "inputs.partySize - size(inputs.childrenAges)" }
+        - { id: trip, when: "has(inputs.trip.adults) && inputs.trip.adults != null", value: "inputs.trip.adults" }
+        - { id: default, value: "1" }
+    cabinClass:
+      type: string
+      description: the cabin, one of ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message asks for a cabin" } }
+        - { id: default, value: "'ECONOMY'" }
+    timeConstraint:
+      type: string
+      description: wishes about the flight time, in the user's words (de manhã, chegar até 15h, sem pernoite)
+      resolve:
+        - { id: said, extract: {} }
+        - { id: none, value: "''" }
+    returnTime:
+      type: string
+      description: wishes about the return flight's time, in the user's words (volta de dia, voltar à tarde, volta mais cedo)
+      resolve:
+        - { id: said, extract: { instructions: "only what the message says about the return flight's time; null otherwise" } }
+        - { id: none, value: "''" }
+    cheap:
+      type: bool
+      description: whether the user asks for the cheapest or something cheaper
+      resolve:
+        - { id: said, extract: { instructions: "true when the message asks for cheaper, the cheapest or a low price; false otherwise" } }
+        - { id: default, value: "false" }
+    directOnly:
+      type: bool
+      description: whether the user wants direct flights only
+      resolve:
+        - { id: said, extract: { instructions: "true only when the message asks for direct flights (direto, sem escala)" } }
+        - { id: default, value: "false" }
+  preconditions:
+    - cel: "date(inputs.departDate, 'America/Sao_Paulo') >= startOfDay(event.time, 'America/Sao_Paulo')"
+      message: "Entendi a ida como {{ inputs.departDate.substring(8, 10) + '/' + inputs.departDate.substring(5, 7) + '/' + inputs.departDate.substring(0, 4) }}, que já passou. Para quando é a viagem?"
+    - cel: "inputs.returnDate == null || inputs.returnDate >= inputs.departDate"
+      message: "A volta precisa ser depois da ida."
+  steps:
+    - id: previous
+      act: memo/last-search-to
+      with: { conversation: "${ conversation.id }", destination: "${ inputs.destination }" }
+    - id: fromPlaces
+      act: booking/search-flight-destination
+      with: { query: "${ inputs.origin }" }
+    - id: toPlaces
+      act: booking/search-flight-destination
+      with: { query: "${ inputs.destination }" }
+    - id: route
+      compute:
+        starlark:
+          script: ../scripts/places.star
+          function: route
+          with:
+            from_places: "${ steps.fromPlaces.output }"
+            to_places: "${ steps.toPlaces.output }"
+            home_city: "${ has(inputs.profile.home_city) && inputs.profile.home_city != null ? inputs.profile.home_city : has(caller.homeCity) ? caller.homeCity : '' }"
+      onError:
+        - fallback: { useNull: true }   # not found: the team looks for it (agency-002)
+    - id: notFound
+      when: "steps.route.output == null"
+      escalate:
+        queue: atendimento
+        task: answer
+        message: "Cliente quer voo {{ inputs.origin }} → {{ inputs.destination }}, ida {{ inputs.departDate }}{{ inputs.returnDate != null ? ', volta ' + inputs.returnDate : '' }}, {{ inputs.adults }} adulto(s): a busca não encontrou aeroporto para uma das cidades."
+        whileWaiting: { template: "Não encontrei aeroporto para {{ inputs.origin }} → {{ inputs.destination }} no nosso sistema. Passei para uma agente da equipe ver a melhor forma de chegar; ela te responde por aqui." }
+    - id: currency
+      when: "steps.route.output != null"
+      compute:
+        starlark:
+          script: ../scripts/currency.star
+          function: currency
+          with:
+            home_city: "${ has(inputs.profile.home_city) && inputs.profile.home_city != null ? inputs.profile.home_city : has(caller.homeCity) ? caller.homeCity : '' }"
+            origin: "${ inputs.origin }"
+            round_trip: "${ inputs.returnDate != null }"
+    - id: offers
+      when: "steps.route.output != null"
+      act: booking/search-flights
+      with:
+        fromId: "${ steps.route.output.fromId }"
+        toId: "${ steps.route.output.toId }"
+        departDate: "${ inputs.departDate }"
+        returnDate: "${ inputs.returnDate }"
+        adults: "${ inputs.adults }"
+        children: "${ size(inputs.childrenAges) == 0 ? dyn(null) : dyn(inputs.childrenAges.map(a, string(a)).join(',')) }"
+        cabinClass: "${ inputs.cabinClass }"
+        currency: "${ steps.currency.output }"
+      onError:
+        - respond: { template: "Não consegui buscar voos agora. Quer que eu tente de novo?" }
+    - id: ranked
+      when: "steps.route.output != null"
+      compute:
+        starlark:
+          script: ../scripts/scoring.star
+          function: score_flights
+          with:
+            offers: "${ steps.offers.output }"
+            prefs: "${ inputs.cheap ? {'time_value': dyn('price'), 'avoided_airlines': has(inputs.profile.avoided_airlines) ? inputs.profile.avoided_airlines : null, 'loyalty_program': has(inputs.profile.loyalty_program) ? inputs.profile.loyalty_program : null, 'never_middle_seat': has(inputs.profile.never_middle_seat) ? inputs.profile.never_middle_seat : null} : inputs.profile }"
+            time_text: "${ inputs.timeConstraint }"
+    - id: changes
+      when: "steps.route.output != null"
+      compute:
+        starlark:
+          script: ../scripts/connections.star
+          function: airport_changes
+          with: { offers: "${ steps.offers.output }" }
+    - id: matrix
+      when: "steps.route.output != null"
+      compute:
+        starlark:
+          script: ../scripts/connections.star
+          function: matrix_request
+          with: { detected: "${ steps.changes.output }" }
+    - id: drive
+      when: "steps.route.output != null && (size(steps.matrix.output.cells) > 0)"
+      act: routes/drive-matrix
+      with: { origins: "${ steps.matrix.output.origins }", destinations: "${ steps.matrix.output.destinations }" }
+      onError:
+        - fallback: { useNull: true }  # drive times are then estimated
+    - id: risk
+      when: "steps.route.output != null"
+      compute:
+        starlark:
+          script: ../scripts/connections.star
+          function: risk
+          with: { detected: "${ steps.changes.output }", request: "${ steps.matrix.output }", elements: "${ steps.drive.output }" }
+    - id: safe
+      when: "steps.route.output != null"
+      compute:
+        starlark:
+          script: ../scripts/connections.star
+          function: with_risk
+          with: { ranked: "${ steps.ranked.output }", risk: "${ steps.risk.output }" }
+    - id: view
+      when: "steps.route.output != null"
+      compute:
+        starlark:
+          script: ../scripts/present.star
+          function: flights_view
+          with:
+            ranked: "${ steps.safe.output }"
+            origin: "${ inputs.origin }"
+            destination: "${ inputs.destination }"
+            depart: "${ inputs.departDate }"
+            ret: "${ inputs.returnDate }"
+            adults: "${ inputs.adults }"
+            children: "${ inputs.childrenAges }"
+            direct_only: "${ inputs.directOnly }"
+            reused: "${ has(inputs.trip.depart) && !inputs.newDates && inputs.trip.depart == inputs.departDate }"
+            cheap: "${ inputs.cheap }"
+            previous: "${ steps.previous.output }"
+            other: "${ inputs.otherDestination }"
+            return_time: "${ inputs.returnTime }"
+    - id: remember
+      when: "steps.route.output != null && (size(steps.view.output.shown) > 0)"
+      act: memo/save-search
+      with: { conversation: "${ conversation.id }", results: "${ steps.view.output.shown }", destination: "${ inputs.destination }", at: "${ event.time }" }
+      idempotencyKey: "conversation.id + '/' + inputs.destination + '/' + inputs.departDate + '/' + (inputs.returnDate == null ? '' : inputs.returnDate) + '/' + string(inputs.cheap) + string(inputs.directOnly) + inputs.returnTime + '@' + string(event.time)"
+    - id: keepTrip
+      when: "steps.route.output != null"
+      act: trip/save
+      with:
+        conversation: "${ conversation.id }"
+        destination: "${ inputs.destination }"
+        origin: "${ inputs.origin }"
+        depart: "${ inputs.departDate }"
+        returnDate: "${ inputs.returnDate }"
+        adults: "${ inputs.adults }"
+        children: "${ inputs.childrenAges }"
+        other: "${ inputs.otherDestination != '' ? inputs.otherDestination : has(inputs.trip.other) && inputs.trip.other != inputs.destination ? inputs.trip.other : null }"
+        at: "${ event.time }"
+      idempotencyKey: "'trip/' + conversation.id + '/' + inputs.destination + '/' + inputs.departDate + '/' + (inputs.returnDate == null ? '' : inputs.returnDate) + '/' + string(inputs.cheap) + string(inputs.directOnly) + inputs.returnTime + '@' + string(event.time)"
+  output:
+    template: "{{ steps.route.output == null ? string(steps.notFound.output) : steps.view.output.message }}"
+    value: "steps.route.output == null ? {'topFlights': [], 'summary': {'hasInfants': false, 'currency': 'BRL'}} : steps.safe.output"

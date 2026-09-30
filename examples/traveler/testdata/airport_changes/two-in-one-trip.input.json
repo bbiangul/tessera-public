@@ -1,0 +1,72 @@
+{
+ "rawFlights": {
+  "data": {
+   "flightOffers": [
+    {
+     "segments": [
+      {
+       "legs": [
+        {
+         "arrivalAirport": {
+          "code": "GRU"
+         },
+         "arrivalTime": "2026-10-12T09:15:00",
+         "departureAirport": {
+          "code": "REC"
+         },
+         "departureTime": "2026-10-12T06:00:00"
+        },
+        {
+         "arrivalAirport": {
+          "code": "SDU"
+         },
+         "arrivalTime": "2026-10-12T12:00:00",
+         "departureAirport": {
+          "code": "CGH"
+         },
+         "departureTime": "2026-10-12T11:00:00"
+        },
+        {
+         "arrivalAirport": {
+          "code": "LIS"
+         },
+         "arrivalTime": "2026-10-13T09:00:00",
+         "departureAirport": {
+          "code": "GIG"
+         },
+         "departureTime": "2026-10-12T20:00:00"
+        }
+       ]
+      },
+      {
+       "legs": [
+        {
+         "arrivalAirport": {
+          "code": "GIG"
+         },
+         "arrivalTime": "2026-10-20T17:00:00",
+         "departureAirport": {
+          "code": "LIS"
+         },
+         "departureTime": "2026-10-20T10:00:00"
+        },
+        {
+         "arrivalAirport": {
+          "code": "CGH"
+         },
+         "arrivalTime": "2026-10-20T20:30:00",
+         "departureAirport": {
+          "code": "SDU"
+         },
+         "departureTime": "2026-10-20T19:30:00"
+        }
+       ]
+      }
+     ],
+     "token": "x"
+    }
+   ]
+  },
+  "status": true
+ }
+}

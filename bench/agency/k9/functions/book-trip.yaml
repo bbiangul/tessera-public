@@ -1,0 +1,295 @@
+# The booking, end to end (RFC-0009). The customer picks what was shown,
+# gives each traveler's name and birth date and an e-mail, and confirms
+# the total. The request goes to the agency's system and a person on the
+# emissao queue reserves it, answering the locator and the payment link.
+# The run then waits for the payment (the payment provider's webhook), has
+# the team issue the tickets, and reminds the customer of the check-in two
+# days before the flight. Everything the customer hears about the booking
+# comes from the system or the team, never from a model.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: book-trip
+  namespace: traveler
+spec:
+  description: Books the flight and the stay the customer picks among those shown, through the agency's team, and follows it to the tickets.
+  selector:
+    # Only after something was shown: "quero comprar uma passagem" with
+    # nothing shown is a search (agency-001, routing regression).
+    after: [search-flights, search-hotels, quote-trip, compare-trips, flight-details, flight-extras, book-trip]
+    intent: book
+    description: "O cliente quer reservar, fechar, comprar ou emitir uma passagem, uma hospedagem ou uma cotação que eu já mostrei ('pode reservar', 'quero fechar o da GOL', 'vamos com a opção 2', 'compra essa pra mim'), ou manda os dados dos viajantes para a reserva (nomes completos, datas de nascimento, e-mail). Não é uma busca nova, nem perguntar sobre uma reserva que já existe, nem perguntar se dá para segurar o preço, reservar sem os dados ou como funciona a reserva (isso eu explico)."
+  inputs:
+    trip:
+      type: map
+      description: the trip being planned in this conversation
+      resolve:
+        - { id: saved, fromAction: trip/get, with: { conversation: "${ conversation.id }" } }
+        - { id: found, when: "sources.saved.output != null", value: "sources.saved.output" }
+        - { id: none, value: "{}" }
+    destination:
+      type: string
+      description: "the destination of the trip to book, when the message names it (o pacote de Salvador), its full name"
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "null unless the message names the destination of what to book" } }
+        - { id: trip, when: "has(inputs.trip.destination) && inputs.trip.destination != null", value: "inputs.trip.destination" }
+        - { id: none, value: "''" }
+    flights:
+      type: map
+      description: the last flights shown in this conversation
+      resolve:
+        # The flights shown for the trip's destination: after comparing two
+        # destinations, the booking is for the one the trip is now about.
+        - { id: forTrip, when: "inputs.destination != ''", fromAction: memo/last-search-to, with: { conversation: "${ conversation.id }", destination: "${ inputs.destination }" } }
+        - { id: saved, fromAction: memo/last-search, with: { conversation: "${ conversation.id }" } }
+        - { id: none, value: "{}" }
+    hotels:
+      type: any
+      description: the last stays shown in this conversation
+      resolve:
+        - { id: forTrip, when: "inputs.destination != ''", fromAction: memo/last-shown-to, with: { conversation: "${ conversation.id }", kind: hotels, destination: "${ inputs.destination }" } }
+        - { id: tripFound, when: "inputs.destination != '' && sources.forTrip.output != null", value: "sources.forTrip.output" }
+        - { id: saved, when: "inputs.destination == ''", fromAction: memo/last-shown, with: { conversation: "${ conversation.id }", kind: hotels } }
+        - { id: found, when: "has(sources.saved) && sources.saved.output != null", value: "sources.saved.output" }
+        - { id: none, value: "{}" }
+    quote:
+      type: any
+      description: the last whole-trip quote shown in this conversation
+      resolve:
+        - { id: forTrip, when: "inputs.destination != ''", fromAction: memo/last-shown-to, with: { conversation: "${ conversation.id }", kind: quote, destination: "${ inputs.destination }" } }
+        - { id: tripFound, when: "inputs.destination != '' && sources.forTrip.output != null", value: "sources.forTrip.output" }
+        - { id: saved, when: "inputs.destination == ''", fromAction: memo/last-shown, with: { conversation: "${ conversation.id }", kind: quote } }
+        - { id: found, when: "has(sources.saved) && sources.saved.output != null", value: "sources.saved.output" }
+        - { id: none, value: "{}" }
+    scope:
+      type: string
+      description: "what the user wants to book: flight (only the flight), hotel (only the stay) or both"
+      resolve:
+        - { id: said, extract: { instructions: "flight, hotel or both; null unless the message says which" } }
+        - id: shown
+          value: "has(inputs.flights.results) && has(inputs.hotels.items) ? 'both' : has(inputs.hotels.items) ? 'hotel' : 'flight'"
+    option:
+      type: map
+      description: the quote option the user picks, when the last thing shown was a whole-trip quote
+      resolve:
+        - id: pick
+          when: "has(inputs.quote.items) && (!has(inputs.flights.at) || inputs.quote.at >= inputs.flights.at) && (!has(inputs.hotels.at) || inputs.quote.at >= inputs.hotels.at)"
+          ask:
+            text: "Qual das opções você quer reservar? {{ inputs.quote.items.map(o, o.label).join(' / ') }}"
+            choices: "inputs.quote.items"
+            minConfidence: 0.6
+            onLowConfidence: ask-user
+      onUnresolved:
+        - fallback: { useNull: true }
+    pickedPrice:
+      type: int
+      description: "the price the user names to point to a flight shown (o de 900, o de R$ 1.500: 1500), in whole reais"
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message points to a flight by its price" } }
+      onUnresolved:
+        - fallback: { useNull: true }
+    pickedPosition:
+      type: int
+      description: "the position of the flight the user points to in the list shown (o primeiro: 1, o segundo: 2, a opção 3: 3, o último: -1)"
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message points to a flight by its position or option number" } }
+      onUnresolved:
+        - fallback: { useNull: true }
+    checkedBag:
+      type: bool
+      description: whether the user wants a checked bag added to the flight (com mala, com uma mala despachada)
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "true only when the user asks to add a checked bag; false otherwise" } }
+        - { id: default, value: "false" }
+    flight:
+      type: map
+      description: the flight the user wants to book
+      resolve:
+        - { id: fromQuote, when: "inputs.option != null", value: "inputs.option.flight" }
+        - id: byPrice
+          when: "inputs.option == null && inputs.scope != 'hotel' && has(inputs.flights.results) && inputs.pickedPrice != null && size(inputs.flights.results.filter(f, int(f.price) == inputs.pickedPrice)) == 1"
+          value: "inputs.flights.results.filter(f, int(f.price) == inputs.pickedPrice)[0]"
+        - id: byPosition
+          when: "inputs.option == null && inputs.scope != 'hotel' && has(inputs.flights.results) && inputs.pickedPosition != null && (inputs.pickedPosition == -1 || (inputs.pickedPosition >= 1 && inputs.pickedPosition <= size(inputs.flights.results)))"
+          value: "inputs.pickedPosition == -1 ? inputs.flights.results[size(inputs.flights.results) - 1] : inputs.flights.results[inputs.pickedPosition - 1]"
+        - id: pick
+          when: "inputs.option == null && inputs.scope != 'hotel' && has(inputs.flights.results) && size(inputs.flights.results) > 0"
+          ask:
+            text: "Qual voo você quer reservar? {{ inputs.flights.results.map(f, f.label).join(' / ') }}"
+            choices: "inputs.flights.results"
+            minConfidence: 0.6
+            onLowConfidence: ask-user
+      onUnresolved:
+        - fallback: { useNull: true }
+    hotel:
+      type: map
+      description: the stay the user wants to book
+      resolve:
+        - { id: fromQuote, when: "inputs.option != null", value: "inputs.option.hotel" }
+        - id: pick
+          when: "inputs.option == null && inputs.scope != 'flight' && has(inputs.hotels.items) && size(inputs.hotels.items) > 0"
+          ask:
+            text: "E qual hospedagem? {{ inputs.hotels.items.map(h, h.label).join(' / ') }}"
+            choices: "inputs.hotels.items"
+            minConfidence: 0.6
+            onLowConfidence: ask-user
+      onUnresolved:
+        - fallback: { useNull: true }
+    extrasOffer:
+      type: any
+      description: what can be added to the chosen flight (checked bag, flexible ticket), read once so the free mode can answer about it while the booking is confirmed (freeMode.runReads)
+      resolve:
+        - { id: offer, when: "inputs.flight != null", fromAction: booking/seat-map, with: { offerToken: "${ inputs.flight.token }", currency: "${ has(inputs.flight.currency) ? inputs.flight.currency : 'BRL' }" } }
+        - { id: found, when: "has(sources.offer) && sources.offer.output != null", value: "sources.offer.output" }
+        - { id: none, value: "{}" }
+    travelers:
+      type: int
+      description: how many people travel, from the trip being planned
+      resolve:
+        - { id: trip, when: "has(inputs.trip.adults) && inputs.trip.adults != null", value: "inputs.trip.adults + (has(inputs.trip.children) && inputs.trip.children != null ? size(inputs.trip.children) : 0)" }
+        - { id: default, value: "1" }
+    passengersGiven:
+      type: list<map>
+      description: "each traveler the user names, as {name: full name, birthDate: YYYY-MM-DD}"
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "one entry per traveler with a full name and a birth date written in the message; null when the message names nobody" } }
+        - id: asked
+          ask: { text: "Para reservar, preciso {{ inputs.travelers == 1 ? 'do nome completo e da data de nascimento de quem vai viajar' : 'do nome completo e da data de nascimento dos ' + string(inputs.travelers) + ' viajantes' }}, como no documento.", minConfidence: 0.7, onLowConfidence: ask-user }
+      onUnresolved:
+        - respond: { template: "Sem problema! Quando tiver {{ inputs.travelers == 1 ? 'o nome completo e a data de nascimento de quem vai viajar' : 'o nome completo e a data de nascimento de cada viajante' }} à mão, é só me mandar aqui que eu sigo com a reserva. As opções ficam salvas, mas o preço só fica garantido na reserva." }
+    passengers:
+      type: list<map>
+      description: "every traveler as {name: full name, birthDate: YYYY-MM-DD}: those in STATE.known.passengersGiven plus those in the reply"
+      resolve:
+        - id: complete
+          when: "size(inputs.passengersGiven.filter(p, has(p.name) && has(p.birthDate) && p.name != null && p.birthDate != null)) >= inputs.travelers"
+          value: "inputs.passengersGiven"
+        - id: asked
+          ask: { text: "Anotei {{ inputs.passengersGiven.map(p, has(p.name) ? p.name : '?').join(', ') }}. Falta{{ inputs.travelers - size(inputs.passengersGiven) > 1 ? 'm' : '' }} o nome completo e a data de nascimento de {{ inputs.travelers - size(inputs.passengersGiven) > 1 ? string(inputs.travelers - size(inputs.passengersGiven)) + ' viajantes' : 'mais um viajante' }}.", minConfidence: 0.7, onLowConfidence: ask-user }
+      onUnresolved:
+        - respond: { template: "Sem problema! Quando tiver {{ inputs.travelers == 1 ? 'o nome completo e a data de nascimento de quem vai viajar' : 'o nome completo e a data de nascimento de cada viajante' }} à mão, é só me mandar aqui que eu sigo com a reserva. As opções ficam salvas, mas o preço só fica garantido na reserva." }
+    email:
+      type: string
+      format: email   # read from the customer's words by code; no model sees it
+      description: the e-mail where the customer receives the booking and the payment link
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "an e-mail address written in the message; null otherwise" } }
+        - id: asked
+          ask: { text: "Qual e-mail para receber a reserva e o link de pagamento?", minConfidence: 0.7, onLowConfidence: ask-user }
+      onUnresolved:
+        - respond: { template: "Sem problema! Quando quiser seguir, me mande o e-mail para a reserva e eu continuo daqui." }
+  preconditions:
+    - cel: "inputs.flight != null || inputs.hotel != null"
+      message: "Ainda não te mostrei opções para reservar nesta conversa. Quer que eu busque voos, hospedagem ou a viagem completa?"
+  steps:
+    - id: bags
+      compute:
+        starlark:
+          script: ../scripts/extras.star
+          function: bag_for
+          with:
+            data: "${ inputs.checkedBag && inputs.flight != null && !inputs.flight.baggage.contains('mala despachada inclusa') ? inputs.extrasOffer : null }"
+            wanted: "${ inputs.checkedBag && inputs.flight != null && !inputs.flight.baggage.contains('mala despachada inclusa') }"
+            travelers: "${ size(inputs.passengers) }"
+    - id: bagHint
+      compute:
+        starlark:
+          script: ../scripts/extras.star
+          function: bag_offer
+          with:
+            data: "${ inputs.flight != null && !inputs.checkedBag && !inputs.flight.baggage.contains('mala despachada inclusa') ? inputs.extrasOffer : null }"
+            travelers: "${ size(inputs.passengers) }"
+    - id: summary
+      compute:
+        starlark:
+          script: ../scripts/present.star
+          function: booking_summary
+          with:
+            flight: "${ inputs.flight }"
+            hotel: "${ inputs.hotel }"
+            adults: "${ has(inputs.trip.adults) ? inputs.trip.adults : 1 }"
+            children: "${ has(inputs.trip.children) && inputs.trip.children != null ? inputs.trip.children : [] }"
+            passengers: "${ inputs.passengers }"
+            bags: "${ steps.bags.output }"
+    - id: request
+      act: agency/request-booking
+      with:
+        key: "${ conversation.id + '/booking@' + string(event.time) }"
+        customer: "${ has(caller.userId) ? caller.userId : conversation.id }"
+        conversation: "${ conversation.id }"
+        summary: "${ steps.summary.output.text }"
+        flight: "${ inputs.flight }"
+        hotel: "${ inputs.hotel }"
+        passengers: "${ inputs.passengers }"
+        email: "${ inputs.email }"
+        total: "${ int(steps.summary.output.total) }"
+        departDate: "${ steps.summary.output.departDate }"
+        extras: "${ steps.bags.output }"
+      confirm: "Posso pedir a reserva?\n{{ inputs.flight != null ? '✈️ ' + inputs.flight.summary + '\\n' : '' }}{{ steps.bags.output.line != '' ? steps.bags.output.line + '\\n' : steps.bagHint.output != '' ? steps.bagHint.output + '\\n' : '' }}{{ inputs.hotel != null ? '🏨 ' + inputs.hotel.summary + '\\n' : '' }}Viajantes: {{ inputs.passengers.map(p, has(p.name) ? p.name : '?').join(', ') }}\nE-mail: {{ inputs.email }}\nTotal: {{ steps.summary.output.totalText }}\nA equipe confirma a disponibilidade e te manda o localizador e o link de pagamento por aqui. Responda sim para confirmar."
+      idempotencyKey: "conversation.id + '/booking@' + string(event.time)"
+      milestone: { name: pediu-reserva, subject: viajante }
+      onError:
+        - probe: {}
+        - escalate:
+            queue: atendimento
+            task: input
+            message: "Não consegui registrar um pedido de reserva no sistema (conversa {{ conversation.id }}). Verifique e registre."
+            whileWaiting: { template: "Tive um problema para registrar o pedido. Já pedi para a equipe conferir e te respondo por aqui." }
+    - id: reserve
+      escalate:
+        queue: emissao
+        task: input
+        message: "Reservar o pedido {{ steps.request.output.id }} (total R$ {{ steps.summary.output.total }}): os dados estão no sistema. Responda {reserved: true, locator, payment, note} ou {reserved: false, note}."
+        whileWaiting: { template: "Pedido registrado ✅ (nº {{ steps.request.output.id }}). A equipe está confirmando a disponibilidade e te manda o localizador e o link de pagamento por aqui." }
+    - id: refused
+      when: "!(has(steps.reserve.output.reserved) && steps.reserve.output.reserved == true)"
+      respond: { template: "A equipe não conseguiu reservar: {{ has(steps.reserve.output.note) ? steps.reserve.output.note : 'as opções não estão mais disponíveis' }}. Quer que eu busque outras opções?" }
+    - id: reserved
+      when: "has(steps.reserve.output.reserved) && steps.reserve.output.reserved == true"
+      act: agency/update-booking
+      with:
+        id: "${ steps.request.output.id }"
+        status: reserved
+        locator: "${ steps.reserve.output.locator }"
+        payment: "${ steps.reserve.output.payment }"
+        eticket: null
+        note: "${ has(steps.reserve.output.note) ? steps.reserve.output.note : null }"
+      milestone: { name: reservou, subject: viajante }
+    - id: payLink
+      when: "has(steps.reserve.output.reserved) && steps.reserve.output.reserved == true"
+      respond:
+        template: "Reservado ✅ Localizador {{ steps.reserve.output.locator }}.\nPara garantir, pague pelo link: {{ steps.reserve.output.payment }}{{ has(steps.reserve.output.note) ? '\\n' + steps.reserve.output.note : '' }}\nAssim que o pagamento for aprovado a equipe emite e eu te aviso por aqui."
+    - id: paid
+      when: "has(steps.reserve.output.reserved) && steps.reserve.output.reserved == true"
+      wait: { for: 24h, events: [ { name: pagamento-aprovado, key: "steps.request.output.id" } ] }
+    - id: expired
+      when: "has(steps.reserve.output.reserved) && steps.reserve.output.reserved == true && steps.paid.output.timedOut"
+      respond: { template: "O prazo para pagar a reserva {{ steps.reserve.output.locator }} venceu e ela pode ter sido liberada. Se ainda quiser viajar, me avise que eu peço para a equipe verificar." }
+    - id: issue
+      when: "has(steps.reserve.output.reserved) && steps.reserve.output.reserved == true && !steps.paid.output.timedOut"
+      escalate:
+        queue: emissao
+        task: input
+        message: "Pagamento aprovado do pedido {{ steps.request.output.id }} (localizador {{ steps.reserve.output.locator }}). Emita e responda {issued: true, eticket}."
+        whileWaiting: { template: "Pagamento aprovado ✅ A equipe está emitindo e eu te mando a confirmação por aqui." }
+      milestone: { name: pagou, subject: viajante }
+    - id: issued
+      when: "has(steps.reserve.output.reserved) && steps.reserve.output.reserved == true && !steps.paid.output.timedOut && has(steps.issue.output.issued) && steps.issue.output.issued == true"
+      act: agency/update-booking
+      with:
+        id: "${ steps.request.output.id }"
+        status: issued
+        locator: "${ steps.reserve.output.locator }"
+        payment: "${ steps.reserve.output.payment }"
+        eticket: "${ has(steps.issue.output.eticket) ? steps.issue.output.eticket : null }"
+        note: null
+      milestone: { name: emitiu, subject: viajante }
+    - id: tickets
+      when: "has(steps.reserve.output.reserved) && steps.reserve.output.reserved == true && !steps.paid.output.timedOut && has(steps.issue.output.issued) && steps.issue.output.issued == true"
+      respond: { template: "Emitido ✈️ Localizador {{ steps.reserve.output.locator }}{{ has(steps.issue.output.eticket) ? ', e-ticket ' + steps.issue.output.eticket : '' }}. Os bilhetes também vão para o seu e-mail. Dois dias antes do voo eu te lembro do check-in." }
+    - id: checkin
+      when: "inputs.flight != null && has(steps.issue.output.issued) && steps.issue.output.issued == true && !steps.paid.output.timedOut"
+      wait: { until: "timestamp(inputs.flight.departTime + '-03:00') - duration('48h')" }
+    - id: reminder
+      when: "inputs.flight != null && has(steps.issue.output.issued) && steps.issue.output.issued == true && !steps.paid.output.timedOut"
+      respond: { template: "Lembrete da sua viagem: o voo {{ inputs.flight.summary }} é daqui a dois dias. O check-in online abre no site ou no app da companhia; leve um documento oficial com foto. Boa viagem! ✈️" }

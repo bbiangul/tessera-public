@@ -1,0 +1,80 @@
+{
+  "apiVersion": "agents.tessera.dev/v1alpha1",
+  "kind": "Function",
+  "metadata": {
+    "name": "parse-request",
+    "namespace": "clinica-bench"
+  },
+  "spec": {
+    "inputs": {
+      "message": {
+        "type": "string",
+        "resolve": [
+          {
+            "id": "initial",
+            "value": "event.message"
+          }
+        ]
+      }
+    },
+    "steps": [
+      {
+        "id": "week",
+        "call": "weekday-preferences",
+        "with": {
+          "message": "${ inputs.message }"
+        }
+      },
+      {
+        "id": "dates",
+        "extract": {
+          "instructions": "Objeto com fromDate (YYYY-MM-DD inicial inclusivo), endDate (YYYY-MM-DD final inclusivo), period (morning, afternoon, evening ou any), clockTime (HH:mm ou null). Use STATE.now e America/Sao_Paulo para datas relativas. Para data exata, fromDate e endDate iguais. Para próxima semana, segunda a domingo da próxima semana. Para intervalo explícito, preserve os dois limites. Para próximas vagas sem intervalo, hoje até seis dias depois. Extraia hora apenas do NOVO horário desejado; às 14h = 14:00. Manhã = morning, tarde = afternoon, noite = evening. Nunca use horário atual como novo. Se não informar data, fromDate/endDate null; preserve período e hora informados. Nunca invente vaga. period representa somente uma preferência de período explicitamente solicitada, nunca uma classificação inferida do horário numérico. Se o usuário informar apenas uma hora exata, use period=any e preserve clockTime. Não converta nomes de dias da semana em datas. Sem data de calendário ou intervalo explícito, fromDate e endDate são null. Outubro de 2026 significa 2026-10-01 a 2026-10-31. As mensagens estão em ordem; uma nova data substitui a anterior.",
+          "state": {
+            "message": "${ inputs.message }",
+            "now": "${ event.time }"
+          },
+          "schema": {
+            "type": "object",
+            "properties": {
+              "fromDate": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "endDate": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "period": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "clockTime": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "fromDate",
+              "endDate",
+              "period",
+              "clockTime"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    ],
+    "output": {
+      "value": "{'fromDate': steps.dates.output.fromDate, 'endDate': steps.dates.output.endDate, 'period': steps.dates.output.period, 'clockTime': steps.dates.output.clockTime, 'week': steps.week.output}"
+    },
+    "description": "Resolução de preferências de remarcação preservando texto real e restrições."
+  }
+}

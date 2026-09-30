@@ -1,0 +1,310 @@
+{
+ "now": "2026-09-28T10:00:00-03:00",
+ "note": "agency-005. Written 2026-09-28 before the three agent-mode fixes are built. 'test' (16) is sealed. At most two dev tuning rounds.",
+ "dev": [
+  {
+   "id": "k01-pix",
+   "caller": {
+    "userId": "k01"
+   },
+   "goal": "Ver o voo mais barato de São Paulo para Florianópolis, ida 12/12 e volta 16/12, só você, e saber se dá para pagar com Pix e por quanto tempo vale o link.",
+   "style": "Direto, frases curtas.",
+   "knows": {}
+  },
+  {
+   "id": "k02-noite-a-menos",
+   "caller": {
+    "userId": "k02"
+   },
+   "goal": "Cotar voo e hotel para Porto Seguro para o casal, saindo de São Paulo, 3 a 8 de dezembro; depois ver a mesma viagem voltando dia 6.",
+   "style": "Animada, usa emojis.",
+   "knows": {}
+  },
+  {
+   "id": "k03-dados-depois",
+   "caller": {
+    "userId": "k03"
+   },
+   "goal": "Reservar o voo mais barato de São Paulo para Recife, ida 20/11 e volta 25/11, para você e seu irmão. Você não tem o nome completo nem a data de nascimento do irmão agora: diga que manda depois e pergunte se o preço fica garantido até lá.",
+   "style": "Educado.",
+   "knows": {
+    "seu nome": "Marcos Vinícius Almeida",
+    "sua data de nascimento": "14/03/1990",
+    "e-mail": "marcos.almeida@example.com"
+   }
+  },
+  {
+   "id": "k04-cachorro",
+   "caller": {
+    "userId": "k04"
+   },
+   "goal": "Levar seu cachorro pequeno (6 kg) na cabine na viagem para Salvador que você já comprou na agência; saber o preço e pedir para incluir.",
+   "style": "Carinhosa com o cachorro.",
+   "knows": {
+    "reserva": "viagem para Salvador comprada na agência"
+   },
+   "humans": [
+    "Dá sim: cachorro de até 10 kg vai na cabine, R$ 250 por trecho. Posso incluir nos dois trechos?",
+    "Incluído nos dois trechos. O comprovante vai por e-mail."
+   ]
+  },
+  {
+   "id": "k05-bebe",
+   "caller": {
+    "userId": "k05"
+   },
+   "goal": "Viajar com a bebê de 1 ano de São Paulo para Maceió, 10 a 15 de janeiro, você e seu marido: saber quanto a bebê paga no voo e ver o total com hotel.",
+   "style": "Prática.",
+   "knows": {
+    "idade da bebê": "1 ano"
+   }
+  },
+  {
+   "id": "k06-chuva",
+   "caller": {
+    "userId": "k06"
+   },
+   "goal": "Comparar Natal e Fortaleza de 10 a 14 de novembro para 2 pessoas, saindo de São Paulo, e saber qual costuma ter menos chuva nessa época.",
+   "style": "Curiosa, faz várias perguntas.",
+   "knows": {}
+  },
+  {
+   "id": "k07-emitida",
+   "caller": {
+    "userId": "k07"
+   },
+   "goal": "Saber se a viagem para Porto Alegre já foi emitida e qual é o localizador.",
+   "style": "Apressado.",
+   "knows": {
+    "reserva": "viagem para Porto Alegre comprada na agência"
+   }
+  },
+  {
+   "id": "k08-lisboa-centro",
+   "caller": {
+    "userId": "k08"
+   },
+   "goal": "Hotel em Lisboa perto do centro histórico, de 5 a 8 de março, para o casal, e saber que documentos precisam para entrar em Portugal.",
+   "style": "Formal.",
+   "knows": {}
+  },
+  {
+   "id": "k09-muda-origem",
+   "caller": {
+    "userId": "k09"
+   },
+   "goal": "Cotar voo e hotel para Florianópolis, 15 a 18 de janeiro, 2 adultos, saindo de São Paulo; depois pedir a mesma cotação saindo de Belo Horizonte, porque decidiu sair de lá.",
+   "style": "Informal.",
+   "knows": {}
+  },
+  {
+   "id": "k10-cancelar",
+   "caller": {
+    "userId": "k10"
+   },
+   "goal": "Cancelar a viagem para Natal que você comprou na agência e saber quanto recebe de volta; confirmar o cancelamento.",
+   "style": "Chateado, mas educado.",
+   "knows": {
+    "reserva": "viagem para Natal comprada na agência"
+   },
+   "humans": [
+    "O cancelamento tem multa da companhia de R$ 300; o restante, R$ 2.100, volta em até 7 dias úteis. Confirma o cancelamento?",
+    "Cancelado. O reembolso de R$ 2.100 sai em até 7 dias úteis no mesmo cartão."
+   ]
+  },
+  {
+   "id": "k11-vacina",
+   "caller": {
+    "userId": "k11"
+   },
+   "goal": "Saber se precisa de vacina de febre amarela para ir a Salvador e depois ver voo de Porto Alegre para Salvador, ida 2/12, volta 7/12, só você.",
+   "style": "Cauteloso.",
+   "knows": {}
+  },
+  {
+   "id": "k12-mais-barato-dezembro",
+   "caller": {
+    "userId": "k12"
+   },
+   "goal": "Achar o voo mais barato do Rio de Janeiro para Recife em dezembro; você é flexível e aceita a data que o agente sugerir ou escolher uma data que ele pedir.",
+   "style": "Econômico, sem pressa.",
+   "knows": {}
+  }
+ ],
+ "test": [
+  {
+   "id": "m01-parcela-mala",
+   "caller": {
+    "userId": "m01"
+   },
+   "goal": "Ver o voo mais barato de Belo Horizonte para Salvador, ida 3/12 e volta 8/12, só você, e saber em quantas vezes dá para parcelar e se a mala está inclusa.",
+   "style": "Objetiva.",
+   "knows": {}
+  },
+  {
+   "id": "m02-noite-a-mais",
+   "caller": {
+    "userId": "m02"
+   },
+   "goal": "Cotar voo e hotel para Fortaleza para o casal, saindo de São Paulo, 10 a 14 de janeiro; depois ver a mesma viagem com uma noite a mais.",
+   "style": "Animado.",
+   "knows": {}
+  },
+  {
+   "id": "m03-segurar-preco",
+   "caller": {
+    "userId": "m03"
+   },
+   "goal": "Reservar o pacote mais barato para Maceió, saindo de São Paulo, 5 a 9 de dezembro, para você e sua esposa. Você não tem os dados da esposa agora: diga que manda amanhã e pergunte se consegue segurar o preço.",
+   "style": "Educado.",
+   "knows": {
+    "seu nome": "Paulo Henrique Souza",
+    "sua data de nascimento": "02/07/1985",
+    "e-mail": "paulo.souza@example.com"
+   }
+  },
+  {
+   "id": "m04-gato",
+   "caller": {
+    "userId": "m04"
+   },
+   "goal": "Levar seu gato na cabine na viagem para Recife que você já comprou na agência; saber o preço e pedir para incluir.",
+   "style": "Tranquila.",
+   "knows": {
+    "reserva": "viagem para Recife comprada na agência",
+    "peso do gato": "4 kg"
+   },
+   "humans": [
+    "Pode sim: gato de até 10 kg na cabine, R$ 250 por trecho. Incluo nos dois trechos?",
+    "Incluído. O comprovante vai por e-mail."
+   ]
+  },
+  {
+   "id": "m05-bebe-colo",
+   "caller": {
+    "userId": "m05"
+   },
+   "goal": "Viajar com o bebê de 8 meses de São Paulo para Natal, 15 a 20 de dezembro, você e sua esposa: saber quanto o bebê paga, se o carrinho vai de graça e ver os voos.",
+   "style": "Detalhista.",
+   "knows": {
+    "idade do bebê": "8 meses"
+   }
+  },
+  {
+   "id": "m06-feriado",
+   "caller": {
+    "userId": "m06"
+   },
+   "goal": "Comparar Salvador e Recife de 14 a 17 de novembro para uma pessoa, saindo de São Paulo, voo e hotel, e saber qual sai mais barato no total.",
+   "style": "Direta.",
+   "knows": {}
+  },
+  {
+   "id": "m07-horario",
+   "caller": {
+    "userId": "m07"
+   },
+   "goal": "Saber se a viagem para Florianópolis já foi emitida e a que horas é o voo de ida.",
+   "style": "Rápida.",
+   "knows": {
+    "reserva": "viagem para Florianópolis comprada na agência"
+   }
+  },
+  {
+   "id": "m08-lisboa-seguro",
+   "caller": {
+    "userId": "m08"
+   },
+   "goal": "Planejar ida a Lisboa saindo de São Paulo, 10 a 20 de abril, só você: ver voos e saber se o seguro viagem é obrigatório e quais documentos precisa.",
+   "style": "Organizado.",
+   "knows": {}
+  },
+  {
+   "id": "m09-troca-origem",
+   "caller": {
+    "userId": "m09"
+   },
+   "goal": "Cotar voo e hotel para o Rio de Janeiro, 12 a 15 de dezembro, 2 adultos, saindo de São Paulo; depois pedir a mesma saindo de Curitiba.",
+   "style": "Informal.",
+   "knows": {}
+  },
+  {
+   "id": "m10-remarcar-volta",
+   "caller": {
+    "userId": "m10"
+   },
+   "goal": "Remarcar a volta da viagem para Salvador que você comprou na agência para dois dias depois, saber a taxa e confirmar.",
+   "style": "Educado.",
+   "knows": {
+    "reserva": "viagem para Salvador comprada na agência"
+   },
+   "humans": [
+    "A volta dois dias depois custa R$ 180 de diferença de tarifa, sem taxa da agência. Confirma?",
+    "Feito: volta remarcada. O bilhete novo vai por e-mail."
+   ]
+  },
+  {
+   "id": "m11-natal-o-que-fazer",
+   "caller": {
+    "userId": "m11"
+   },
+   "goal": "Saber o que fazer em Natal e como é o clima em novembro; depois ver hotel em Ponta Negra de 20 a 24 de novembro para o casal.",
+   "style": "Empolgada.",
+   "knows": {}
+  },
+  {
+   "id": "m12-cupom",
+   "caller": {
+    "userId": "m12"
+   },
+   "goal": "Perguntar se a agência tem cupom de desconto e depois cotar voo e hotel para Porto Seguro saindo de Belo Horizonte, 7 a 11 de janeiro, para 2.",
+   "style": "Caçador de promoções.",
+   "knows": {}
+  },
+  {
+   "id": "m13-filha-15",
+   "caller": {
+    "userId": "m13"
+   },
+   "goal": "Saber o que precisa para a filha de 15 anos voar sozinha de Recife para São Paulo em voo nacional, e ver o voo de 18 de dezembro, só ida, para ela.",
+   "style": "Preocupada.",
+   "knows": {}
+  },
+  {
+   "id": "m14-paguei-ontem",
+   "caller": {
+    "userId": "m14"
+   },
+   "goal": "Avisar que pagou ontem a reserva para Fortaleza e saber quando sai a emissão.",
+   "style": "Ansioso.",
+   "knows": {
+    "reserva": "viagem para Fortaleza reservada na agência"
+   },
+   "humans": [
+    "Recebemos o pagamento da reserva FOR7K3. A emissão sai hoje até as 18h e o bilhete vai por e-mail."
+   ]
+  },
+  {
+   "id": "m15-perto-aeroporto",
+   "caller": {
+    "userId": "m15"
+   },
+   "goal": "Hotel barato no Rio de Janeiro de 3 a 5 de fevereiro, só você, e saber quanto tempo leva do aeroporto Santos Dumont até o centro.",
+   "style": "Executivo, sem tempo.",
+   "knows": {}
+  },
+  {
+   "id": "m16-mala-depois",
+   "caller": {
+    "userId": "m16"
+   },
+   "goal": "Reservar o voo mais barato de São Paulo para Porto Alegre, só ida em 22/11, só você; primeiro sem mala e, antes de confirmar, mudar de ideia e pedir com mala.",
+   "style": "Indeciso.",
+   "knows": {
+    "seu nome": "Rafael Costa Lima",
+    "sua data de nascimento": "30/01/1992",
+    "e-mail": "rafael.lima@example.com"
+   }
+  }
+ ]
+}

@@ -1,0 +1,107 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: test, namespace: kb }
+spec:
+  description: knowledge-003; transcripts only, judged outside.
+  now: "2026-09-28T09:00:00-03:00"
+  scenarios:
+    - id: t-t1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "minha filha tem 16 anos certinho, pode clarear?"
+    - id: t-t2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "clareamento em quem tem aparelho fixo pode?"
+    - id: t-t3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs abrem no carnaval?"
+    - id: t-t4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "abre dia 31 de dezembro?"
+    - id: t-t5
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "depois da extração posso ir pra academia?"
+    - id: t-t6
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso tomar café quente no dia seguinte da extração?"
+    - id: t-t7
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o estacionamento aceita moto?"
+    - id: t-t8
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a terceira hora do estacionamento sai quanto?"
+    - id: t-t9
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "aceitam o Amil Dental 300?"
+    - id: t-t10
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o plano Bradesco Dental Top Plus é aceito?"
+    - id: t-t11
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "se eu faltar por causa de enchente tenho que pagar a taxa?"
+    - id: t-t12
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a restauração de porcelana custa quanto?"
+    - id: t-t13
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "clareamento caseiro gestante pode?"
+    - id: t-t14
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso parcelar no débito?"
+    - id: t-d1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "menor de 16 pode clarear?"
+    - id: t-d2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "abrem sábado de manhã?"
+    - id: t-d3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto tempo sem fumar depois da extração?"
+    - id: t-d4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o estacionamento conveniado cobra quanto nas duas primeiras horas?"
+    - id: t-d5
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "aceitam o Amil Dental Básico 100?"
+    - id: t-d6
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "parcelam em quantas vezes no cartão de crédito?"

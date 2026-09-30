@@ -1,0 +1,63 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata: { name: clinica, namespace: learn }
+spec:
+  description: Recepção da Clínica Sorriso Vila.
+  messages:
+    notUnderstood: "Desculpe, não entendi. Pode falar com a recepção pelo (11) 3000-0000."
+  humanInTheLoop: { queue: recepcao }
+  audiences:
+    - name: equipe
+      who: "has(caller.roles) && size(caller.roles) > 0"
+      functions: []
+      freeMode: { instructions: "Ajude a equipe da recepção.", self: false }
+    - name: paciente
+      functions: [enviar-exame]
+      freeMode:
+        instructions: "Tire dúvidas dos pacientes sobre a clínica."
+        self: false
+        knowledge: { bases: [publico, licoes], relevance: false }
+        functions:
+          - function: perguntar-recepcao
+            when: "a dúvida não é respondida por FACTS.documents, ou é sobre o próprio caso do paciente (a consulta, o exame, o orçamento ou o pagamento dele): uma pessoa da recepção precisa responder"
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: KnowledgeBase
+metadata: { name: publico, namespace: learn }
+spec:
+  description: Políticas, preços e FAQ da clínica.
+  sources: [ { files: ["../../knowledge/docs/convenios.md", "../../knowledge/docs/precos-particular.md", "../../knowledge/docs/pagamento.md", "../../knowledge/docs/cancelamento.md", "../../knowledge/docs/localizacao.md", "../../knowledge/docs/pos-extracao.md", "../../knowledge/docs/clareamento.md"] } ]
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: KnowledgeBase
+metadata: { name: licoes, namespace: learn }
+spec:
+  description: Lições aprendidas com as respostas da recepção (tessera learn).
+  sources: [ { files: ["licoes.md"] } ]
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: perguntar-recepcao, namespace: learn }
+spec:
+  description: Asks the reception a question the agent cannot answer, and relays the answer.
+  steps:
+    - id: resposta
+      escalate:
+        queue: recepcao
+        task: answer
+        message: "Paciente pergunta: {{ event.message }}"
+        whileWaiting: { template: "Vou perguntar para a recepção e já te respondo por aqui." }
+  output: { template: "{{ steps.resposta.output }}" }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: enviar-exame, namespace: learn }
+spec:
+  description: A patient sends an exam file to the clinic.
+  selector: { intent: enviar-exame, description: "O paciente quer mandar um arquivo de exame (raio-x, tomografia) para a clínica." }
+  output: { template: "Pode mandar o arquivo por aqui que a recepção anexa ao seu prontuário." }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: HumanQueue
+metadata: { name: recepcao, namespace: learn }
+spec: { description: A recepção. }   # no roles: the EvalSuite's human turn answers

@@ -1,0 +1,22 @@
+{
+ "about": "learn-001 phase 1: patients ask what the documents do not say; the free mode hands off to the reception, which answers. Written 2026-09-27 before building. topic: general topics (G*), a conflicting one (C1), personal cases (P*), a single occurrence (S1).",
+ "scenarios": [
+  {"id": "g1a", "topic": "G1", "message": "vcs atendem criança pequena?", "human": "Oi Ana! Atendemos sim: a Dra. Paula faz odontopediatria para crianças a partir de 3 anos, às terças e quintas."},
+  {"id": "g1b", "topic": "G1", "message": "meu filho tem 4 anos, pode consultar ai?", "human": "Pode sim, Marcos. Crianças a partir de 3 anos são atendidas pela Dra. Paula (odontopediatria), terças e quintas."},
+  {"id": "g2a", "topic": "G2", "message": "fazem implante com carga imediata?", "human": "Fazemos sim, com o Dr. Bruno. Antes precisa de avaliação e tomografia."},
+  {"id": "g2b", "topic": "G2", "message": "da pra colocar o implante e já sair com o dente no mesmo dia?", "human": "Dá sim, Joana, é a carga imediata, feita pelo Dr. Bruno. Precisa de avaliação e tomografia antes."},
+  {"id": "g3a", "topic": "G3", "message": "quanto custa o invisalign?", "human": "O Invisalign começa em R$ 9.800, depende do caso; a avaliação define o valor."},
+  {"id": "g3b", "topic": "G3", "message": "qual o preço do aparelho transparente?", "human": "Oi Pedro, o alinhador transparente (Invisalign) sai a partir de R$ 9.800, o valor exato sai na avaliação."},
+  {"id": "g4a", "topic": "G4", "message": "sou cadeirante, consigo chegar na sala de vcs?", "human": "Consegue sim, Luiza: o prédio tem rampa na entrada e elevador, e a sala 12 é acessível."},
+  {"id": "g4b", "topic": "G4", "message": "o prédio tem elevador? minha mãe não sobe escada", "human": "Tem elevador e rampa na entrada, a sala 12 é acessível para cadeira de rodas."},
+  {"id": "g5a", "topic": "G5", "message": "tenho pavor de dentista, vcs fazem sedação?", "human": "Fazemos sedação consciente com óxido nitroso, Carla. Tem custo adicional de R$ 250 por sessão."},
+  {"id": "g5b", "topic": "G5", "message": "tem aquele gás pra relaxar durante o tratamento?", "human": "Temos sim, é a sedação consciente com óxido nitroso; custa R$ 250 a mais por sessão."},
+  {"id": "c1a", "topic": "C1", "message": "tem wifi na sala de espera?", "human": "Temos sim, a senha fica na recepção."},
+  {"id": "c1b", "topic": "C1", "message": "da pra usar internet ai enquanto espero?", "human": "Não temos wi-fi para pacientes, desculpe."},
+  {"id": "p1", "topic": "P1", "message": "minha consulta de amanhã tá confirmada?", "human": "Oi Ana, está sim: amanhã às 14h com a Dra. Paula."},
+  {"id": "p2", "topic": "P2", "message": "o resultado do meu raio-x já chegou?", "human": "Chegou sim, Carlos, pode retirar na recepção a partir de hoje."},
+  {"id": "p3", "topic": "P3", "message": "quanto ficou meu orçamento?", "human": "Seu orçamento ficou R$ 3.200, Bia, em até 4x no cartão."},
+  {"id": "p4", "topic": "P4", "message": "posso pagar a parcela de outubro semana que vem?", "human": "Pode sim, Rafael, sem juros, até o dia 15."},
+  {"id": "s1", "topic": "S1", "message": "vcs tem desfibrilador na clinica?", "human": "Temos sim, um DEA na recepção."}
+ ]
+}

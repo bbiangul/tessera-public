@@ -1,0 +1,17 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: after, namespace: learn }
+spec:
+  description: learn-001 after; transcripts only, judged outside.
+  now: "2026-09-27T09:00:00-03:00"
+  scenarios:
+    - id: a1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "atendem criança de 1 ano?"
+    - id: a2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem sedação consciente?"

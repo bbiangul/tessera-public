@@ -1,0 +1,128 @@
+# The cadence: a template (A/B), then wait 48h for the lead's reply. A reply
+# gets an answer in free text (the lead just wrote: the window is open);
+# silence gets the follow-up template, then 72h more and a nurture
+# template. It stops as soon as the lead answers.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: cadencia, namespace: sdr }
+spec:
+  description: Outbound cadence for a new lead.
+  authorize: "has(caller.trigger)"
+  steps:
+    - { id: variante, experiment: primeira-mensagem }
+    - id: primeiro
+      act: whatsapp/send-template
+      with:
+        to: "${ event.payload.phone }"
+        template: "${ steps.variante.output == 'prova-social' ? 'outbound_prova_social' : 'outbound_first_contact' }"
+        params: "${ [event.payload.name] }"
+      idempotencyKey: "conversation.id + ':primeiro'"
+      milestone: { name: contatado, subject: lead, attributes: { origem: "'crm'" } }
+    - id: w1
+      wait:
+        for: 48h
+        orReply: true
+        events: [ { name: reuniao-marcada, key: "event.payload.leadId" } ]
+    - id: depois1
+      branch:
+        - { when: "steps.w1.output.event == 'reuniao-marcada'", call: reuniao, with: { quando: "${ steps.w1.output.payload.when }" } }
+        - { when: "steps.w1.output.reply != null", call: respondeu, with: { resposta: "${ steps.w1.output.reply }" } }
+        - { else: true, call: followup }
+  output: { value: "steps.w1.output" }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: respondeu, namespace: sdr }
+spec:
+  description: The lead answered.
+  inputs:
+    resposta:
+      type: string
+      description: what the lead wrote, or the button they tapped (given by the caller)
+      resolve: [ { id: nada, value: "''" } ]
+  steps:
+    - id: resposta
+      branch:
+        # The templates carry a quick-reply button "Parar": its text comes
+        # back exactly, no model needed. Guardrail opt-out of the experiment.
+        - { when: "inputs.resposta.trim().lowerAscii() == 'parar'", call: sair }
+        - { else: true, call: interessado }
+  output: { value: "true" }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: interessado, namespace: sdr }
+spec:
+  description: The lead answered with something other than stop.
+  steps:
+    - id: obrigado
+      respond: { template: "Que bom falar com você! Posso te fazer duas perguntas rápidas para entender se faz sentido para vocês?" }
+      milestone: { name: respondeu, subject: lead }
+  output: { value: "true" }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: sair, namespace: sdr }
+spec:
+  description: The lead asked to stop receiving messages.
+  steps:
+    - id: ok
+      respond: { template: "Tudo bem, você não vai mais receber mensagens nossas." }
+      milestone: { name: opt-out, subject: lead }
+  output: { value: "true" }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: followup, namespace: sdr }
+spec:
+  description: Silence after the first message.
+  steps:
+    # Free text when the window allows it (it does not after 48h of
+    # silence: the runtime refuses it, WINDOW_CLOSED), the approved
+    # template otherwise. Admission requires the fallback on this path.
+    - id: t2
+      respond: { template: "{{ event.payload.name }}, conseguiu ver minha mensagem?" }
+      onError:
+        - fallback:
+            act: whatsapp/send-template
+            with: { to: "${ event.payload.phone }", template: followup_outbound, params: "${ [event.payload.name] }" }
+            idempotencyKey: "conversation.id + ':followup'"
+    - id: w2
+      wait:
+        for: 72h
+        orReply: true
+        events: [ { name: reuniao-marcada, key: "event.payload.leadId" } ]
+    - id: depois2
+      branch:
+        - { when: "steps.w2.output.event == 'reuniao-marcada'", call: reuniao, with: { quando: "${ steps.w2.output.payload.when }" } }
+        - { when: "steps.w2.output.reply != null", call: respondeu, with: { resposta: "${ steps.w2.output.reply }" } }
+        - { else: true, call: nutrir }
+  output: { value: "true" }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: nutrir, namespace: sdr }
+spec:
+  description: No answer to two messages; the last touch.
+  steps:
+    - id: t3
+      act: whatsapp/send-template
+      with: { to: "${ event.payload.phone }", template: nurture_reengagement, params: "${ [event.payload.name] }" }
+      idempotencyKey: "conversation.id + ':nutrir'"
+  output: { value: "true" }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: reuniao, namespace: sdr }
+spec:
+  description: The CRM reports the lead's meeting; the cadence ends.
+  inputs:
+    quando:
+      type: string
+      description: when the meeting is, as the CRM wrote it (given by the caller)
+      resolve: [ { id: nada, value: "''" } ]
+  steps:
+    - id: nota
+      respond: { template: "Reunião marcada com {{ event.payload.name }}: {{ inputs.quando }}. Cadência encerrada.", to: "queue:vendas" }
+      milestone: { name: reuniao-marcada, subject: lead }
+  output: { value: "true" }

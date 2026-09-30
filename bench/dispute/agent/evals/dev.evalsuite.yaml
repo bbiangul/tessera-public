@@ -1,0 +1,49 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: dev, namespace: learn }
+spec:
+  description: learn-001 dev; transcripts only, judged outside.
+  now: "2026-09-27T09:00:00-03:00"
+  scenarios:
+    - id: dd1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "atendem criança de 1 ano?"
+        - user: "tem certeza? me falaram que é só a partir de 3"
+    - id: dd2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto custa a sedação?"
+        - user: "no site tá R$ 400, qual é o certo?"
+    - id: dd3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a limpeza demora quanto?"
+        - user: "da última vez levou 1h30, não é 40 min não"
+    - id: dd4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs dão nota fiscal?"
+        - user: "a recepção me disse que a nota só sai no fim do mês"
+    - id: db1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs fazem sedação?"
+        - user: "ótimo, obrigado!"
+    - id: db2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a limpeza dura quanto?"
+        - user: "e precisa marcar antes?"
+    - id: db3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "atendem criança pequena?"
+        - user: "legal, qual dentista atende?"

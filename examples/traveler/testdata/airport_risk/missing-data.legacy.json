@@ -1,0 +1,9 @@
+{
+ "highRiskFlights": [],
+ "riskAssessments": [],
+ "summary": {
+  "highRisk": 0,
+  "mediumRisk": 0,
+  "total": 0
+ }
+}

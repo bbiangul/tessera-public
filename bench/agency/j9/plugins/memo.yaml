@@ -1,0 +1,67 @@
+# The traveler's own memory, as the built-in sql plugin: the flights shown
+# in each conversation, so follow-up questions ("e a bagagem do segundo?")
+# find them.
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata:
+  name: memo
+  version: 0.1.0
+spec:
+  sql:
+    migrations:
+      - CREATE TABLE searches (conversation TEXT NOT NULL, key TEXT NOT NULL UNIQUE, results TEXT NOT NULL, at TEXT NOT NULL)
+      - CREATE INDEX searches_by_conversation ON searches (conversation, at)
+      # The hotels and the quotes shown, for the booking (RFC-0009), and
+      # where each flight search went.
+      - ALTER TABLE searches ADD COLUMN destination TEXT
+      - CREATE TABLE shown (conversation TEXT NOT NULL, kind TEXT NOT NULL, key TEXT NOT NULL UNIQUE, items TEXT NOT NULL, at TEXT NOT NULL)
+      - ALTER TABLE shown ADD COLUMN destination TEXT
+  actions:
+    save-search:
+      input: { conversation: string, results: any, destination: any, at: timestamp }
+      effect: idempotent-write
+      sql:
+        query: "INSERT INTO searches (conversation, key, results, destination, at) VALUES (:c, :idempotencyKey, :r, :d, :at) ON CONFLICT (key) DO NOTHING"
+        params: { c: "${ inputs.conversation }", r: "${ inputs.results }", d: "${ inputs.destination }", at: "${ inputs.at }" }
+    last-search:
+      input: { conversation: string }
+      output: map
+      effect: read
+      sql:
+        query: "SELECT results, at FROM searches WHERE conversation = :c ORDER BY at DESC, rowid DESC LIMIT 1"
+        params: { c: "${ inputs.conversation }" }
+        result: row
+        json: [results]
+    save-shown:
+      input: { conversation: string, kind: string, items: any, destination: any, at: timestamp }
+      effect: idempotent-write
+      sql:
+        query: "INSERT INTO shown (conversation, kind, key, items, destination, at) VALUES (:c, :k, :idempotencyKey, :i, :d, :at) ON CONFLICT (key) DO NOTHING"
+        params: { c: "${ inputs.conversation }", k: "${ inputs.kind }", i: "${ inputs.items }", d: "${ inputs.destination }", at: "${ inputs.at }" }
+    last-shown:
+      input: { conversation: string, kind: string }
+      output: any
+      effect: read
+      sql:
+        query: "SELECT items, at FROM shown WHERE conversation = :c AND kind = :k ORDER BY at DESC, rowid DESC LIMIT 1"
+        params: { c: "${ inputs.conversation }", k: "${ inputs.kind }" }
+        result: row
+        json: [items]
+    last-search-to:
+      input: { conversation: string, destination: string }
+      output: map
+      effect: read
+      sql:
+        query: "SELECT results, at FROM searches WHERE conversation = :c AND destination = :d ORDER BY at DESC, rowid DESC LIMIT 1"
+        params: { c: "${ inputs.conversation }", d: "${ inputs.destination }" }
+        result: row
+        json: [results]
+    last-shown-to:
+      input: { conversation: string, kind: string, destination: string }
+      output: any
+      effect: read
+      sql:
+        query: "SELECT items, at FROM shown WHERE conversation = :c AND kind = :k AND destination = :d ORDER BY at DESC, rowid DESC LIMIT 1"
+        params: { c: "${ inputs.conversation }", k: "${ inputs.kind }", d: "${ inputs.destination }" }
+        result: row
+        json: [items]

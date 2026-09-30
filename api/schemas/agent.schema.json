@@ -1,0 +1,531 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bbiangul/tessera/api/agents/v1alpha1/agent",
+  "$ref": "#/$defs/Agent",
+  "$defs": {
+    "Agent": {
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "enum": [
+            "agents.tessera.dev/v1alpha1"
+          ],
+          "description": "APIVersion must be agents.tessera.dev/v1alpha1."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Agent"
+          ],
+          "description": "Kind must be Agent."
+        },
+        "metadata": {
+          "$ref": "#/$defs/ObjectMeta",
+          "description": "Metadata names the agent; its namespace is the one it configures."
+        },
+        "spec": {
+          "$ref": "#/$defs/AgentSpec",
+          "description": "Spec is the configuration."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ],
+      "description": "Agent holds what is the same for every Function of a namespace (RFC-0001,\n\"Humano no loop\"): how the platform itself speaks to users, in their\nlanguage, and where work for people goes. At most one per namespace;\nwithout one, the platform's English defaults and the \"default\" queue\napply."
+    },
+    "AgentMessages": {
+      "properties": {
+        "notUnderstood": {
+          "type": "string",
+          "description": "NotUnderstood: a message no Function fits, or fits too weakly."
+        },
+        "unsure": {
+          "type": "string",
+          "description": "Unsure: the free mode had no answer it could stand behind (its checks\ndropped every draft), so it says it is not sure instead of \"not\nunderstood\" (agency-001). Empty: NotUnderstood."
+        },
+        "later": {
+          "type": "string",
+          "description": "Later: the user will give what a process asks later (\"mando amanhã\");\nthe process keeps waiting and the question is not asked again\n(agency-005)."
+        },
+        "withAPerson": {
+          "type": "string",
+          "description": "WithAPerson: the user writes while a person handles the run."
+        },
+        "notAllowed": {
+          "type": "string",
+          "description": "NotAllowed: the caller may not run the Function (authorize)."
+        },
+        "cancelled": {
+          "type": "string",
+          "description": "Cancelled: the user did not confirm an effect."
+        },
+        "denied": {
+          "type": "string",
+          "description": "Denied: a person denied an approval the Function asked for\n(escalate task: approve), and the step has no onDeny."
+        },
+        "failed": {
+          "type": "string",
+          "description": "Failed: the run failed and no onError strategy told the user."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "AgentMessages are the platform's own messages to users. An empty one\nkeeps the English default."
+    },
+    "AgentSpec": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description says what the agent is for."
+        },
+        "timezone": {
+          "type": "string",
+          "description": "Timezone is the IANA time zone schedules are read in, e.g.\nAmerica/Sao_Paulo."
+        },
+        "channel": {
+          "type": "string",
+          "description": "Channel names the plugin whose channel rules (the free-text window)\napply to messages to the user, e.g. whatsapp."
+        },
+        "messages": {
+          "$ref": "#/$defs/AgentMessages",
+          "description": "Messages are what the platform says on its own, when no Function\nspeaks. Write them in the users' language."
+        },
+        "humanInTheLoop": {
+          "$ref": "#/$defs/HumanInTheLoop",
+          "description": "HumanInTheLoop says where work for people goes."
+        },
+        "autonomy": {
+          "type": "string",
+          "enum": [
+            "autonomous",
+            "approve-actions",
+            "draft"
+          ],
+          "description": "Autonomy is how much the agent does alone (RFC-0001): autonomous,\nthe default; approve-actions, a person of humanInTheLoop approves\nevery irreversible or external-message effect first; draft, that and\nevery message a run sends the user. An audience's autonomy wins."
+        },
+        "routing": {
+          "$ref": "#/$defs/Routing",
+          "description": "Routing tunes the router for this namespace."
+        },
+        "voice": {
+          "$ref": "#/$defs/Voice",
+          "description": "Voice rewrites every message to users in a persona's words\n(RFC-0004): the facts the templates interpolate (dates, times, what\nwill be done) stay word for word, or the template's text is sent.\nNeeds a Generate backend; each message costs one call."
+        },
+        "freeMode": {
+          "$ref": "#/$defs/FreeMode",
+          "description": "FreeMode answers what no Function covers (RFC-0004, part B): a\nmessage the router cannot place, and a question or request in the\nmiddle of a process, after which the pending question is asked\nagain. It reads (the reads' actions must be read-only) and talks; it\nnever acts. Without it, those messages get messages.notUnderstood."
+        },
+        "audiences": {
+          "items": {
+            "$ref": "#/$defs/Audience"
+          },
+          "type": "array",
+          "description": "Audiences give each kind of caller (patients, the reception, a\ndentist) its own menu, voice, free mode and messages (RFC-0006). The\nfirst audience whose who holds for the caller is theirs; one without\nwho, last, catches everyone else. A caller no audience matches is\noffered nothing. Without audiences every caller gets the Agent."
+        },
+        "explainFailures": {
+          "type": "boolean",
+          "description": "ExplainFailures, on by default: when an action fails because the\nsystem refused it (a definite failure) and the system said why, the\nfailure's message is rewritten to say it was not done, what the\nsystem said and the user's next step. The system's words are masked\nunless its plugin declares connection.publicErrors; a rewrite that\nsays the action was done, or loses one of the system's numbers, is\ndropped. It also turns on the free mode's claims guard (it never says\nit registered or passed something on). Measured in drift-005/006:\n0/96 false claims under API drift, every refusal explained.\nNeeds a Generate backend."
+        },
+        "improvise": {
+          "$ref": "#/$defs/Improvise",
+          "description": "Improvise lets the agent go beyond its definitions, with the\nplatform's guarantees (RFC-0005). Off unless set."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "AgentSpec configures a namespace."
+    },
+    "Audience": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Name identifies it (journaled with each run as caller.audience)."
+        },
+        "who": {
+          "$ref": "#/$defs/Expr",
+          "description": "Who is a bool expression over caller: \"'dentista' in caller.roles\".\nRoles come from the Team through an identity a channel attests,\nnever from what the caller writes. Empty: everyone else (last only)."
+        },
+        "functions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Functions are the router's menu for this audience. selector.who and\nauthorize still apply to each."
+        },
+        "voice": {
+          "$ref": "#/$defs/Voice",
+          "description": "Voice replaces the Agent's voice for this audience."
+        },
+        "freeMode": {
+          "$ref": "#/$defs/FreeMode",
+          "description": "FreeMode replaces the Agent's free mode for this audience."
+        },
+        "messages": {
+          "$ref": "#/$defs/AgentMessages",
+          "description": "Messages replace the Agent's, field by field."
+        },
+        "autonomy": {
+          "type": "string",
+          "enum": [
+            "autonomous",
+            "approve-actions",
+            "draft"
+          ],
+          "description": "Autonomy replaces the Agent's for this audience's runs."
+        },
+        "sees": {
+          "items": {
+            "$ref": "#/$defs/AudienceView"
+          },
+          "type": "array",
+          "description": "Sees declares what this audience's members see of other audiences'\nconversations behind the tasks they answer (audiences-002). Every\nview is journaled in the task's run. Without it, only the task's\ntext."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "description": "Audience is one kind of caller and what the agent is for them."
+    },
+    "AudienceView": {
+      "properties": {
+        "audience": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Audience whose conversations are seen."
+        },
+        "conversation": {
+          "type": "string",
+          "enum": [
+            "masked",
+            "full"
+          ],
+          "description": "Conversation: masked (e-mails, phones and documents hidden) or full."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "audience",
+        "conversation"
+      ],
+      "description": "AudienceView is one audience whose conversations another sees."
+    },
+    "Expr": {
+      "type": "string",
+      "x-tessera-kind": "expression"
+    },
+    "FreeAgent": {
+      "properties": {
+        "maxSteps": {
+          "type": "integer",
+          "maximum": 8,
+          "minimum": 0,
+          "description": "MaxSteps bounds the tool calls of one turn; default 5."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "FreeAgent is agent mode's configuration."
+    },
+    "FreeFunction": {
+      "properties": {
+        "function": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Function is the name of a Function in the Agent's namespace."
+        },
+        "when": {
+          "type": "string",
+          "minLength": 1,
+          "description": "When says when to start it rather than answer, for Decide: e.g.\n\"the question needs a decision, an approval or an exception that\nthe checklist gives to the coach\"."
+        },
+        "minConfidence": {
+          "type": "number",
+          "maximum": 1,
+          "minimum": 0,
+          "description": "MinConfidence is the lowest probability acted on; below it the free\nmode answers. Default 0.6."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "function",
+        "when"
+      ],
+      "description": "FreeFunction is a Function the free mode may start."
+    },
+    "FreeKnowledge": {
+      "properties": {
+        "bases": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "minItems": 1,
+          "description": "Bases are KnowledgeBase names of this namespace. Before a free\nanswer the masked message is searched in them (full text, BM25) and\nthe best passages the caller may read reach the model as\nFACTS.documents; the passages given are journaled with the turn."
+        },
+        "check": {
+          "type": "boolean",
+          "description": "Check asks Jev, after the answer is written, whether it states a\nfact that neither the documents nor the other facts support; if so\nit is rewritten once, then the agent says it does not know. On\nunless set to false (knowledge-001: unsupported claims 1/90 -\u003e 0/90,\nabout 0.4 s more per answer)."
+        },
+        "relevance": {
+          "type": "boolean",
+          "description": "Relevance asks Jev, in one request, which of the passages found\nanswer or directly settle part of the message; the others are\ndropped before the handoff and the answer (knowledge-002), so a\npassage on a nearby topic is not taken for an answer. On unless set\nto false (knowledge-002: misleading replies 14 -\u003e 7 of 42 on new\ndata, handoffs 19 -\u003e 27, answerable unchanged)."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "bases"
+      ],
+      "description": "FreeKnowledge gives the free mode the business's documents."
+    },
+    "FreeMode": {
+      "properties": {
+        "instructions": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instructions: what the agent may talk about and how to point to a\nperson or a phone for the rest."
+        },
+        "whenUnsure": {
+          "type": "string",
+          "description": "WhenUnsure is a Function started when the free mode has no answer it\ncan stand behind (its checks dropped every draft), instead of\nmessages.unsure: asking the team, as a person who does not know\nwould (agency-003). Usually one of functions, with no selector."
+        },
+        "reads": {
+          "items": {
+            "$ref": "#/$defs/FreeRead"
+          },
+          "type": "array",
+          "description": "Reads are read actions whose results are what the free mode knows\n(e.g. the business's facts). Called on each use, with their with."
+        },
+        "runReads": {
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+/[a-z0-9-]+$"
+          },
+          "type": "array",
+          "description": "RunReads lists read-only plugin/action names whose successful input\nsource results may answer a side question during the current Function.\nOnly top-level fromAction sources already recorded in that run are\nshared, for the same caller, conversation and namespace. Results are\nalways masked; arguments, other inputs, steps and called Functions are\nnot shared. No action is called again. These are snapshots, not fresh\navailability or proof that an effect happened. Default: share nothing.\nThe combined context must fit in 32 KiB of JSON; larger context is an\nerror, never silently truncated. Expose a smaller read result instead."
+        },
+        "functions": {
+          "items": {
+            "$ref": "#/$defs/FreeFunction"
+          },
+          "type": "array",
+          "description": "Functions the free mode may start instead of answering, such as\nasking a person. Before answering a message no Function was routed\nto, one Decide question, which sees the reads' results, chooses\nbetween answering and each of these."
+        },
+        "search": {
+          "$ref": "#/$defs/FreeSearch",
+          "description": "Search lets the free mode search the web for current public\ninformation (a country's visa rules, an airline's baggage policy),\noff unless set. Jev decides whether a message needs it, the Generate\nengine writes one query from the masked message, a query with\nanything about a person is never sent, and the results reach the\nmodel as third-party pages: cited, never obeyed (websearch-001)."
+        },
+        "tasks": {
+          "type": "boolean",
+          "description": "Tasks gives the free mode the caller's open tasks (backoffice-006):\nthose a Team member may answer, as FACTS.myTasks, masked like any\nprivate read. The free mode says how many and which; they are\nanswered with the buttons or the link sent to the member, never by a\nmessage in the conversation. For a team audience."
+        },
+        "self": {
+          "type": "boolean",
+          "description": "Self gives the free mode FACTS.self (self-001): what the agent does\nfor this caller, built from the definitions (the Functions on the\ncaller's audience menu and the free mode's functions, what each asks\nfor, what a person approves), so the agent can say what it does, what\nit needs and where to go for the rest. Another audience's Functions\nnever appear. On unless set to false (self-001; default since\nguard-003 fixed the claims guard that dropped these answers, #60)."
+        },
+        "knowledge": {
+          "$ref": "#/$defs/FreeKnowledge",
+          "description": "Knowledge gives the free mode the business's documents\n(KnowledgeBase, knowledge-001)."
+        },
+        "agent": {
+          "$ref": "#/$defs/FreeAgent",
+          "description": "Agent turns on agent mode (RFC-0010, experimental, ADR-0007): with no\nrun pending, a model plans each turn in steps over the audience's\nFunctions, the functions above, the web search and the documents,\ninstead of the router and the free answer. A Function it calls runs\nas always (its questions, confirmation, approval, idempotency); its\nreply passes the free mode's checks; each step is journaled."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "instructions"
+      ],
+      "description": "FreeMode is the agent outside its processes."
+    },
+    "FreeRead": {
+      "properties": {
+        "act": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+/[a-z0-9-]+$",
+          "description": "Act is plugin/action; its effect must be read."
+        },
+        "with": {
+          "type": "object",
+          "description": "With gives its arguments; expressions read caller."
+        },
+        "public": {
+          "type": "boolean",
+          "description": "Public says the result is the business's public information (an\naddress, a phone, prices), not personal data: it reaches the model\nunmasked. Without it the result is masked like the conversation, so\na phone number in it becomes a placeholder the free mode cannot\nrepeat."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "act"
+      ],
+      "description": "FreeRead is one read action and its arguments."
+    },
+    "FreeSearch": {
+      "properties": {
+        "act": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+/[a-z0-9-]+$",
+          "description": "Act is the search action, plugin/action: a read taking {query} and\nreturning a list of {site, title, url, snippet}. tessera add web\nwrites one (TinyFish by default; SearXNG, Tavily, Brave)."
+        },
+        "when": {
+          "type": "string",
+          "description": "When says which messages need a search; default: current public\ninformation from outside the business (rules, requirements,\nseasons, schedules, general prices)."
+        },
+        "maxResults": {
+          "type": "integer",
+          "maximum": 10,
+          "minimum": 0,
+          "description": "MaxResults is how many results the model sees; default 5, at most 10."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "act"
+      ],
+      "description": "FreeSearch is the free mode's web search."
+    },
+    "HumanInTheLoop": {
+      "properties": {
+        "queue": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Queue receives escalations and questions that do not name a queue."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "queue"
+      ],
+      "description": "HumanInTheLoop configures escalation."
+    },
+    "Improvise": {
+      "properties": {
+        "repair": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Repair lists actions (plugin/action, http bindings that send a body)\nwhose refused calls may be repaired. When the system refuses one and\nsays what it now needs (a field, the user's acceptance of a fee), the\nmodel proposes only additions to the request body; the platform\nchecks them, asks the user for a missing value or their agreement\n(naming any amount exactly), and a person on the humanInTheLoop\nqueue approves before the action runs again, with its own\nidempotency key and the action's verification (drift-007)."
+        },
+        "repairReads": {
+          "type": "boolean",
+          "description": "RepairReads: when a read's answer no longer matches the plugin's\ndeclared type (a field renamed), the model maps the answer's fields\nto the declared ones. Only renames: values are never computed or\nchanged, the result must meet the type, and the rename is journaled.\nReads change nothing, so no approval is asked (RFC-0005 step 2,\ndrift-008)."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Improvise is what the agent may do beyond its definitions."
+    },
+    "ObjectMeta": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Name of the resource, unique per kind within its namespace. Lowercase\nletters, digits and hyphens, starting and ending with a letter or digit."
+        },
+        "namespace": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Namespace the resource belongs to, usually one per customer."
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Labels are free-form key/value pairs for selecting and grouping."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "namespace"
+      ],
+      "description": "ObjectMeta identifies a resource."
+    },
+    "Routing": {
+      "properties": {
+        "minConfidence": {
+          "type": "number",
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "description": "MinConfidence is the lowest router probability acted on; below it the\nuser is asked to say it another way. Default 0.6."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Routing tunes the router. Set it from the namespace's own routing\nbenchmark (tessera bench route), not by feel."
+    },
+    "Voice": {
+      "properties": {
+        "persona": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Persona: who speaks, the tone, how formal, how to call the user."
+        },
+        "examples": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Examples of messages in this voice."
+        },
+        "keep": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Keep are words a rewrite must keep whenever the template has them,\nmatched case-insensitively as substrings: the action's verb, so\n\"remarcar\" never becomes \"agendar\". A stem (\"remarc\") covers its\nforms."
+        },
+        "greeting": {
+          "type": "string",
+          "enum": [
+            "first",
+            "any"
+          ],
+          "description": "Greeting is \"first\" (the default): only the conversation's first\nmessage may greet, and a later greeting is removed; or \"any\": the\nvoice decides, as in voice-001."
+        },
+        "latitude": {
+          "type": "string",
+          "enum": [
+            "strict",
+            "warm"
+          ],
+          "description": "Latitude is \"warm\" (the default): the facts are locked, and the\nvoice may acknowledge, add transitions and a closing offer, and put\nfacts on lines, as a friendly person would. Warm rewrites receive the\napproved draft, facts, persona and user name, plus whether the agent\nalready spoke; they do not receive dialogue text that could introduce\nextra requests or promises. Routing and free mode retain their history.\n\"strict\" keeps masked dialogue context and says what the template says\nand nothing more, for texts that must stay exact."
+        },
+        "dialogue": {
+          "type": "string",
+          "enum": [
+            "marker",
+            "full"
+          ],
+          "description": "Dialogue is what the warm voice sees of the conversation. \"full\"\n(the default): the masked dialogue, with the rule that only the\ntemplate authorizes actions and services; the conversation gives\ntone, not permission (voice-008/009: 0/108 unsupported promises;\nnatural share against the competitors 40.8% against 30.3% over three\nseeds). \"marker\" (voice-007): only whether the agent already spoke."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "persona"
+      ],
+      "description": "Voice is how the agent speaks."
+    }
+  },
+  "title": "Agent"
+}

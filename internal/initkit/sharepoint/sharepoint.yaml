@@ -1,0 +1,43 @@
+# Microsoft SharePoint through Microsoft Graph, for KnowledgeBase sources
+# (plugin-001): list the files of a folder of a site's document library,
+# and download each one. App-only access: register an app in Entra ID
+# with the application permission Sites.Selected (granted to this site)
+# or Sites.Read.All, and set its secrets:
+#   TESSERA_SECRET_SHAREPOINT_CLIENT_ID, TESSERA_SECRET_SHAREPOINT_CLIENT_SECRET
+# Then, in a KnowledgeBase:
+#   sources:
+#     - list:  { act: sharepoint/list-files, with: { folder: "Politicas" } }
+#       fetch: { act: sharepoint/download, with: { id: "${ inputs.id }" } }
+#       refresh: 24h
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: sharepoint, version: 0.1.0 }
+spec:
+  egress:
+    # Downloads redirect to the tenant's *.sharepoint.com.
+    hosts: [graph.microsoft.com, login.microsoftonline.com, "*.sharepoint.com"]
+  connection:
+    baseUrl: https://graph.microsoft.com/v1.0
+    oauth2:
+      tokenUrl: https://login.microsoftonline.com/TENANT_ID/oauth2/v2.0/token
+      clientId: SHAREPOINT_CLIENT_ID
+      clientSecret: SHAREPOINT_CLIENT_SECRET
+      scope: https://graph.microsoft.com/.default
+  actions:
+    list-files:
+      input: { folder: string }
+      output: list
+      effect: read
+      http:
+        method: GET
+        path: "/sites/SITE_ID/drive/root:/{{ inputs.folder }}:/children"
+        query: { "$select": "id,name,lastModifiedDateTime,file" }
+        output: "sources.response.body.value.filter(x, has(x.file)).map(x, {'id': x.id, 'name': x.name, 'modified': x.lastModifiedDateTime})"
+    download:
+      input: { id: string }
+      output: map
+      effect: read
+      http:
+        method: GET
+        path: "/sites/SITE_ID/drive/items/{{ inputs.id }}/content"
+        response: bytes

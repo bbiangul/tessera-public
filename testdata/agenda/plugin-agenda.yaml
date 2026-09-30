@@ -1,0 +1,32 @@
+# Manifest of a clinic-management plugin (illustrative; the real Agenda
+# plugin will publish its own). Admission checks every Function that calls
+# these actions against this file.
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata:
+  name: agenda
+  version: 1.4.0
+spec:
+  egress:
+    hosts: ["api.agenda.com"]
+  actions:
+    list-upcoming-appointments:
+      input: { patientId: string }
+      output: list<agenda.Appointment>
+      effect: read
+    find-slots:
+      input: { dentistId: string, from: timestamp, days: int }
+      output: list<agenda.Slot>
+      effect: read
+    reschedule:
+      input: { appointmentId: string, slotId: string }
+      output: agenda.Appointment
+      effect: irreversible
+      verify:
+        mode: probe
+        with: list-upcoming-appointments
+        args: { patientId: "${ caller.patientId }" }
+        happened: "sources.probe.output.exists(a, a.id == inputs.appointmentId && a.slotId == inputs.slotId)"
+        output: "sources.probe.output.filter(a, a.id == inputs.appointmentId)[0]"
+      compensate: reschedule
+      authorize: "inputs.appointmentId in caller.appointmentIds"

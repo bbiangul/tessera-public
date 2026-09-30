@@ -1,0 +1,74 @@
+[
+  {
+    "id": "replication-01",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Antes de dizer sim, queria marcar uma avaliação também. Vocês fazem isso aqui?",
+    "want": "side"
+  },
+  {
+    "id": "replication-02",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Confirmo a mudança de horário, mas também preciso cancelar uma consulta diferente.",
+    "want": "side"
+  },
+  {
+    "id": "replication-03",
+    "pending": "Posso alterar a entrega para sexta? Responda sim para confirmar.",
+    "message": "Além dessa entrega, quero enviar outro pacote. Dá para fazer?",
+    "want": "side"
+  },
+  {
+    "id": "replication-04",
+    "pending": "Posso transferir 100 reais para Ana? Responda sim para confirmar.",
+    "message": "Sim, mas antes da transferência, você consegue abrir uma conta para minha esposa?",
+    "want": "side"
+  },
+  {
+    "id": "replication-05",
+    "pending": "Posso alterar a categoria do seu quarto para superior? Responda sim para confirmar.",
+    "message": "Antes de confirmar a reserva, tem café da manhã?",
+    "want": "side"
+  },
+  {
+    "id": "replication-06",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Sim, pode prosseguir com a mudança.",
+    "want": "answer"
+  },
+  {
+    "id": "replication-07",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Não, deixa no horário original.",
+    "want": "answer"
+  },
+  {
+    "id": "replication-08",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Mudei de ideia: pode trocar para quinta às 15h?",
+    "want": "answer"
+  },
+  {
+    "id": "replication-09",
+    "pending": "Posso alterar a entrega para sexta? Responda sim para confirmar.",
+    "message": "Quero a entrega na segunda, pode ser?",
+    "want": "answer"
+  },
+  {
+    "id": "replication-10",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Por favor, abandone esse processo.",
+    "want": "cancel"
+  },
+  {
+    "id": "replication-11",
+    "pending": "Posso remarcar sua consulta para sexta 09/10 às 14h? Responda sim para confirmar.",
+    "message": "Até logo, tchau.",
+    "want": "goodbye"
+  },
+  {
+    "id": "replication-12",
+    "pending": "Posso alterar a entrega para sexta? Responda sim para confirmar.",
+    "message": "Sim, mas antes preciso saber o prazo dessa entrega.",
+    "want": "side"
+  }
+]

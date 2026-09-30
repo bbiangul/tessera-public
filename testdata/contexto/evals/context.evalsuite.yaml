@@ -1,0 +1,62 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: read-context, namespace: contexto }
+spec:
+  description: Side questions reuse authorized slot snapshots without another read or an unconfirmed effect.
+  now: "2026-10-02T08:00:00-03:00"
+  sandboxes:
+    - plugin: context-agenda
+      script: agenda.sandbox.star
+      state:
+        slots: ["sexta 09/10 às 9h", "sexta 09/10 às 14h", "sábado 10/10 às 10h"]
+  scenarios:
+    - id: cross-day-times
+      caller: { patientId: p1 }
+      simulator: scripted
+      turns:
+        - user: "Quero remarcar minha consulta na próxima semana."
+          expect: { status: WaitingForUser }
+        - user: "E quais horários específicos vocês têm nesses dias?"
+          expect:
+            status: WaitingForUser
+            says: ["9h", "14h", "10h"]
+            notSays: ["não consigo ver", "não tenho acesso"]
+        - user: "Pode ser sexta 09/10 às 14h."
+          expect: { status: Confirming, says: ["14h"] }
+        - user: "sim"
+          expect: { status: Succeeded, says: ["14h"] }
+      expect:
+        effects:
+          - { action: context-agenda/slots, count: 1 }
+          - { action: context-agenda/reschedule, count: 1, where: "inputs.slot == 'sexta 09/10 às 14h'" }
+        budget: { costUSD: 0.03, decideCalls: 16, generateCalls: 12 }  # agency-001: +2 Decide for the side-answer checks
+    - id: question-does-not-confirm
+      caller: { patientId: p1 }
+      simulator: scripted
+      turns:
+        - user: "Quero remarcar para sexta 09/10 às 14h."
+          expect: { status: Confirming }
+        - user: "Antes de confirmar, quais são os outros horários disponíveis?"
+          expect: { status: Confirming, says: ["9h", "10h"], notSays: ["foi remarcada"] }
+        - user: "não, deixa como está"
+          expect: { status: Succeeded }
+      expect:
+        never: [context-agenda/reschedule]
+        effects: [{ action: context-agenda/slots, count: 1 }]
+        budget: { costUSD: 0.03, decideCalls: 16, generateCalls: 12 }  # agency-001: +2 Decide for the side-answer checks
+    - id: timeout-after-side-question
+      caller: { patientId: p1 }
+      state: { context-agenda: { timeout: true } }
+      simulator: scripted
+      turns:
+        - user: "Quero remarcar para sexta 09/10 às 14h."
+          expect: { status: Confirming }
+        - user: "Quais outros horários estão disponíveis?"
+          expect: { status: Confirming, says: ["9h", "10h"] }
+        - user: "Sim, confirmo sexta às 14h."
+          expect: { status: Succeeded, says: ["14h"] }
+      expect:
+        effects:
+          - { action: context-agenda/slots, count: 1 }
+          - { action: context-agenda/current, count: 1 }
+        budget: { costUSD: 0.03, decideCalls: 16, generateCalls: 12 }  # agency-001: +2 Decide for the side-answer checks

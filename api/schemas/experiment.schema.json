@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bbiangul/tessera/api/agents/v1alpha1/experiment",
+  "$ref": "#/$defs/Experiment",
+  "$defs": {
+    "Experiment": {
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "enum": [
+            "agents.tessera.dev/v1alpha1"
+          ],
+          "description": "APIVersion must be agents.tessera.dev/v1alpha1."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Experiment"
+          ],
+          "description": "Kind must be Experiment."
+        },
+        "metadata": {
+          "$ref": "#/$defs/ObjectMeta",
+          "description": "Metadata names the experiment; the name seeds the assignment."
+        },
+        "spec": {
+          "$ref": "#/$defs/ExperimentSpec",
+          "description": "Spec describes the variants and how they are judged."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ],
+      "description": "Experiment is an A/B test (RFC-0001, \"Experimentos\"): each subject gets\none variant, always the same, and the variants are compared on a Funnel\nstage with a sequential test, so looking at the results every day does\nnot produce false winners. Promoting a winner is a person's decision: it\nis a change to the definitions, never automatic."
+    },
+    "ExperimentSpec": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description says what is tested."
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Subject is the Subject kind assigned (by its id)."
+        },
+        "variants": {
+          "items": {
+            "$ref": "#/$defs/ExperimentVariant"
+          },
+          "type": "array",
+          "minItems": 2,
+          "description": "Variants; the first is the control. Weights are relative."
+        },
+        "primary": {
+          "$ref": "#/$defs/PrimaryMetric",
+          "description": "Primary is the Funnel stage that decides: conversion to it, among\nthe subjects exposed to each variant."
+        },
+        "minSamplePerVariant": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "MinSamplePerVariant is how many decided subjects each variant needs\nbefore any result is declared. Default 100."
+        },
+        "alpha": {
+          "type": "number",
+          "maximum": 0.2,
+          "exclusiveMinimum": 0,
+          "description": "Alpha is the false positive rate accepted. Default 0.05."
+        },
+        "guardrails": {
+          "items": {
+            "$ref": "#/$defs/Guardrail"
+          },
+          "type": "array",
+          "description": "Guardrails are outcomes that must not get worse (opt-outs,\ncomplaints, escalations): when a variant is significantly worse than\nthe control by more than maxIncrease, the platform stops the\nexperiment (every subject exposed after that gets the control) and\nstarts onBreach once. Checked every few minutes by the scheduler."
+        },
+        "onBreach": {
+          "$ref": "#/$defs/OnStuck",
+          "description": "OnBreach starts a Function when a guardrail stops the experiment,\nwith event.payload {experiment, guardrail, variant, controlRate,\nvariantRate, difference}; typically it escalates to the team.\nRequired with guardrails."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "subject",
+        "variants",
+        "primary"
+      ],
+      "description": "ExperimentSpec describes an experiment."
+    },
+    "ExperimentVariant": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Name of the variant, read by steps.\u003cexperiment step\u003e.output."
+        },
+        "weight": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Weight is the share of subjects, relative to the others."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "weight"
+      ],
+      "description": "ExperimentVariant is one arm."
+    },
+    "Guardrail": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Name of the guardrail, e.g. opt-out."
+        },
+        "milestone": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Milestone of the experiment's Subject that counts, e.g. opt-out."
+        },
+        "within": {
+          "type": "string",
+          "description": "Within is how long after the exposure it counts (e.g. 14d, 72h).\nUntil then the subject is pending."
+        },
+        "maxIncrease": {
+          "type": "number",
+          "maximum": 1,
+          "exclusiveMinimum": 0,
+          "description": "MaxIncrease is how much worse than the control a variant may be,\nin rate points (0.02: two points, e.g. 3% to 5%)."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "milestone",
+        "within",
+        "maxIncrease"
+      ],
+      "description": "Guardrail is an outcome that must not rise: the share of exposed\nsubjects with a milestone within a window after their exposure."
+    },
+    "ObjectMeta": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Name of the resource, unique per kind within its namespace. Lowercase\nletters, digits and hyphens, starting and ending with a letter or digit."
+        },
+        "namespace": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Namespace the resource belongs to, usually one per customer."
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Labels are free-form key/value pairs for selecting and grouping."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "namespace"
+      ],
+      "description": "ObjectMeta identifies a resource."
+    },
+    "OnStuck": {
+      "properties": {
+        "function": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Function to start, in the same namespace."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "function"
+      ],
+      "description": "OnStuck names what runs for a stuck subject."
+    },
+    "PrimaryMetric": {
+      "properties": {
+        "funnel": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Funnel name."
+        },
+        "stage": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stage of the funnel that counts as conversion."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "funnel",
+        "stage"
+      ],
+      "description": "PrimaryMetric is a Funnel stage."
+    }
+  },
+  "title": "Experiment"
+}

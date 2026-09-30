@@ -1,0 +1,5 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata: { name: calendar-demo, namespace: travel }
+spec:
+  description: Demonstração de classificação de dias, sem agendamento nem efeitos externos.

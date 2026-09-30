@@ -1,0 +1,9 @@
+# Who the clinic's numbers are about: patients, by a pseudonymous ID.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Subject
+metadata:
+  name: paciente
+  namespace: agenda-exemplo
+spec:
+  description: Um paciente da clínica.
+  id: "caller.patientId"

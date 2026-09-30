@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bbiangul/tessera/api/agents/v1alpha1/subject",
+  "$ref": "#/$defs/Subject",
+  "$defs": {
+    "Expr": {
+      "type": "string",
+      "x-tessera-kind": "expression"
+    },
+    "ObjectMeta": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Name of the resource, unique per kind within its namespace. Lowercase\nletters, digits and hyphens, starting and ending with a letter or digit."
+        },
+        "namespace": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Namespace the resource belongs to, usually one per customer."
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Labels are free-form key/value pairs for selecting and grouping."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "namespace"
+      ],
+      "description": "ObjectMeta identifies a resource."
+    },
+    "Subject": {
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "enum": [
+            "agents.tessera.dev/v1alpha1"
+          ],
+          "description": "APIVersion must be agents.tessera.dev/v1alpha1."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Subject"
+          ],
+          "description": "Kind must be Subject."
+        },
+        "metadata": {
+          "$ref": "#/$defs/ObjectMeta",
+          "description": "Metadata names the subject kind, e.g. paciente."
+        },
+        "spec": {
+          "$ref": "#/$defs/SubjectSpec",
+          "description": "Spec says how a subject is identified and described."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ],
+      "description": "Subject is who business numbers are about (RFC-0001, \"Métricas de\nnegócio\"): a lead, a patient, a store. Milestones name a subject;\nfunnels follow the same subjects from one milestone to the next."
+    },
+    "SubjectAttribute": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "string",
+            "int",
+            "bool"
+          ],
+          "description": "Type is string, int or bool."
+        },
+        "enum": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Enum lists the allowed values of a string attribute; required for\nstrings, so no free text is stored."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "description": "SubjectAttribute is one dimension."
+    },
+    "SubjectSpec": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description says who the subjects are."
+        },
+        "id": {
+          "$ref": "#/$defs/Expr",
+          "description": "ID is a string expression that identifies the subject where a\nmilestone is recorded, e.g. caller.patientId. Use a pseudonymous ID,\nnever a phone or an e-mail."
+        },
+        "attributes": {
+          "additionalProperties": {
+            "$ref": "#/$defs/SubjectAttribute"
+          },
+          "type": "object",
+          "description": "Attributes are the dimensions numbers can be cut by. They are typed\nand closed: free text could carry personal data."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "description": "SubjectSpec describes a subject kind."
+    }
+  },
+  "title": "Subject"
+}

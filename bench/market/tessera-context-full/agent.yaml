@@ -1,0 +1,78 @@
+# The market benchmark's clinic (docs/research/market-bench-000-preregistration.md):
+# the reschedule Function of testdata/agenda, bound over HTTP to the
+# neutral tool server (clinic.bench).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata: { name: recepcao, namespace: clinica-bench }
+spec:
+  description: Recepção da clínica, para pacientes.
+  timezone: America/Sao_Paulo
+  messages:
+    notUnderstood: "Posso ajudar com mais alguma coisa? Por aqui eu consigo remarcar as suas consultas."
+    withAPerson: "Alguém da recepção está vendo isso e responde por aqui."
+    notAllowed: "Desculpe, não posso fazer isso por você."
+    cancelled: "Tudo bem, não mudei nada."
+    failed: "Algo deu errado. Alguém da recepção vai te responder por aqui."
+  humanInTheLoop: { queue: recepcao }
+  freeMode:
+    runReads: [clinic/find-slots]
+    instructions: "Você é a recepção da clínica. Responde dúvidas sobre a clínica (endereço, estacionamento, horários, preços, convênios, telefone) com as informações da clínica. Pelo chat só dá para remarcar consultas do próprio paciente; para cancelar, marcar consultas novas ou tratar de outra pessoa, o paciente liga para o telefone da clínica."
+    reads: [ { act: clinic/info, public: true } ]
+  voice:
+    persona: "Recepcionista de uma clínica odontológica, no chat. Cordial e acolhedora, frases curtas, português do Brasil informal mas educado; trata o paciente por você e pelo primeiro nome quando souber. Pode usar um emoji leve de vez em quando, nunca vários. Numa confirmação, pode pôr os dados em linhas curtas (consulta atual, novo horário)."
+    keep: [remarc]
+    latitude: warm
+    dialogue: full
+    examples:
+      - "Oi, Ana! Claro, te ajudo a remarcar. Para qual dia você prefere?"
+      - "Perfeito! Só confirmando: posso mudar sua consulta de sexta 02/10 às 9h para terça 13/10 às 8h? É só responder sim 😊"
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Subject
+metadata: { name: paciente, namespace: clinica-bench }
+spec:
+  description: Um paciente da clínica.
+  id: "caller.patientId"
+---
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: clinic, version: 0.1.0 }
+spec:
+  egress: { hosts: [clinic.bench] }
+  connection: { baseUrl: "https://clinic.bench" }
+  actions:
+    list-appointments:
+      input: { patientId: string }
+      output: list<clinic.Appointment>
+      effect: read
+      http: { method: GET, path: "/patients/{{ inputs.patientId }}/appointments" }
+    find-slots:
+      input: { dentistId: string, from: string, days: int }
+      output: list<clinic.Slot>
+      effect: read
+      http:
+        method: GET
+        path: "/dentists/{{ inputs.dentistId }}/slots"
+        query: { from: "${ inputs.from }", days: "${ inputs.days }" }
+    # The clinic's facts. Declared, but no Function uses it yet: today
+    # Tessera answers only what a Function declares (RFC-0004 baseline).
+    info:
+      input: {}
+      output: map
+      effect: read
+      http: { method: GET, path: /clinic/info }
+    reschedule:
+      input: { appointmentId: string, slotId: string }
+      output: clinic.Appointment
+      effect: irreversible
+      verify:
+        mode: probe
+        with: list-appointments
+        args: { patientId: "${ caller.patientId }" }
+        happened: "sources.probe.output.exists(a, a.id == inputs.appointmentId && a.slotId == inputs.slotId)"
+        output: "sources.probe.output.filter(a, a.id == inputs.appointmentId)[0]"
+      authorize: "has(caller.patientId)"
+      http:
+        method: POST
+        path: "/appointments/{{ inputs.appointmentId }}/reschedule"
+        body: { slotId: "${ inputs.slotId }" }

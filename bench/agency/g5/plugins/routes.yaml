@@ -1,0 +1,30 @@
+# Google Routes, for the drive between two airports of a connection (GRU →
+# CGH). One route-matrix call answers every pair; it is a query over POST,
+# declared safe. The key is a secret reference (TESSERA_SECRET_GOOGLE_ROUTES_API_KEY
+# when self-hosted).
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata:
+  name: routes
+  version: 0.1.0
+spec:
+  egress:
+    hosts: [routes.googleapis.com]
+  connection:
+    baseUrl: https://routes.googleapis.com
+    auth: { header: X-Goog-Api-Key, secret: GOOGLE_ROUTES_API_KEY }
+  actions:
+    drive-matrix:
+      input: { origins: any, destinations: any }
+      output: list<routes.Element>
+      effect: read
+      http:
+        method: POST
+        safe: true
+        path: /distanceMatrix/v2:computeRouteMatrix
+        headers: { X-Goog-FieldMask: "originIndex,destinationIndex,duration,condition" }
+        body:
+          origins: "${ inputs.origins }"
+          destinations: "${ inputs.destinations }"
+          travelMode: DRIVE
+          routingPreference: TRAFFIC_AWARE

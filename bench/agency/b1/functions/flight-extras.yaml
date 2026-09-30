@@ -1,0 +1,79 @@
+# What can be bought for a flight already shown (the legacy platform's
+# AnalyzeBaggageOptions and AnalyzeFlexibleTicket): checked-bag prices,
+# flexible ticket, insurance. One getSeatMap call; the prices are read by
+# code (scripts/extras.star), never written by a model.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: flight-extras
+  namespace: traveler
+spec:
+  description: Tells what can be bought for a flight from the last search (checked bags, flexible ticket, insurance) and the prices.
+  selector:
+    after: [search-flights, quote-trip, flight-details, flight-extras]   # follow-ups: only after flights were shown
+    intent: flight-extras
+    description: "Quanto custa um extra de um dos voos que acabei de mostrar (agentSaid lista voos): despachar mala (preço), bilhete flexível para remarcar ou cancelar, seguro viagem. Sem voos mostrados, uma pergunta geral sobre preços não é isto."
+  inputs:
+    last:
+      type: map
+      description: the last flight search of this conversation
+      resolve:
+        - id: saved
+          fromAction: memo/last-search
+          with: { conversation: "${ conversation.id }" }
+      onUnresolved:
+        - respond: { template: "Ainda não mostrei voos nesta conversa. Para onde você quer voar?" }
+    quote:
+      type: any
+      description: the last whole-trip quote shown in this conversation
+      resolve:
+        - { id: saved, fromAction: memo/last-shown, with: { conversation: "${ conversation.id }", kind: quote } }
+        - { id: found, when: "sources.saved.output != null", value: "sources.saved.output" }
+        - { id: none, value: "{}" }
+    namedFlight:
+      type: bool
+      description: whether the message points to a specific flight (o da Azul, o segundo, o das 7h, a opção 2)
+      resolve:
+        - { id: said, extract: { instructions: "true only when the message points to one specific flight or option; false otherwise" } }
+        - { id: default, value: "false" }
+    flight:
+      type: map
+      description: the flight the user asks about
+      resolve:
+        - id: only
+          when: "size(inputs.last.results) == 1"
+          value: "inputs.last.results[0]"
+        # Right after a quote, "e a mala?" is about the quote's flight.
+        - id: fromQuote
+          when: "!inputs.namedFlight && has(inputs.quote.items) && size(inputs.quote.items) > 0 && has(inputs.last.at) && inputs.quote.at >= inputs.last.at"
+          value: "inputs.quote.items[0].flight"
+        - id: pick
+          ask:
+            text: "Sobre qual voo? {{ inputs.last.results.map(f, f.label).join(' / ') }}"
+            choices: "inputs.last.results"
+            minConfidence: 0.6   # agency-001: the right flight came at 0.66 with the longer round-trip labels
+            onLowConfidence: ask-user
+    trip:
+      type: map
+      description: the trip being planned in this conversation (who travels)
+      resolve:
+        - { id: saved, fromAction: trip/get, with: { conversation: "${ conversation.id }" } }
+        - { id: found, when: "sources.saved.output != null", value: "sources.saved.output" }
+        - { id: none, value: "{}" }
+  steps:
+    - id: offer
+      act: booking/seat-map
+      with: { offerToken: "${ inputs.flight.token }", currency: "${ has(inputs.flight.currency) ? inputs.flight.currency : 'BRL' }" }
+      onError:
+        - respond: { template: "Não consegui consultar os extras desse voo agora. Quer que eu tente de novo?" }
+    - id: message
+      compute:
+        starlark:
+          script: ../scripts/extras.star
+          function: extras_message
+          with:
+            flight: "${ inputs.flight }"
+            data: "${ steps.offer.output }"
+            travelers: "${ has(inputs.trip.adults) && inputs.trip.adults != null ? inputs.trip.adults + (has(inputs.trip.children) && inputs.trip.children != null ? size(inputs.trip.children) : 0) : 1 }"
+  output:
+    template: "{{ steps.message.output }}"

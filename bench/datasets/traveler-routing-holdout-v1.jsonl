@@ -1,0 +1,34 @@
+{"id": "h-search-flights-01", "message": "oi, quero comprar uma passagem", "want": "search-flights"}
+{"id": "h-search-flights-02", "message": "gru x cnf dia 4", "want": "search-flights"}
+{"id": "h-search-flights-03", "message": "tem aviao pra natal no sabado?", "want": "search-flights"}
+{"id": "h-search-flights-04", "message": "preciso estar em brasilia segunda 9h", "want": "search-flights"}
+{"id": "h-search-flights-05", "message": "quero levar minha mae pra lisboa em marco", "want": "search-flights"}
+{"id": "h-search-flights-06", "message": "e pra buenos aires, quanto fica?", "want": "search-flights", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h-search-flights-07", "message": "preciso de voo de volta pra sp dia 15", "want": "search-flights", "agentSaid": "Hotéis em Lisboa, 12/10–15/10 (3 noites):\n1. Hotel Avenida Palace — nota 9.0 (2100 avaliações), R$ 3.000 no total (R$ 1.000/noite)\n2. Lisboa Stay Apartments — nota 8.8 (900 avaliações), R$ 1.800 no total (R$ 600/noite), cancelamento grátis", "after": "search-hotels"}
+{"id": "h-search-flights-08", "message": "voo direto pra miami em julho", "want": "search-flights"}
+{"id": "h-flight-details-01", "message": "o da gol tem mala?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h-flight-details-02", "message": "e a do segundo, despacha?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h-flight-details-03", "message": "o terceiro é qual tarifa?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h-flight-details-04", "message": "no de 720 posso despachar?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h-flight-details-05", "message": "e esse primeiro ai, inclui o que?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h-flight-details-06", "message": "o voo das 16h tem bagagem?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h-search-hotels-01", "message": "onde posso dormir em ouro preto sabado?", "want": "search-hotels"}
+{"id": "h-search-hotels-02", "message": "hostel em BA pra 5 noites", "want": "search-hotels"}
+{"id": "h-search-hotels-03", "message": "flat em sp pra 2 semanas", "want": "search-hotels"}
+{"id": "h-search-hotels-04", "message": "e hospedagem em lisboa pra essas datas?", "want": "search-hotels", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h-search-hotels-05", "message": "tem algo com cancelamento gratis?", "want": "search-hotels", "agentSaid": "Hotéis em Lisboa, 12/10–15/10 (3 noites):\n1. Hotel Avenida Palace — nota 9.0 (2100 avaliações), R$ 3.000 no total (R$ 1.000/noite)\n2. Lisboa Stay Apartments — nota 8.8 (900 avaliações), R$ 1.800 no total (R$ 600/noite), cancelamento grátis", "after": "search-hotels"}
+{"id": "h-search-hotels-06", "message": "resort em porto de galinhas no ano novo", "want": "search-hotels"}
+{"id": "h-set-preferences-01", "message": "tenho tudoazul", "want": "set-preferences"}
+{"id": "h-set-preferences-02", "message": "nao voo de avianca de jeito nenhum", "want": "set-preferences"}
+{"id": "h-set-preferences-03", "message": "sempre saio de campinas", "want": "set-preferences"}
+{"id": "h-set-preferences-04", "message": "prefiro corredor, nunca meio", "want": "set-preferences"}
+{"id": "h-set-preferences-05", "message": "tempo é mais importante que preço pra mim", "want": "set-preferences"}
+{"id": "h-set-preferences-06", "message": "academia no hotel é essencial pra mim", "want": "set-preferences"}
+{"id": "h-none-01", "message": "boa noite", "want": "none"}
+{"id": "h-none-02", "message": "qual o fuso de lisboa?", "want": "none"}
+{"id": "h-none-03", "message": "precisa de vacina pra ir pra africa do sul?", "want": "none"}
+{"id": "h-none-04", "message": "vcs vendem pacote de cruzeiro?", "want": "none"}
+{"id": "h-none-05", "message": "perfeito, obrigado", "want": "none", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h-none-06", "message": "que horas sao ai?", "want": "none"}
+{"id": "h-none-07", "message": "quero reclamar de uma cobranca", "want": "none"}
+{"id": "h-none-08", "message": "me manda o comprovante", "want": "none"}

@@ -1,0 +1,370 @@
+{
+ "about": "knowledge-002: messages to the learn bench clinic (knowledge-001's documents, an empty lessons base, a free-mode handoff to the reception). gold: answer = the documents settle it (answer correctly, no handoff); handoff = they do not, though a passage on a nearby topic exists (near) or nothing does (none). Written 2026-09-27 before any change. Split fixed here.",
+ "dev": [
+  {
+   "id": "d-a1",
+   "gold": "answer",
+   "message": "vcs aceitam sulamerica?",
+   "truth": "Sim, SulAmérica Odonto."
+  },
+  {
+   "id": "d-a2",
+   "gold": "answer",
+   "message": "até quantas vezes parcela?",
+   "truth": "Até 6x sem juros no crédito, para tratamentos acima de R$ 600."
+  },
+  {
+   "id": "d-a3",
+   "gold": "answer",
+   "message": "posso fumar depois de tirar o dente?",
+   "truth": "Não por pelo menos 72 horas."
+  },
+  {
+   "id": "d-a4",
+   "gold": "answer",
+   "message": "abre domingo?",
+   "truth": "Não abre aos domingos e feriados."
+  },
+  {
+   "id": "d-n1",
+   "gold": "handoff",
+   "near": "clareamento.md",
+   "message": "vcs atendem bebê?",
+   "truth": "Os documentos não dizem se atendem bebês (a idade do clareamento não responde)."
+  },
+  {
+   "id": "d-n2",
+   "gold": "handoff",
+   "near": "convenios.md",
+   "message": "o amil dental 200 cobre ortodontia?",
+   "truth": "Os documentos dizem que aceitam Amil Dental, mas não o que cada plano cobre."
+  },
+  {
+   "id": "d-n3",
+   "gold": "handoff",
+   "near": "pos-extracao.md",
+   "message": "depois de fazer canal posso comer normal?",
+   "truth": "Os cuidados escritos são de extração, não de canal."
+  },
+  {
+   "id": "d-n4",
+   "gold": "handoff",
+   "near": "precos-particular.md",
+   "message": "quanto custa uma coroa de porcelana?",
+   "truth": "A tabela não tem coroa."
+  },
+  {
+   "id": "d-n5",
+   "gold": "handoff",
+   "near": "localizacao.md",
+   "message": "tem estacionamento pra moto?",
+   "truth": "Os documentos falam do estacionamento conveniado para carros sem mencionar motos; não dizem."
+  },
+  {
+   "id": "d-x1",
+   "gold": "handoff",
+   "message": "vcs fazem lente de contato dental?",
+   "truth": "Nada nos documentos."
+  },
+  {
+   "id": "d-x2",
+   "gold": "handoff",
+   "message": "a dentista fala inglês?",
+   "truth": "Nada nos documentos."
+  },
+  {
+   "id": "d-x3",
+   "gold": "handoff",
+   "message": "tem desconto pra idoso?",
+   "truth": "Nada nos documentos."
+  }
+ ],
+ "test": [
+  {
+   "id": "t-a1",
+   "gold": "answer",
+   "message": "bradesco dental serve?",
+   "truth": "Só o plano Bradesco Dental Top."
+  },
+  {
+   "id": "t-a2",
+   "gold": "answer",
+   "message": "aceita cheque?",
+   "truth": "Não aceitam cheque (nem boleto)."
+  },
+  {
+   "id": "t-a3",
+   "gold": "answer",
+   "message": "a avaliação é paga?",
+   "truth": "Sim, R$ 120, abatida do tratamento se feito em até 60 dias."
+  },
+  {
+   "id": "t-a4",
+   "gold": "answer",
+   "message": "se eu faltar tem que pagar alguma coisa?",
+   "truth": "Taxa de R$ 50 na consulta seguinte, exceto com atestado em até 2 dias."
+  },
+  {
+   "id": "t-a5",
+   "gold": "answer",
+   "message": "que horas vcs fecham?",
+   "truth": "19h de segunda a sexta; 12h no sábado."
+  },
+  {
+   "id": "t-a6",
+   "gold": "answer",
+   "message": "posso tomar café depois do clareamento?",
+   "truth": "Durante o tratamento, evitar café, vinho tinto, açaí e molho de tomate."
+  },
+  {
+   "id": "t-a7",
+   "gold": "answer",
+   "message": "o clareamento caseiro custa quanto?",
+   "truth": "R$ 650 (com moldeira)."
+  },
+  {
+   "id": "t-a8",
+   "gold": "answer",
+   "message": "sangrou muito depois da extração, o que faço?",
+   "truth": "Morder a gaze; se não parar depois de 4 horas, ligar para a clínica."
+  },
+  {
+   "id": "t-n1",
+   "gold": "handoff",
+   "near": "clareamento.md",
+   "message": "meu filho de 8 anos pode fazer consulta?",
+   "truth": "Os documentos não dizem se atendem crianças (a regra do clareamento não responde)."
+  },
+  {
+   "id": "t-n2",
+   "gold": "handoff",
+   "near": "convenios.md",
+   "message": "o odontoprev integral cobre implante?",
+   "truth": "Aceitam OdontoPrev Integral, mas os documentos não dizem o que cobre."
+  },
+  {
+   "id": "t-n3",
+   "gold": "handoff",
+   "near": "pos-extracao.md",
+   "message": "depois da limpeza posso beber café?",
+   "truth": "Os cuidados escritos são de extração e de clareamento; nada sobre limpeza."
+  },
+  {
+   "id": "t-n4",
+   "gold": "handoff",
+   "near": "precos-particular.md",
+   "message": "quanto custa um canal particular?",
+   "truth": "A tabela não tem canal."
+  },
+  {
+   "id": "t-n5",
+   "gold": "handoff",
+   "near": "pagamento.md",
+   "message": "aceitam vale-refeição?",
+   "truth": "Os documentos listam as formas aceitas sem vale-refeição; não afirmam que não aceita, mas não está na lista (dizer o que aceita e encaminhar é certo; afirmar que aceita é errado)."
+  },
+  {
+   "id": "t-n6",
+   "gold": "handoff",
+   "near": "cancelamento.md",
+   "message": "se a dentista faltar eu recebo algum desconto?",
+   "truth": "A política fala de faltas do paciente, não do dentista."
+  },
+  {
+   "id": "t-n7",
+   "gold": "handoff",
+   "near": "localizacao.md",
+   "message": "tem ponto de ônibus perto?",
+   "truth": "Os documentos falam do metrô Ana Rosa, não de ônibus."
+  },
+  {
+   "id": "t-n8",
+   "gold": "handoff",
+   "near": "clareamento.md",
+   "message": "clareamento funciona em dente com canal?",
+   "truth": "Os documentos dizem que coroas e restaurações não clareiam; nada sobre dentes com canal."
+  },
+  {
+   "id": "t-n9",
+   "gold": "handoff",
+   "near": "convenios.md",
+   "message": "a autorização do plano pra aparelho demora quanto?",
+   "truth": "Os documentos citam autorização para canal, prótese e implante (3 dias úteis), não para aparelho."
+  },
+  {
+   "id": "t-n10",
+   "gold": "handoff",
+   "near": "pos-extracao.md",
+   "message": "posso fazer academia depois de arrancar o siso?",
+   "truth": "Os cuidados não falam de exercício."
+  },
+  {
+   "id": "t-x1",
+   "gold": "handoff",
+   "message": "vcs fazem botox?",
+   "truth": "Nada nos documentos."
+  },
+  {
+   "id": "t-x2",
+   "gold": "handoff",
+   "message": "tem café na sala de espera?",
+   "truth": "Nada nos documentos."
+  },
+  {
+   "id": "t-x3",
+   "gold": "handoff",
+   "message": "atendem urgência de madrugada?",
+   "truth": "Os documentos dão o horário; não falam de urgência fora dele (dizer o horário e encaminhar é certo)."
+  },
+  {
+   "id": "t-x4",
+   "gold": "handoff",
+   "message": "quem é o dentista responsável técnico?",
+   "truth": "Nada nos documentos."
+  },
+  {
+   "id": "t-x5",
+   "gold": "handoff",
+   "message": "vcs tem instagram?",
+   "truth": "Nada nos documentos."
+  },
+  {
+   "id": "t-x6",
+   "gold": "handoff",
+   "message": "fazem raio-x panorâmico aí mesmo?",
+   "truth": "Nada nos documentos."
+  }
+ ],
+ "confirm": [
+  {
+   "id": "c-a1",
+   "gold": "answer",
+   "message": "aceitam amil dental básico 100?",
+   "truth": "Não: o Amil Dental Básico 100 é a exceção; os outros planos Amil Dental são aceitos."
+  },
+  {
+   "id": "c-a2",
+   "gold": "answer",
+   "message": "quanto é a restauração de resina?",
+   "truth": "A partir de R$ 220 por dente."
+  },
+  {
+   "id": "c-a3",
+   "gold": "answer",
+   "message": "se eu chegar 20 minutos atrasado?",
+   "truth": "Atrasos de mais de 15 minutos podem exigir remarcação, conforme a agenda."
+  },
+  {
+   "id": "c-a4",
+   "gold": "answer",
+   "message": "lactante pode clarear os dentes?",
+   "truth": "Não: gestantes, lactantes e menores de 16 não podem."
+  },
+  {
+   "id": "c-a5",
+   "gold": "answer",
+   "message": "qual o endereço?",
+   "truth": "Rua das Acácias, 250, sala 12, Vila Mariana."
+  },
+  {
+   "id": "c-a6",
+   "gold": "answer",
+   "message": "posso usar canudo depois da extração?",
+   "truth": "Não nas primeiras 24 horas."
+  },
+  {
+   "id": "c-n1",
+   "gold": "handoff",
+   "near": "clareamento.md",
+   "message": "clareamento em adolescente de 17 anos pode?",
+   "truth": "Os documentos só dizem que menores de 16 não podem; 17 não está proibido pelo documento, mas também não confirma que pode: afirmar a regra dos 16 é certo; encaminhar também. Errado: dizer que não pode."
+  },
+  {
+   "id": "c-n2",
+   "gold": "handoff",
+   "near": "pos-extracao.md",
+   "message": "depois de fazer implante posso comer pão?",
+   "truth": "Os cuidados escritos são de extração, não de implante."
+  },
+  {
+   "id": "c-n3",
+   "gold": "handoff",
+   "near": "convenios.md",
+   "message": "o sulamérica cobre clareamento?",
+   "truth": "Aceitam SulAmérica Odonto, mas os documentos não dizem o que cobre."
+  },
+  {
+   "id": "c-n4",
+   "gold": "handoff",
+   "near": "precos-particular.md",
+   "message": "quanto custa uma extração de siso?",
+   "truth": "A tabela não tem extração."
+  },
+  {
+   "id": "c-n5",
+   "gold": "handoff",
+   "near": "localizacao.md",
+   "message": "tem bicicletário?",
+   "truth": "Os documentos falam do estacionamento de carros e do metrô; nada de bicicletas."
+  },
+  {
+   "id": "c-n6",
+   "gold": "handoff",
+   "near": "cancelamento.md",
+   "message": "se eu remarcar em cima da hora pago taxa?",
+   "truth": "A taxa de R$ 50 é para falta sem aviso; remarcações devem ter 24h de antecedência, mas os documentos não dizem de taxa por remarcação tardia."
+  },
+  {
+   "id": "c-n7",
+   "gold": "handoff",
+   "near": "pagamento.md",
+   "message": "dá pra pagar metade no pix e metade no cartão?",
+   "truth": "Os documentos listam as formas aceitas, sem dizer se podem ser combinadas."
+  },
+  {
+   "id": "c-n8",
+   "gold": "handoff",
+   "near": "clareamento.md",
+   "message": "depois do clareamento posso tomar vinho branco?",
+   "truth": "O documento cita vinho tinto, não branco."
+  },
+  {
+   "id": "c-n9",
+   "gold": "handoff",
+   "near": "convenios.md",
+   "message": "preciso de pedido médico pra usar o plano?",
+   "truth": "Os documentos pedem carteirinha e documento com foto e autorização para alguns tratamentos; nada sobre pedido médico."
+  },
+  {
+   "id": "c-n10",
+   "gold": "handoff",
+   "near": "localizacao.md",
+   "message": "vcs abrem no feriado de carnaval?",
+   "truth": "Os documentos dizem que não abrem em feriados; carnaval não é feriado nacional em todos os lugares: afirmar que fecha em feriados é aceitável se não afirmar sobre carnaval com certeza; encaminhar é certo."
+  },
+  {
+   "id": "c-x1",
+   "gold": "handoff",
+   "message": "vcs atendem pelo SUS?",
+   "truth": "Nada nos documentos."
+  },
+  {
+   "id": "c-x2",
+   "gold": "handoff",
+   "message": "tem cadeira de massagem na espera?",
+   "truth": "Nada nos documentos."
+  },
+  {
+   "id": "c-x3",
+   "gold": "handoff",
+   "message": "fazem clareamento em gengiva?",
+   "truth": "Nada nos documentos."
+  },
+  {
+   "id": "c-x4",
+   "gold": "handoff",
+   "message": "a clínica tem alvará da vigilância sanitária?",
+   "truth": "Nada nos documentos."
+  }
+ ]
+}

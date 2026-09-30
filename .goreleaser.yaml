@@ -1,0 +1,21 @@
+# Releases (RFC-0007, step 1): on a tag v*, binaries for linux and darwin
+# (amd64, arm64) and the image ghcr.io/bbiangul/tessera:<version>, private
+# and shared per customer (owner's decision, 2026-09-25).
+version: 2
+project_name: tessera
+builds:
+  - main: ./cmd/tessera
+    binary: tessera
+    env: [CGO_ENABLED=0]
+    goos: [linux, darwin]
+    goarch: [amd64, arm64]
+    ldflags: ["-s -w -X github.com/bbiangul/tessera/internal/project.Version={{ .Tag }}"]
+archives:
+  - formats: [tar.gz]
+checksum:
+  name_template: checksums.txt
+dockers_v2:
+  - images: [ghcr.io/bbiangul/tessera]
+    tags: ["{{ .Version }}", "{{ .Major }}.{{ .Minor }}", latest]
+    platforms: [linux/amd64, linux/arm64]
+    dockerfile: Dockerfile

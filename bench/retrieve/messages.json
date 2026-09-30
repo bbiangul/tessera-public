@@ -1,0 +1,15 @@
+{
+ "about": "retrieve-001: price questions to a clinic Function (orcamento). indocs: the price list settles it; notindocs: it does not. Written 2026-09-27 before building.",
+ "questions": [
+  {"id": "p01", "kind": "indocs", "message": "quanto fica a avaliação?", "truth": "R$ 120, abatida do tratamento se feito na clínica em até 60 dias."},
+  {"id": "p02", "kind": "indocs", "message": "qual o valor da limpeza particular?", "truth": "R$ 180."},
+  {"id": "p03", "kind": "indocs", "message": "preço do clareamento no consultório?", "truth": "R$ 950, duas sessões."},
+  {"id": "p04", "kind": "indocs", "message": "e o clareamento caseiro sai por quanto?", "truth": "R$ 650, com moldeira."},
+  {"id": "p05", "kind": "indocs", "message": "quanto custa uma restauração?", "truth": "A partir de R$ 220 por dente (resina)."},
+  {"id": "p06", "kind": "indocs", "message": "a limpeza e a avaliação juntas dão quanto?", "truth": "Avaliação R$ 120 + limpeza R$ 180 = R$ 300 (a avaliação é abatida se fizer o tratamento em até 60 dias)."},
+  {"id": "p07", "kind": "notindocs", "message": "quanto custa um tratamento de canal?", "truth": "Não está na tabela: não pode dar valor; deve dizer que não tem e indicar a recepção/avaliação."},
+  {"id": "p08", "kind": "notindocs", "message": "valor de uma coroa de porcelana?", "truth": "Não está na tabela: não pode dar valor."},
+  {"id": "p09", "kind": "notindocs", "message": "quanto sai tirar um siso?", "truth": "Não está na tabela: não pode dar valor."},
+  {"id": "p10", "kind": "notindocs", "message": "implante unitário custa quanto?", "truth": "Não está na tabela: não pode dar valor."}
+ ]
+}

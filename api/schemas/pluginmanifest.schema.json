@@ -1,0 +1,449 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bbiangul/tessera/api/plugins/v1alpha1/plugin-manifest",
+  "$ref": "#/$defs/PluginManifest",
+  "$defs": {
+    "ActionSpec": {
+      "properties": {
+        "input": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Input maps each parameter name to its type. All parameters are required."
+        },
+        "output": {
+          "type": "string",
+          "description": "Output is the type the action returns."
+        },
+        "effect": {
+          "type": "string",
+          "enum": [
+            "read",
+            "idempotent-write",
+            "irreversible",
+            "external-message"
+          ],
+          "description": "Effect is what the action does to the world. The manifest is the\nauthority: a Function may treat an action as riskier, never as safer."
+        },
+        "verify": {
+          "$ref": "#/$defs/Verify",
+          "description": "Verify says how to tell whether the effect happened after an ambiguous\nfailure. Missing means none."
+        },
+        "compensate": {
+          "type": "string",
+          "description": "Compensate names the action that undoes this one, if any."
+        },
+        "authorize": {
+          "type": "string",
+          "description": "Authorize is a boolean expression on inputs and caller checked by the\nplatform before every call: object-level authorization."
+        },
+        "freeText": {
+          "type": "boolean",
+          "description": "FreeText marks an external-message action that sends free text (not\nan approved template): the channel's window applies to it."
+        },
+        "http": {
+          "$ref": "#/$defs/HTTPCall",
+          "description": "HTTP implements the action with the built-in http plugin."
+        },
+        "sql": {
+          "$ref": "#/$defs/SQLStatement",
+          "description": "SQL implements the action with the built-in sql plugin."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "effect"
+      ],
+      "description": "ActionSpec describes one action."
+    },
+    "Auth": {
+      "properties": {
+        "header": {
+          "type": "string",
+          "description": "Header names the header, e.g. Authorization or x-api-key."
+        },
+        "query": {
+          "type": "string",
+          "description": "Query names the query parameter, e.g. key."
+        },
+        "secret": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "Secret is the name of the secret; the value never appears in a\ndefinition. Self-hosted, it is read from TESSERA_SECRET_\u003cNAME\u003e."
+        },
+        "prefix": {
+          "type": "string",
+          "description": "Prefix goes before the value, e.g. \"Bearer \"."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "secret"
+      ],
+      "description": "Auth puts a secret in a header or a query parameter. Exactly one of header\nand query must be set."
+    },
+    "Channel": {
+      "properties": {
+        "window": {
+          "type": "string",
+          "description": "Window is how long after the user's last message free text may be\nsent (Go duration; WhatsApp: 24h). Outside it, only template actions\n(external-message without freeText) may reach the user. A step that\nwould send free text outside the window fails with the definite\nerror WINDOW_CLOSED, which its onError can answer with a template."
+        },
+        "consent": {
+          "type": "string",
+          "description": "Consent is a boolean expression on caller and event that must be\ntrue before any external-message action of this plugin runs (LGPD\nopt-in, do-not-contact); otherwise the action fails with the\ndefinite error CONSENT_MISSING and nothing is sent."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Channel holds a messaging channel's rules."
+    },
+    "Connection": {
+      "properties": {
+        "baseUrl": {
+          "type": "string",
+          "pattern": "^https://",
+          "description": "BaseURL is https://host[:port][/prefix]; its host must be in egress."
+        },
+        "auth": {
+          "$ref": "#/$defs/Auth",
+          "description": "Auth sends a secret with every request."
+        },
+        "oauth2": {
+          "$ref": "#/$defs/OAuth2",
+          "description": "OAuth2 gets a bearer token by the client-credentials grant and sends\nit with every request (the Bot Framework, Microsoft Graph). Not with\nauth."
+        },
+        "publicErrors": {
+          "type": "boolean",
+          "description": "PublicErrors says the system's error texts are the business's own\nwords (a new rule, a phone to call, a fee), not personal data. When\nan action fails definitely, the platform then passes what the system\nsaid on to the user unmasked; otherwise it is masked like personal\ndata (drift-002)."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "baseUrl"
+      ],
+      "description": "Connection is the endpoint and credentials of the system a plugin calls."
+    },
+    "Egress": {
+      "properties": {
+        "hosts": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "minItems": 1,
+          "description": "Hosts the plugin may contact. \"*.example.com\" allows its subdomains\n(not example.com itself), e.g. a tenant's *.sharepoint.com."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "hosts"
+      ],
+      "description": "Egress limits a plugin's network access."
+    },
+    "HTTPCall": {
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE"
+          ],
+          "description": "Method is the HTTP method."
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "Path is appended to the connection's base URL. It is a template:\n{{ inputs.id }} is escaped as one path segment."
+        },
+        "query": {
+          "type": "object",
+          "description": "Query parameters. Values are literal unless the whole value is\n\"${ expr }\"; a null value is left out, a list repeats the parameter."
+        },
+        "headers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Headers are literal. Credentials go in connection.auth, never here."
+        },
+        "body": {
+          "type": "object",
+          "description": "Body is sent as JSON. Values are literal unless the whole value is\n\"${ expr }\"."
+        },
+        "output": {
+          "type": "string",
+          "description": "Output is an expression on sources.response.body (the decoded JSON)\nand sources.response.status; default: the whole body."
+        },
+        "failWhen": {
+          "type": "string",
+          "description": "FailWhen is a boolean expression on sources.response: when true, the\nserver refused the request although it answered 2xx, as APIs that\nreport errors in the body do (Slack: \"!sources.response.body.ok\").\nThe call fails definitely (nothing happened), with the body's start\nin the message; for an irreversible action it is unclear instead, and\nverification decides. Match only answers that mean nothing was done."
+        },
+        "safe": {
+          "type": "boolean",
+          "description": "Safe declares that this POST only reads: a query API that takes its\nquestion as a body (GraphQL queries, route matrices). Only then may a\nread action use POST; it is retried like a GET, so a POST that\nchanges anything must not say so."
+        },
+        "response": {
+          "type": "string",
+          "enum": [
+            "json",
+            "bytes"
+          ],
+          "description": "Response is json (the default) or bytes: a file, returned as\n{base64, contentType, size} (plugin-001). Only for reads; redirects\nare followed (at most 3), each to a host in egress.hosts, without\ncredentials when the host changes. SharePoint's /content answers\nwith a redirect."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "method",
+        "path"
+      ],
+      "description": "HTTPCall describes the request an action makes and how its output is read."
+    },
+    "OAuth2": {
+      "properties": {
+        "tokenUrl": {
+          "type": "string",
+          "pattern": "^https://",
+          "description": "TokenURL is the token endpoint, e.g.\nhttps://login.microsoftonline.com/\u003ctenant\u003e/oauth2/v2.0/token."
+        },
+        "clientId": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "ClientID names the secret holding the client (app) ID."
+        },
+        "clientSecret": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "ClientSecret names the secret holding the client secret."
+        },
+        "scope": {
+          "type": "string",
+          "description": "Scope is requested with the token, e.g.\nhttps://api.botframework.com/.default."
+        },
+        "refreshToken": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "RefreshToken names the secret holding a refresh token: the grant is\nthen refresh_token, for an API that acts as a user who consented\nonce (Gmail)."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "tokenUrl",
+        "clientId",
+        "clientSecret"
+      ],
+      "description": "OAuth2 is the client-credentials grant, or the refresh-token grant with\nrefreshToken. The token is fetched through\nthe plugin's egress (the token URL's host must be in egress.hosts) and\nkept until a minute before it expires, or until an API answers 401."
+    },
+    "PluginManifest": {
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "enum": [
+            "plugins.tessera.dev/v1alpha1"
+          ],
+          "description": "APIVersion must be plugins.tessera.dev/v1alpha1."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "PluginManifest"
+          ],
+          "description": "Kind must be PluginManifest."
+        },
+        "metadata": {
+          "$ref": "#/$defs/PluginMeta",
+          "description": "Metadata names and versions the plugin."
+        },
+        "spec": {
+          "$ref": "#/$defs/PluginSpec",
+          "description": "Spec lists what the plugin needs and offers."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ],
+      "description": "PluginManifest declares a plugin's actions."
+    },
+    "PluginMeta": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Name of the plugin, used as the prefix in plugin/action."
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+",
+          "description": "Version in semver."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "version"
+      ],
+      "description": "PluginMeta identifies a plugin."
+    },
+    "PluginSpec": {
+      "properties": {
+        "egress": {
+          "$ref": "#/$defs/Egress",
+          "description": "Egress lists the hosts the plugin may contact."
+        },
+        "connection": {
+          "$ref": "#/$defs/Connection",
+          "description": "Connection says how the built-in http plugin reaches the system, for\nactions that declare http. Credentials are always secret references."
+        },
+        "sql": {
+          "$ref": "#/$defs/SQLDatabase",
+          "description": "SQL gives the plugin its own database, for actions that declare sql:\nthe agent's state between turns (profiles, last search results)."
+        },
+        "channel": {
+          "$ref": "#/$defs/Channel",
+          "description": "Channel declares the rules of a messaging channel (WhatsApp, SMS),\nwhich the platform applies to every message it carries: the free-text\nwindow and consent. An Agent whose spec.channel names this plugin\ngets them on its messages to the user too."
+        },
+        "actions": {
+          "additionalProperties": {
+            "$ref": "#/$defs/ActionSpec"
+          },
+          "type": "object",
+          "description": "Actions by name."
+        },
+        "types": {
+          "additionalProperties": {
+            "$ref": "#/$defs/TypeSpec"
+          },
+          "type": "object",
+          "description": "Types declare the plugin's objects (Appointment, Slot): their\nfields and field types. An action whose output names a declared\ntype has its reads checked against it, so a changed API is noticed\n(\"CONTRACT\") and, with improvise.repairReads, repaired by renaming\nfields (drift-008). Undeclared plugin types are any object."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "actions"
+      ],
+      "description": "PluginSpec describes a plugin."
+    },
+    "SQLDatabase": {
+      "properties": {
+        "migrations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "minItems": 1,
+          "description": "Migrations are applied in order, once each, and never edited after\nthey ran: add a new one to change the schema."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "migrations"
+      ],
+      "description": "SQLDatabase is a plugin's own database (SQLite when self-hosted)."
+    },
+    "SQLStatement": {
+      "properties": {
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Query is the statement, with :name parameters."
+        },
+        "params": {
+          "type": "object",
+          "description": "Params gives each :name parameter its value. Values are literal\nunless the whole value is \"${ expr }\"; expressions read inputs (the\naction's arguments) and caller."
+        },
+        "result": {
+          "type": "string",
+          "enum": [
+            "rows",
+            "row",
+            "affected"
+          ],
+          "description": "Result shapes the output: rows (a list of objects, the default for a\nSELECT), row (the first row, or null), or affected (rows changed)."
+        },
+        "json": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "JSON lists columns holding JSON text, decoded in the output."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "query"
+      ],
+      "description": "SQLStatement is one parameterized statement. The SQL text is literal;\nvalues only enter as named parameters (:name), so no input can change\nthe statement. A SELECT must be a read action; any other statement must\ndeclare the effect it has."
+    },
+    "TypeSpec": {
+      "properties": {
+        "fields": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Fields by name, with their types: a basic type (string, int, float,\nbool, date, timestamp, duration, map, any), another plugin.Type or\nlist\u003cT\u003e. A trailing \"?\" makes a field optional."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "fields"
+      ],
+      "description": "TypeSpec is an object's fields."
+    },
+    "Verify": {
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "native",
+            "probe",
+            "none"
+          ],
+          "description": "Mode is native, probe or none."
+        },
+        "with": {
+          "type": "string",
+          "description": "With names a read action in this PluginManifest that checks the effect\n(mode probe). Use its local name, e.g. \"lookup\", not \"plugin/lookup\"."
+        },
+        "args": {
+          "type": "object",
+          "description": "Args are the probe action's arguments. Values are literal unless the\nwhole value is \"${ expr }\"; expressions read inputs (this action's\narguments) and caller."
+        },
+        "happened": {
+          "type": "string",
+          "description": "Happened is a boolean expression that says whether the effect\nhappened, reading the probe's result as sources.probe.output and this\naction's arguments as inputs. Required for mode probe. Example:\n\"sources.probe.output.exists(a, a.id == inputs.appointmentId \u0026\u0026 a.slotId == inputs.slotId)\""
+        },
+        "output": {
+          "type": "string",
+          "description": "Output optionally computes this action's output from the probe's\nresult when the effect happened; without it the output is null."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "mode"
+      ],
+      "description": "Verify describes verification."
+    }
+  },
+  "title": "PluginManifest"
+}

@@ -1,0 +1,67 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: dev, namespace: learn }
+spec:
+  description: learn-001 dev; transcripts only, judged outside.
+  now: "2026-09-27T09:00:00-03:00"
+  scenarios:
+    - id: d-a1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs aceitam sulamerica?"
+    - id: d-a2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "até quantas vezes parcela?"
+    - id: d-a3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso fumar depois de tirar o dente?"
+    - id: d-a4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "abre domingo?"
+    - id: d-n1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs atendem bebê?"
+    - id: d-n2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o amil dental 200 cobre ortodontia?"
+    - id: d-n3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "depois de fazer canal posso comer normal?"
+    - id: d-n4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto custa uma coroa de porcelana?"
+    - id: d-n5
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem estacionamento pra moto?"
+    - id: d-x1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs fazem lente de contato dental?"
+    - id: d-x2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a dentista fala inglês?"
+    - id: d-x3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem desconto pra idoso?"

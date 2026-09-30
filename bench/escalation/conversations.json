@@ -1,0 +1,21 @@
+{
+  "note": "Multi-turn free-mode conversations (issue #27, history-001). Turns 2 and 3 need the earlier turns to be understood.",
+  "conversations": [
+    {"id": "m01", "turns": ["hi! when do I need to order the tech and furniture package?", "and how much is it?", "who do I order it through again?"],
+     "points": [["at least 6 weeks before opening", "through Franchise Administration"], ["$18,500"], ["Franchise Administration"]]},
+    {"id": "m02", "turns": ["do tutors need a degree?", "what about someone halfway through one?", "and can they start before their background check clears?"],
+     "points": [["a bachelor's degree or enrolled in one"], ["yes, enrolment in a bachelor's program counts"], ["no, nobody works with students before the check clears"]]},
+    {"id": "m03", "turns": ["what's the royalty rate?", "when is it due?", "and the brand fund on top of that?"],
+     "points": [["7% of gross revenue"], ["by ACH on the 10th of the following month"], ["1.5% of gross revenue, starting the month you open"]]},
+    {"id": "m04", "turns": ["how big does our site need to be?", "and parking?", "does it have to be on the ground floor?"],
+     "points": [["1,200 to 2,000 sq ft"], ["at least 8 spaces"], ["ground floor or elevator access"]]},
+    {"id": "m05", "turns": ["which days do we have to close?", "what about the day after?", "how much notice do families need for that?"],
+     "points": [["New Year's Day, Thanksgiving Day, Christmas Day"], ["other closures are your decision"], ["at least 2 weeks' notice"]]},
+    {"id": "m06", "turns": ["where do student records live?", "can I export them for a backup?", "what if a laptop with records is stolen?"],
+     "points": [["BrightDesk"], ["no, never export them to personal devices or spreadsheets"], ["report the data incident to Franchise Administration within 24 hours"]]},
+    {"id": "m07", "turns": ["how long is owner training?", "can my business partner come too?", "and our center director?"],
+     "points": [["5 days, virtual"], ["a second owner attends at no cost"], ["an additional staff member costs $500"]]},
+    {"id": "m08", "turns": ["what insurance do we need?", "when do the certificates have to be uploaded?", "who has to be named on them?"],
+     "points": [["general liability $1M/$2M, professional liability $1M, workers' comp as the state requires"], ["before opening"], ["Brightpath Learning as additional insured"]]}
+  ]
+}

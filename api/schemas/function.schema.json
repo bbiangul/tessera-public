@@ -1,0 +1,1035 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bbiangul/tessera/api/agents/v1alpha1/function",
+  "$ref": "#/$defs/Function",
+  "$defs": {
+    "Action": {
+      "properties": {
+        "act": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+/[a-z0-9-]+$",
+          "description": "Act is the plugin action, written plugin/action."
+        },
+        "with": {
+          "type": "object",
+          "description": "With gives the action's arguments. Values are literal unless the whole\nvalue is \"${ expr }\"."
+        },
+        "confirm": {
+          "$ref": "#/$defs/Template",
+          "description": "Confirm is the question asked to the user before an irreversible\naction. The action runs only after a clear yes."
+        },
+        "idempotencyKey": {
+          "$ref": "#/$defs/Expr",
+          "description": "IdempotencyKey is a string expression identifying the effect, so it is\nnot repeated. Required for irreversible actions."
+        },
+        "milestone": {
+          "$ref": "#/$defs/MilestoneRef",
+          "description": "Milestone is recorded when the effect is confirmed."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "act"
+      ],
+      "description": "Action is a call to a plugin action with an effect on the world."
+    },
+    "Ask": {
+      "properties": {
+        "text": {
+          "$ref": "#/$defs/Template",
+          "description": "Text is the question sent to the user."
+        },
+        "choices": {
+          "$ref": "#/$defs/Expr",
+          "description": "Choices is an expression producing the list the user picks from. When\nset, the reply is matched to one element; otherwise it is extracted as\nthe input's type."
+        },
+        "minConfidence": {
+          "type": "number",
+          "maximum": 1,
+          "exclusiveMinimum": 0,
+          "description": "MinConfidence is the lowest confidence at which the interpretation is\naccepted, between 0 and 1. Every decision declares one."
+        },
+        "onLowConfidence": {
+          "type": "string",
+          "enum": [
+            "ask-user",
+            "escalate-model",
+            "human"
+          ],
+          "description": "OnLowConfidence says what happens below minConfidence. Every decision\ndeclares it."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "text",
+        "minConfidence",
+        "onLowConfidence"
+      ],
+      "description": "Ask asks the user for a value and interprets the reply with the Decide\nengine."
+    },
+    "BatchQuestion": {
+      "properties": {
+        "instructions": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instructions say what to decide from the shared state."
+        },
+        "choice": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Choice maps option keys to descriptions."
+        },
+        "yesNo": {
+          "$ref": "#/$defs/YesNo",
+          "description": "YesNo asks a yes/no question."
+        },
+        "score": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "maxItems": 10,
+          "minItems": 2,
+          "description": "Score lists ordered levels, lowest first."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "instructions"
+      ],
+      "description": "BatchQuestion asks exactly one choice, yesNo or score question."
+    },
+    "BranchCase": {
+      "properties": {
+        "when": {
+          "$ref": "#/$defs/Expr",
+          "description": "When is a boolean expression."
+        },
+        "else": {
+          "type": "boolean",
+          "description": "Else marks the last case, taken when no other matched."
+        },
+        "call": {
+          "type": "string",
+          "description": "Call runs another Function; with gives its inputs."
+        },
+        "with": {
+          "type": "object",
+          "description": "With gives the arguments of call."
+        },
+        "respond": {
+          "$ref": "#/$defs/Respond",
+          "description": "Respond sends a message."
+        },
+        "escalate": {
+          "$ref": "#/$defs/Escalate",
+          "description": "Escalate hands over to a person."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "BranchCase is one case of a branch. Exactly one of when and else must be\nset, and exactly one of call, respond and escalate."
+    },
+    "Compensate": {
+      "properties": {},
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Compensate has no settings; each action's compensation comes from its plugin."
+    },
+    "Compute": {
+      "properties": {
+        "cel": {
+          "$ref": "#/$defs/Expr",
+          "description": "CEL is an expression; its value is the step's output."
+        },
+        "starlark": {
+          "$ref": "#/$defs/StarlarkCall",
+          "description": "Starlark calls a function of a script file."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Compute is a deterministic computation. Exactly one of cel and starlark\nmust be set."
+    },
+    "DecideBatchStep": {
+      "properties": {
+        "state": {
+          "type": "object",
+          "description": "State is shared by every question and masked before leaving the process."
+        },
+        "questions": {
+          "additionalProperties": {
+            "$ref": "#/$defs/BatchQuestion"
+          },
+          "type": "object",
+          "description": "Questions names independent questions; they cannot read each other's answers."
+        },
+        "minConfidence": {
+          "type": "number",
+          "maximum": 1,
+          "exclusiveMinimum": 0,
+          "description": "MinConfidence is the minimum winning probability for each answer."
+        },
+        "onLowConfidence": {
+          "type": "string",
+          "enum": [
+            "fail",
+            "continue"
+          ],
+          "description": "OnLowConfidence is fail (run onError) or continue (null only uncertain answers).\nProvider errors or missing answers always run onError, even with continue."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "state",
+        "questions",
+        "minConfidence",
+        "onLowConfidence"
+      ],
+      "description": "DecideBatchStep groups independent questions without changing their dependencies.\nLater steps read output.answers.\u003cname\u003e.value and probability. A low-confidence\nanswer has value null when onLowConfidence is continue. output.value is the map\nof values only when every question meets the threshold; otherwise it is null.\nNever treat a null answer as permission or as an absent user restriction."
+    },
+    "DecideStep": {
+      "properties": {
+        "state": {
+          "type": "object",
+          "description": "State is what the question is about. It is masked for personal data\nbefore it leaves the process."
+        },
+        "instructions": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instructions say what to decide."
+        },
+        "choice": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Choice maps each option key to its description."
+        },
+        "yesNo": {
+          "$ref": "#/$defs/YesNo",
+          "description": "YesNo asks a yes/no question."
+        },
+        "score": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "maxItems": 10,
+          "minItems": 2,
+          "description": "Score lists ordered levels, lowest first."
+        },
+        "minConfidence": {
+          "type": "number",
+          "maximum": 1,
+          "exclusiveMinimum": 0,
+          "description": "MinConfidence is the lowest probability of the answer that is acted on."
+        },
+        "onLowConfidence": {
+          "type": "string",
+          "enum": [
+            "human",
+            "fail",
+            "continue"
+          ],
+          "description": "OnLowConfidence says what happens below minConfidence: human asks a\nperson (an answer task with the options), fail fails the step, and\ncontinue sets output.value to null so a later branch can handle it."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "state",
+        "instructions",
+        "minConfidence",
+        "onLowConfidence"
+      ],
+      "description": "DecideStep asks the Decide engine one question about a state. Exactly one\nof choice, yesNo and score must be set. The step's output is\n{value, probability, probabilities}: value is the chosen key (choice),\ntrue or false (yesNo), or the most probable level (score)."
+    },
+    "ErrorStrategy": {
+      "properties": {
+        "when": {
+          "$ref": "#/$defs/Expr",
+          "description": "When is a boolean expression: the strategy runs only when it is\ntrue. It reads the failure as sources.error (code, message, definite)\nbesides inputs, steps and caller, e.g. \"sources.error.code ==\n'CONFLICT'\". It only narrows the chain: an irreversible action whose\noutcome is unknown is still verified first and never repeated or\nre-routed blind (#30)."
+        },
+        "probe": {
+          "$ref": "#/$defs/Probe",
+          "description": "Probe asks the external system whether the failed effect happened\nanyway. The action's plugin must declare verify mode probe or native."
+        },
+        "retry": {
+          "$ref": "#/$defs/Retry",
+          "description": "Retry tries again. After an irreversible action it is allowed only\nwhen the plugin verifies natively or a probe proved nothing happened."
+        },
+        "fallback": {
+          "$ref": "#/$defs/Fallback",
+          "description": "Fallback takes another path: another function, another action, or a\nfixed value."
+        },
+        "escalate": {
+          "$ref": "#/$defs/Escalate",
+          "description": "Escalate creates a human task and waits for it."
+        },
+        "compensate": {
+          "$ref": "#/$defs/Compensate",
+          "description": "Compensate undoes earlier effects of the same run, in reverse order."
+        },
+        "respond": {
+          "$ref": "#/$defs/Respond",
+          "description": "Respond sends a message to the user and ends the run."
+        },
+        "fail": {
+          "$ref": "#/$defs/Fail",
+          "description": "Fail ends the run as failed."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "ErrorStrategy is one step of an onError chain. Exactly one field must be set."
+    },
+    "Escalate": {
+      "properties": {
+        "queue": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Queue is the HumanQueue that receives the task."
+        },
+        "task": {
+          "type": "string",
+          "enum": [
+            "input",
+            "answer",
+            "approve",
+            "takeover"
+          ],
+          "description": "Task is the kind of human task."
+        },
+        "message": {
+          "$ref": "#/$defs/Template",
+          "description": "Message tells the human what is needed."
+        },
+        "whileWaiting": {
+          "$ref": "#/$defs/Respond",
+          "description": "WhileWaiting is sent to the user while the human task is open."
+        },
+        "onDeny": {
+          "$ref": "#/$defs/Respond",
+          "description": "OnDeny is what the user hears when a person denies an approval\n(task: approve); default: the Agent's messages.denied. A denied (or\nunclear) approval ends the Function: no later step or action runs."
+        },
+        "route": {
+          "items": {
+            "$ref": "#/$defs/EscalateRoute"
+          },
+          "type": "array",
+          "description": "Route sends the task to another queue by a declared rule: the first\nrule whose when holds decides, else queue (\"a discount above 50% goes\nto the owner\"). A rule, never a model's choice (RFC-0006)."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "queue",
+        "task"
+      ],
+      "description": "Escalate creates a HumanTask."
+    },
+    "EscalateRoute": {
+      "properties": {
+        "when": {
+          "$ref": "#/$defs/Expr",
+          "description": "When is a bool expression over inputs, steps and caller."
+        },
+        "queue": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Queue receives the task when it holds."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "when",
+        "queue"
+      ],
+      "description": "EscalateRoute is one routing rule."
+    },
+    "Expr": {
+      "type": "string",
+      "x-tessera-kind": "expression"
+    },
+    "Extract": {
+      "properties": {
+        "instructions": {
+          "type": "string",
+          "description": "Instructions add to the input's description, e.g. how to resolve\nrelative dates or which default not to assume."
+        },
+        "future": {
+          "type": "boolean",
+          "description": "Future moves a date the model read as more than a week past to the\nsame day a year later: \"10 de julho\" said in September is next July.\nModels often got the year wrong (agency-002); \"ontem\" stays past."
+        },
+        "conversation": {
+          "type": "boolean",
+          "description": "Conversation lets the value come from what the user said earlier in\nthe conversation when the message leaves it out (\"eu e minha esposa\"\nsaid before asking for a hotel). The message always wins. Leave it off\nfor values that belong to one request only, such as a new trip's\ndates (agency-002)."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Extract reads an input from the conversation."
+    },
+    "Fail": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Message is recorded with the failure."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Fail ends the run as failed."
+    },
+    "Fallback": {
+      "properties": {
+        "function": {
+          "type": "string",
+          "description": "Function to call instead."
+        },
+        "act": {
+          "type": "string",
+          "description": "Act is another plugin action to call instead, written plugin/action."
+        },
+        "with": {
+          "type": "object",
+          "description": "With gives the arguments of function or act. Values are literal unless\nthe whole value is \"${ expr }\"."
+        },
+        "idempotencyKey": {
+          "$ref": "#/$defs/Expr",
+          "description": "IdempotencyKey is required when act is irreversible."
+        },
+        "useNull": {
+          "type": "boolean",
+          "description": "UseNull continues without the value; the input becomes null."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Fallback settings. Exactly one of function, act and useNull must be set.\nA fallback action is held to the same effect rules as the main action:\ninside an input's onUnresolved it must be read-only, and when it is\nirreversible it needs its own idempotencyKey."
+    },
+    "Function": {
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "enum": [
+            "agents.tessera.dev/v1alpha1"
+          ],
+          "description": "APIVersion must be agents.tessera.dev/v1alpha1."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Function"
+          ],
+          "description": "Kind must be Function."
+        },
+        "metadata": {
+          "$ref": "#/$defs/ObjectMeta",
+          "description": "Metadata names the function."
+        },
+        "spec": {
+          "$ref": "#/$defs/FunctionSpec",
+          "description": "Spec is what the author wants the function to do."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ],
+      "description": "Function is one capability of an agent: the inputs it needs, who may run\nit, what must be true before it acts, the action it takes and what it\ntells the user."
+    },
+    "FunctionSpec": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Description says in one sentence what the function does. It is shown\nto people and used by the router."
+        },
+        "selector": {
+          "$ref": "#/$defs/Selector",
+          "description": "Selector says which events can start this function. A function\nwithout a selector can only be called by other functions."
+        },
+        "authorize": {
+          "$ref": "#/$defs/Expr",
+          "description": "Authorize is a boolean expression on caller (and inputs) that must be\ntrue for the function to run. It is checked with the verified identity\nof the caller, never with anything a model decided."
+        },
+        "inputs": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Input"
+          },
+          "type": "object",
+          "description": "Inputs the function needs, by name. Each is resolved from its sources\nin order until one produces a value."
+        },
+        "preconditions": {
+          "items": {
+            "$ref": "#/$defs/Precondition"
+          },
+          "type": "array",
+          "description": "Preconditions must all be true, after inputs are resolved, before the\naction runs."
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/Step"
+          },
+          "type": "array",
+          "description": "Steps run in order after the preconditions and before the action.\nEach step's result is readable by later steps, the action and the\noutput as steps.\u003cid\u003e.status and steps.\u003cid\u003e.output."
+        },
+        "action": {
+          "$ref": "#/$defs/Action",
+          "description": "Action is the effect the function has on the world."
+        },
+        "output": {
+          "$ref": "#/$defs/Output",
+          "description": "Output is what the user is told when the function succeeds."
+        },
+        "onError": {
+          "items": {
+            "$ref": "#/$defs/ErrorStrategy"
+          },
+          "type": "array",
+          "description": "OnError is the chain of strategies tried, in order, when the function\nfails. Each item runs only if the previous one failed."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "description"
+      ],
+      "description": "FunctionSpec describes a Function."
+    },
+    "GenerateStep": {
+      "properties": {
+        "state": {
+          "type": "object",
+          "description": "State is the input. It is masked for personal data before it leaves\nthe process."
+        },
+        "instructions": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instructions say what to produce."
+        },
+        "schema": {
+          "type": "object",
+          "description": "Schema is a JSON Schema the output must match. Required for extract."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "state",
+        "instructions"
+      ],
+      "description": "GenerateStep asks the Generate engine for text or an object. The reply is\nvalidated against the schema locally, repaired once if needed, and\nrefused otherwise; the model is never trusted to follow the schema."
+    },
+    "Input": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Type of the value: a basic type (string, int, float, bool, date,\ntimestamp, duration, map, any), a type published by a plugin\n(agenda.Slot), or list\u003cT\u003e of either. A date is a \"YYYY-MM-DD\"\nstring."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description says what the value is. Extraction and free-text\nquestions show it to the model, so write it for a reader: \"the city\nthe user flies from\"."
+        },
+        "resolve": {
+          "items": {
+            "$ref": "#/$defs/Source"
+          },
+          "type": "array",
+          "minItems": 1,
+          "description": "Resolve lists where the value can come from, tried in order. A source\nmay read the outputs of earlier sources of the same input as\nsources.\u003cid\u003e.output."
+        },
+        "onUnresolved": {
+          "items": {
+            "$ref": "#/$defs/ErrorStrategy"
+          },
+          "type": "array",
+          "description": "OnUnresolved runs when no source produced a value."
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "email",
+            "phone",
+            "cpf"
+          ],
+          "description": "Format marks personal data of a known shape: email, phone or cpf.\nIts extract source and its free-text question read it from the\nuser's own words by pattern, in code: no model sees it, since models\nonly get masked text, where it is a placeholder (agency-001). The\ntype must be string."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type",
+        "resolve"
+      ],
+      "description": "Input is one value the function needs."
+    },
+    "MilestoneRef": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Name of the milestone, e.g. agendou."
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Subject is the Subject kind, in the same namespace."
+        },
+        "id": {
+          "$ref": "#/$defs/Expr",
+          "description": "ID overrides the Subject's id expression here."
+        },
+        "attributes": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Expr"
+          },
+          "type": "object",
+          "description": "Attributes are expressions for the Subject's declared attributes."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "subject"
+      ],
+      "description": "MilestoneRef records a business milestone when the step or the action\nit is on succeeds. For an effect that means confirmed: a cancelled or\nunverified effect records nothing. It is recorded once, however often\nthe run is resumed."
+    },
+    "ObjectMeta": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Name of the resource, unique per kind within its namespace. Lowercase\nletters, digits and hyphens, starting and ending with a letter or digit."
+        },
+        "namespace": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Namespace the resource belongs to, usually one per customer."
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Labels are free-form key/value pairs for selecting and grouping."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "namespace"
+      ],
+      "description": "ObjectMeta identifies a resource."
+    },
+    "Output": {
+      "properties": {
+        "template": {
+          "$ref": "#/$defs/Template",
+          "description": "Template is the message sent to the user; a function called by\nanother sends nothing."
+        },
+        "value": {
+          "$ref": "#/$defs/Expr",
+          "description": "Value is what a caller receives (call, fromFunction); by default the\naction's output, or the rendered template."
+        },
+        "guardrails": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Guardrails checked before the message is sent, by name."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Output is what the function produces on success. At least one of\ntemplate and value must be set."
+    },
+    "Precondition": {
+      "properties": {
+        "cel": {
+          "$ref": "#/$defs/Expr",
+          "description": "CEL is the boolean expression that must be true."
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Message tells the user why the function cannot proceed. It is a\ntemplate: naming what was understood (\"Entendi a ida como\n{{ inputs.departDate }}\") lets the user correct a misreading instead of\nhearing it as a fact (agency-002)."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "cel",
+        "message"
+      ],
+      "description": "Precondition is a condition checked before the action."
+    },
+    "Probe": {
+      "properties": {},
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Probe has no settings; the verification action comes from the plugin."
+    },
+    "Respond": {
+      "properties": {
+        "template": {
+          "$ref": "#/$defs/Template",
+          "description": "Template is the message."
+        },
+        "to": {
+          "type": "string",
+          "pattern": "^(user|queue:[a-z0-9]([-a-z0-9]*[a-z0-9])?)$",
+          "description": "To is \"user\" (the default) or \"queue:\u003cname\u003e\": a note to a human\nqueue that asks nothing and waits for nothing (a report, an alert)."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "template"
+      ],
+      "description": "Respond sends a message."
+    },
+    "RetrieveStep": {
+      "properties": {
+        "bases": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "minItems": 1,
+          "description": "Bases are KnowledgeBase names of this namespace."
+        },
+        "query": {
+          "$ref": "#/$defs/Expr",
+          "description": "Query is a string expression: what to search for, e.g.\n\"event.message\"."
+        },
+        "k": {
+          "type": "integer",
+          "maximum": 10,
+          "minimum": 0,
+          "description": "K is how many passages at most, 1 to 10; default 4."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "bases",
+        "query"
+      ],
+      "description": "RetrieveStep searches knowledge bases."
+    },
+    "Retry": {
+      "properties": {
+        "attempts": {
+          "type": "integer",
+          "maximum": 10,
+          "minimum": 1,
+          "description": "Attempts is the number of extra attempts."
+        },
+        "backoff": {
+          "type": "string",
+          "pattern": "^[0-9]+(ms|s|m)$",
+          "description": "Backoff is the wait before the first retry, as a duration like 2s."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "attempts"
+      ],
+      "description": "Retry settings."
+    },
+    "Selector": {
+      "properties": {
+        "intent": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Intent is the name of the Intent this function handles."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description is what the router reads to choose this function; the\nfunction's own description when empty. Write it in the users'\nlanguage, the way they ask for it: measured with Jev, a Portuguese\nrouting text moved \"quero viajar\" from 0.09 to 0.91\n(docs/research/router-001.md)."
+        },
+        "after": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "After makes this a follow-up: it is routable only when the\nconversation's last run was one of these Functions (\"e o da LATAM?\"\nonly means something after a flight search). Measured: wording alone\ndid not stop general questions from reaching follow-ups\n(docs/research/router-002.md)."
+        },
+        "who": {
+          "$ref": "#/$defs/Expr",
+          "description": "Who is a bool expression over caller: the router offers this\nFunction only to callers it matches, so a patient is never offered\na team Function (RFC-0006). authorize still decides."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "intent"
+      ],
+      "description": "Selector matches events to a function."
+    },
+    "Source": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+          "description": "ID names the source so later sources can read its output."
+        },
+        "when": {
+          "$ref": "#/$defs/Expr",
+          "description": "When is a boolean expression; the source is skipped when it is false."
+        },
+        "fromAction": {
+          "type": "string",
+          "description": "FromAction calls a plugin action, written plugin/action. Its effect\nclass must be read."
+        },
+        "fromFunction": {
+          "type": "string",
+          "description": "FromFunction calls another Function in the same namespace."
+        },
+        "with": {
+          "type": "object",
+          "description": "With gives the arguments of fromAction or fromFunction. Values are\nliteral unless the whole value is \"${ expr }\"."
+        },
+        "value": {
+          "$ref": "#/$defs/Expr",
+          "description": "Value computes the input directly with an expression."
+        },
+        "extract": {
+          "$ref": "#/$defs/Extract",
+          "description": "Extract takes the value from the user's message with the Generate\nengine; null when the message does not say. All extract sources of a\nFunction are answered by one model call."
+        },
+        "ask": {
+          "$ref": "#/$defs/Ask",
+          "description": "Ask asks the user and waits for the answer."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "description": "Source is one way to get an input's value. Exactly one of fromAction,\nfromFunction, value, extract and ask must be set."
+    },
+    "StarlarkCall": {
+      "properties": {
+        "script": {
+          "type": "string",
+          "pattern": "\\.star$",
+          "description": "Script is the path of the .star file, relative to the file that\ndeclares the Function."
+        },
+        "function": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+          "description": "Function is the name of a top-level function of the script."
+        },
+        "with": {
+          "type": "object",
+          "description": "With gives the function's keyword arguments. Values are literal unless\nthe whole value is \"${ expr }\"."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "script",
+        "function"
+      ],
+      "description": "StarlarkCall calls a top-level function of a Starlark script."
+    },
+    "Step": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+          "description": "ID names the step; later steps read its result as steps.\u003cid\u003e."
+        },
+        "when": {
+          "$ref": "#/$defs/Expr",
+          "description": "When is a boolean expression; the step is skipped when it is false,\nand its status is then \"skipped\"."
+        },
+        "compute": {
+          "$ref": "#/$defs/Compute",
+          "description": "Compute runs a CEL expression or a Starlark function."
+        },
+        "act": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+/[a-z0-9-]+$",
+          "description": "Act calls a plugin action, written plugin/action, with the guarantees\nof its effect class."
+        },
+        "call": {
+          "type": "string",
+          "description": "Call runs another Function of the same namespace; with gives its\ninputs."
+        },
+        "with": {
+          "type": "object",
+          "description": "With gives the arguments of act or call. Values are literal unless\nthe whole value is \"${ expr }\"."
+        },
+        "idempotencyKey": {
+          "$ref": "#/$defs/Expr",
+          "description": "IdempotencyKey is a string expression; required when act is\nirreversible."
+        },
+        "confirm": {
+          "$ref": "#/$defs/Template",
+          "description": "Confirm is asked before an act step runs; the step runs only on a\nclear yes."
+        },
+        "decide": {
+          "$ref": "#/$defs/DecideStep",
+          "description": "Decide asks one typed question."
+        },
+        "decideBatch": {
+          "$ref": "#/$defs/DecideBatchStep",
+          "description": "DecideBatch asks independent named questions about one shared state in one request."
+        },
+        "extract": {
+          "$ref": "#/$defs/GenerateStep",
+          "description": "Extract fills a JSON Schema from a state with the Generate engine; the\noutput is the validated object."
+        },
+        "generate": {
+          "$ref": "#/$defs/GenerateStep",
+          "description": "Generate writes text, or an object when a schema is given."
+        },
+        "ask": {
+          "$ref": "#/$defs/Ask",
+          "description": "Ask asks the user to choose from a list and waits for the answer."
+        },
+        "respond": {
+          "$ref": "#/$defs/Respond",
+          "description": "Respond sends a message to the user and continues."
+        },
+        "escalate": {
+          "$ref": "#/$defs/Escalate",
+          "description": "Escalate creates a HumanTask and waits; the person's answer is the\nstep's output."
+        },
+        "branch": {
+          "items": {
+            "$ref": "#/$defs/BranchCase"
+          },
+          "type": "array",
+          "description": "Branch runs the first case whose condition is true. It must end with\nan else case, so every situation is covered."
+        },
+        "experiment": {
+          "type": "string",
+          "description": "Experiment assigns the subject a variant of an Experiment, records\nthat the subject saw it, and outputs the variant's name; later steps\nbranch on it. The same subject always gets the same variant."
+        },
+        "wait": {
+          "$ref": "#/$defs/Wait",
+          "description": "Wait sleeps durably: the run waits for a time, not for a message, and\nsurvives restarts. Its output is the time it woke."
+        },
+        "retrieve": {
+          "$ref": "#/$defs/RetrieveStep",
+          "description": "Retrieve searches the namespace's KnowledgeBases (retrieve-001). Its\noutput is the list of passages found, {source, section, text}, as\nthe free mode finds them: only bases the caller's audience may read,\nno expired or suspended lesson, only passages relevant to the query.\nRecorded, so a resumed run replays the same passages."
+        },
+        "milestone": {
+          "$ref": "#/$defs/MilestoneRef",
+          "description": "Milestone is recorded when the step succeeds (for act: when the\neffect is confirmed)."
+        },
+        "onError": {
+          "items": {
+            "$ref": "#/$defs/ErrorStrategy"
+          },
+          "type": "array",
+          "description": "OnError is tried, in order, when the step fails."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "description": "Step is one step of a Function (RFC-0001, \"Tipos de passo\"). Exactly one\nof compute, act, call, decide, decideBatch, extract, generate, ask, respond, escalate,\nbranch and wait must be set. parallel, foreach, emit, remember and\ndelegate come later."
+    },
+    "Template": {
+      "type": "string",
+      "x-tessera-kind": "template"
+    },
+    "Wait": {
+      "properties": {
+        "for": {
+          "type": "string",
+          "description": "For is a duration from when the step is first reached, in Go syntax\n(90m, 36h). Days are business decisions; write them with until."
+        },
+        "until": {
+          "$ref": "#/$defs/Expr",
+          "description": "Until is a timestamp expression, e.g. the next business day at 10h:\n\"atTime(addBusinessDays(event.time, 1, 'America/Sao_Paulo'), '10:00', 'America/Sao_Paulo')\"."
+        },
+        "orReply": {
+          "type": "boolean",
+          "description": "OrReply ends the wait early when the user replies: while it waits\nthe run is the conversation's active run, so the reply comes here,\nnot to the router. The output is then {reply, timedOut}: the reply's\ntext and false, or null and true when the time came first."
+        },
+        "includeSideMessages": {
+          "type": "boolean",
+          "description": "IncludeSideMessages opts this reply wait into preference capture. The host\nuses a Jev batch to distinguish current factual questions and withdrawal;\nanswered side user messages are journaled without resuming the wait.\nRequires orReply. Output.sideMessages is chronological, scoped to this\nwait and caller, limited to 8 messages/32 KiB (overflow is an error).\nCombine it explicitly with the current reply for preference extraction.\nThis context is never confirmation or permission to perform an effect."
+        },
+        "relay": {
+          "type": "boolean",
+          "description": "Relay makes every reply this wait's own, as written: no side-question\nclassification. For a wait that relays a conversation with a person\n(\"Confirma que quer remarcar?\"), where a question back is for that\nperson, not for the free mode (agency-003). Requires orReply."
+        },
+        "events": {
+          "items": {
+            "$ref": "#/$defs/WaitEvent"
+          },
+          "type": "array",
+          "description": "Events end the wait early when another system reports one of them\nfor this run's key: a Trigger with event (e.g. the CRM says the\nlead's meeting was booked). The output is then {reply: null,\ntimedOut: false, event: \u003cname\u003e, payload: \u003cthe event's payload\u003e};\nwith events, the output always has that shape."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Wait is a durable timer. Exactly one of for and until must be set."
+    },
+    "WaitEvent": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Name of the event, as a Trigger's event.name delivers it."
+        },
+        "key": {
+          "$ref": "#/$defs/Expr",
+          "description": "Key is a string expression identifying whom it is about, evaluated\nwhen the wait starts (e.g. event.payload.leadId): only an event with\nthe same key ends this wait."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "key"
+      ],
+      "description": "WaitEvent is an event a wait listens for."
+    },
+    "YesNo": {
+      "properties": {
+        "ifTrue": {
+          "type": "string",
+          "description": "IfTrue says what yes means."
+        },
+        "ifFalse": {
+          "type": "string",
+          "description": "IfFalse says what no means."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "YesNo describes a yes/no question."
+    }
+  },
+  "title": "Function"
+}

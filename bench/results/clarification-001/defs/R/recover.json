@@ -1,0 +1,52 @@
+{
+  "apiVersion": "agents.tessera.dev/v1alpha1",
+  "kind": "Function",
+  "metadata": {
+    "name": "recover",
+    "namespace": "travel"
+  },
+  "spec": {
+    "description": "Ask once for a full restatement, wait durably and stop safely on uncertainty or timeout.",
+    "steps": [
+      {
+        "id": "question",
+        "respond": {
+          "template": "Quais dias da semana você pode? Liste todos os dias desejados."
+        }
+      },
+      {
+        "id": "reply",
+        "wait": {
+          "for": "1h",
+          "orReply": true
+        }
+      },
+      {
+        "id": "mask",
+        "when": "steps.reply.output.reply != null",
+        "call": "reply-preferences",
+        "with": {
+          "message": "${ steps.reply.output.reply }"
+        }
+      },
+      {
+        "id": "finish",
+        "branch": [
+          {
+            "when": "steps.reply.output.reply == null",
+            "respond": {
+              "template": "Sem resposta, encerrei sem selecionar dias."
+            }
+          },
+          {
+            "else": true,
+            "call": "render",
+            "with": {
+              "mask": "${ steps.mask.output }"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

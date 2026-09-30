@@ -1,0 +1,85 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: remarcar-consulta, namespace: clinica-bench }
+spec:
+  description: Muda a data de uma consulta já existente do paciente.
+  selector:
+    intent: remarcar-consulta
+    description: "O paciente quer remarcar, mudar ou trocar a data ou o horário de uma consulta, ou saber que horários existem para remarcar. Não serve para marcar uma consulta ou um serviço novo (como uma limpeza) nem para cancelar."
+  authorize: "caller.role == 'patient'"
+  inputs:
+    titular:
+      type: string
+      description: whose appointment the patient wants to move
+      resolve:
+        - id: said
+          extract: { instructions: "'outro' when the message is about someone else's appointment (a relative such as mãe, filho, marido, avó, or another patient or appointment id); 'proprio' when it is the patient's own or it does not say" }
+        - { id: default, value: "'proprio'" }
+    appointment:
+      type: clinic.Appointment
+      resolve:
+        - id: upcoming
+          when: "inputs.titular != 'outro'"
+          fromAction: clinic/list-appointments
+          with: { patientId: "${ caller.patientId }" }
+        - id: only
+          when: "inputs.titular != 'outro' && size(sources.upcoming.output) == 1"
+          value: "sources.upcoming.output[0]"
+        - id: pick
+          when: "inputs.titular != 'outro' && size(sources.upcoming.output) > 1"
+          ask:
+            text: "Qual consulta você quer remarcar?"
+            choices: "sources.upcoming.output"
+            minConfidence: 0.7
+            onLowConfidence: ask-user
+      onUnresolved:
+        - respond:
+            template: "{{ inputs.titular == 'outro' ? 'Só consigo remarcar as suas próprias consultas. Para a consulta de outra pessoa, fale com a recepção pelo telefone da clínica.' : 'Não encontrei consultas suas para remarcar.' }}"
+    dia:
+      type: clinic.Day
+      description: the day, or the day and period, the appointment moves to, with its free slots
+      resolve:
+        - id: slots
+          fromAction: clinic/find-slots
+          with:
+            dentistId: "${ inputs.appointment.dentistId }"
+            from: "2026-10-02"
+            days: 14
+        # The days first (about ten), not two weeks of slots at once.
+        # (Options that also held each day's morning and afternoon
+        # overlapped "quarta 14/10": dropped, see freemode-001.)
+        - id: pick
+          ask:
+            text: "Para qual dia você quer remarcar? Tenho horários em: {{ sources.slots.output.filter(s, sources.slots.output.filter(t, t.start.substring(0, 10) == s.start.substring(0, 10))[0].id == s.id).map(s, s.label.split(' às ')[0]).join(', ') }}."
+            choices: "sources.slots.output.filter(s, sources.slots.output.filter(t, t.start.substring(0, 10) == s.start.substring(0, 10))[0].id == s.id).map(s, {'id': s.start.substring(0, 10), 'label': s.label.split(' às ')[0], 'slots': sources.slots.output.filter(t, t.start.substring(0, 10) == s.start.substring(0, 10))})"
+            minConfidence: 0.7
+            onLowConfidence: ask-user
+    newSlot:
+      type: clinic.Slot
+      resolve:
+        - id: only
+          when: "size(inputs.dia.slots) == 1"
+          value: "inputs.dia.slots[0]"
+        - id: pick
+          ask:
+            text: "Em {{ inputs.dia.label }} tenho: {{ inputs.dia.slots.map(s, s.label.split(' às ')[1]).join(', ') }}. Qual prefere? Depois eu confirmo com você."
+            choices: "inputs.dia.slots"
+            minConfidence: 0.7
+            onLowConfidence: ask-user
+  action:
+    act: clinic/reschedule
+    with:
+      appointmentId: "${ inputs.appointment.id }"
+      slotId: "${ inputs.newSlot.id }"
+    confirm: "Posso remarcar sua consulta de {{ inputs.appointment.label }} para {{ inputs.newSlot.label }}? Responda sim para confirmar."
+    idempotencyKey: "inputs.appointment.id + ':' + inputs.newSlot.id"
+    milestone: { name: remarcou, subject: paciente }
+  output:
+    template: "Pronto! Sua consulta foi remarcada para {{ inputs.newSlot.label }}."
+  onError:
+    - probe: {}
+    - escalate:
+        queue: recepcao
+        task: input
+        message: "Não consegui remarcar a consulta {{ inputs.appointment.id }}"
+        whileWaiting: { template: "Vou pedir para a equipe confirmar e te retorno." }

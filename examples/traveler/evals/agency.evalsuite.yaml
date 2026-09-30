@@ -1,0 +1,143 @@
+# The agency's conversation (RFC-0009): the trip remembered across
+# searches, the group with children, refinements, abbreviations, two
+# destinations compared, an answer that comes with a side question, and a
+# request only a person handles. Booking.com is agency-001's world.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata:
+  name: agency
+  namespace: traveler
+spec:
+  description: Whole-trip conversations, as a customer of a travel agency has them.
+  now: "2026-09-28T10:00:00-03:00"
+  sandboxes:
+    - plugin: booking
+      script: world.sandbox.star
+    - plugin: routes
+      script: routes.sandbox.star
+      state: { minutes: {} }
+    - plugin: agency
+      script: agency.sandbox.star
+      state: { next: 101, bookings: [] }
+    - plugin: web
+      script: web.sandbox.star
+  scenarios:
+    - id: trip-remembered
+      description: "Natal, 2026-09-28: the return was lost, the hotel asked the dates again and 'nós 3' became 3 adults."
+      caller: { userId: t1 }
+      simulator: scripted
+      turns:
+        - user: "quero ver passagem pra Natal"
+          expect: { status: WaitingForUser, says: ["De onde você sai?"] }
+        - user: "saio de São Paulo"
+          expect: { status: WaitingForUser }
+        - user: "15 de novembro, volto dia 22"
+          expect: { status: Succeeded, says: ["São Paulo → Natal", "ida 15/11, volta 22/11", "volta 22/11"] }
+        - user: "e hotel em Natal nessas datas? vamos eu, minha esposa e nosso filho de 4 anos"
+          expect: { routed: search-hotels, status: Succeeded, says: ["15/11–22/11", "2 adultos e 1 criança (4 anos)"] }
+        - user: "tem algo mais barato?"
+          expect: { routed: search-hotels, status: Succeeded, says: ["mais barat"] }
+      expect:
+        effects:
+          - { action: booking/search-flights, count: 1, where: "inputs.returnDate == '2026-11-22'" }
+          - { action: booking/search-hotels, count: 2, where: "inputs.adults == 2 && inputs.childrenAges == '4' && inputs.checkIn == '2026-11-15'" }
+
+    - id: abbreviations
+      caller: { userId: t2 }
+      simulator: scripted
+      turns:
+        - user: "passagem sp pra poa dia 3/11 volta 6/11"
+          expect: { routed: search-flights, status: Succeeded, says: ["São Paulo → Porto Alegre", "ida 03/11, volta 06/11"] }
+
+    - id: two-destinations
+      caller: { userId: t3 }
+      simulator: scripted
+      turns:
+        - user: "tô entre Natal e Maceió pro feriado, de 20 a 23 de novembro, saindo de BH, eu e meu namorado. Qual sai mais barato com hotel?"
+          expect: { routed: compare-trips, status: Succeeded, says: ["Comparação", "Natal", "Maceió", "mais barato"] }
+        - user: "fechado, quero reservar o pacote de Maceió"
+          expect: { routed: book-trip, says: ["Maceió"] }
+      expect:
+        never: [agency/request-booking]
+
+    - id: answer-with-a-question
+      description: The dates come with a question about documents; both are handled and the dates are not asked again.
+      caller: { userId: t4 }
+      simulator: scripted
+      turns:
+        - user: "quero ver voos de Recife pra Lisboa"
+          expect: { status: WaitingForUser, says: ["dia da ida"] }
+        - user: "ida 3 de dezembro e volta 17 de dezembro. E que documentos preciso pra entrar em Portugal?"
+          expect: { status: Succeeded, says: ["Recife → Lisboa", "ida 03/12, volta 17/12"], notSays: ["Qual o dia da ida"] }
+      expect:
+        effects: [ { action: booking/search-flights, count: 1 } ]
+
+    - id: reschedule-a-leg
+      description: agency-008. Moving the return two days later - the same airline searched on the new day, the fare paid, the fee and the total by code; the customer's yes; then the team does it, once.
+      caller: { userId: r8 }
+      simulator: scripted
+      state:
+        agency:
+          next: 101
+          bookings:
+            - { id: P8, key: k8, customer: r8, status: issued, summary: "✈️ GOL: ida 03/12 GRU→REC 12:40–17:00, volta 08/12 REC→GRU 12:40–17:00 (direto), 1 adulto — R$ 1.300", total: 1300, departDate: "2026-12-03", locator: REC8T1, eticket: "127-3334445557" }
+      turns:
+        - user: "quero remarcar a volta da minha viagem para Recife para dois dias depois, quanto fica?"
+          expect: { routed: remarcar-voo, status: Confirming, says: ["10/12", "R$ 650", "multa da GOL de R$ 150", "Total estimado"] }
+        - user: "sim, pode pedir"
+          expect: { status: WaitingForHuman, queue: atendimento }
+        - human: "Feito: volta remarcada para 10/12. O bilhete novo vai por e-mail."
+          expect: { says: ["remarcada"] }
+      expect:
+        effects: [ { action: agency/request-change, count: 1 } ]
+
+    - id: reschedule-two-bookings
+      description: agency-008 v02. Two bookings, the one named by its locator; a return from Natal, whose code is inside another airport's name.
+      caller: { userId: r9 }
+      simulator: scripted
+      state:
+        agency:
+          next: 101
+          bookings:
+            - { id: P1, key: k1, customer: r9, status: issued, summary: "✈️ GOL: ida 25/11 GRU→SSA 12:40–15:40, volta 30/11 SSA→GRU 12:40–15:40 (direto), 1 adulto — R$ 1.180", total: 1180, departDate: "2026-11-25", locator: SSA4T7, eticket: "127-1" }
+            - { id: P2, key: k2, customer: r9, status: issued, summary: "✈️ Azul: ida 06/12 GRU→NAT 16:05–19:25, volta 11/12 NAT→GRU 16:05–19:25 (direto), 1 adulto, tarifa Light — R$ 1.520", total: 1520, departDate: "2026-12-06", locator: NAT6V2, eticket: "577-2" }
+      turns:
+        - user: "quero remarcar a volta da reserva NAT6V2 para um dia depois, quanto fica?"
+          expect: { routed: remarcar-voo, status: Confirming, says: ["NAT→GRU", "12/12", "multa da Azul de R$ 160", "Total estimado"] }
+
+    - id: coupon-from-the-policy
+      description: agency-008. The discount policy is the agency's document; the agent answers it, no team task.
+      caller: { userId: t6 }
+      simulator: scripted
+      turns:
+        - user: "vocês têm cupom de desconto?"
+          expect: { status: Succeeded, says: ["cupo"] }
+
+    - id: only-a-person
+      description: Contracting a transfer is the team's; the request goes to them and their answer comes back.
+      caller: { userId: t5 }
+      simulator: scripted
+      turns:
+        - user: "quero contratar o transfer do aeroporto até o hotel em Natal no dia 15 de novembro, pode pedir pra equipe?"
+          expect: { handoff: falar-com-agente, status: WaitingForHuman, queue: atendimento }
+        - human: "Posso sim: o transfer em Natal sai R$ 110 por trecho. Confirmo para o dia 15 às 14h?"
+          expect: { says: ["R$ 110"] }
+        - user: "a cadeirinha de criança está inclusa nesse valor?"
+          expect: { status: WaitingForHuman, queue: atendimento }
+        - human: "Está sim, sem custo."
+          expect: { says: ["sem custo"] }
+
+    - id: booking-status
+      description: A booking's state comes from the agency's system, by template.
+      caller: { userId: s1 }
+      state:
+        agency:
+          next: 101
+          bookings:
+            - { id: P9, key: k9, customer: s1, status: reserved, summary: "✈️ GOL: ida 05/12 GRU→FLN 12:40–14:20, volta 09/12 FLN→GRU 12:40–14:20 (direto), 1 adulto — R$ 860", total: 860, departDate: "2026-12-05", locator: FLN5W1, payment: "https://pagar.tessera-viagens.test/FLN5W1" }
+      simulator: scripted
+      turns:
+        - user: "já emitiram minha passagem pra Floripa? qual o localizador e o horário?"
+          expect: { routed: minha-reserva, status: Succeeded, says: ["FLN5W1", "aguardando o pagamento", "12:40"] }
+        - user: "não recebi o e-mail com o bilhete"
+          expect: { routed: minha-reserva, queue: atendimento, says: ["reenviar"] }

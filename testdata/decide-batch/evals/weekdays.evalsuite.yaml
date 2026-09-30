@@ -1,0 +1,31 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: weekdays, namespace: travel }
+spec:
+  description: Batched Jev decisions drive a deterministic synthetic calendar filter.
+  now: "2026-10-01T09:00:00-03:00"
+  scenarios:
+    - id: saturday
+      simulator: scripted
+      turns:
+        - user: "Filtre o calendário: quero qualquer sábado."
+          expect: { status: Succeeded, routed: filter-days, says: ["2026-10-03"], notSays: ["2026-10-02", "2026-10-04"] }
+      expect: { budget: { decideCalls: 2 } }
+    - id: weekdays
+      simulator: scripted
+      turns:
+        - user: "Filtre o calendário: somente dias úteis."
+          expect: { status: Succeeded, routed: filter-days, says: ["2026-10-02"], notSays: ["2026-10-03", "2026-10-04"] }
+      expect: { budget: { decideCalls: 2 } }
+    - id: exclusion
+      simulator: scripted
+      turns:
+        - user: "Filtre o calendário: qualquer dia menos sábado."
+          expect: { status: Succeeded, routed: filter-days, says: ["2026-10-02", "2026-10-04"], notSays: ["2026-10-03"] }
+      expect: { budget: { decideCalls: 2 } }
+    - id: unrestricted
+      simulator: scripted
+      turns:
+        - user: "Filtre o calendário: qualquer dia serve."
+          expect: { status: Succeeded, routed: filter-days, says: ["2026-10-02", "2026-10-03", "2026-10-04"] }
+      expect: { budget: { decideCalls: 2 } }

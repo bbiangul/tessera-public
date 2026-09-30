@@ -1,0 +1,65 @@
+{
+ "highRiskFlights": [
+  "high"
+ ],
+ "mediumRiskFlights": [
+  "medium",
+  "unknown"
+ ],
+ "riskAssessments": [
+  {
+   "estimated": true,
+   "flightToken": "high",
+   "fromAirport": "GRU",
+   "layoverMinutes": 90,
+   "marginMinutes": 16,
+   "minRequired": 119,
+   "riskLevel": "HIGH",
+   "toAirport": "CGH",
+   "transferMinutes": 74,
+   "warning": "⛔ HIGH RISK: Airport change GRU→CGH with only 90min layover. Transfer time: ~74min (Google Maps). Margin: 16min - NOT RECOMMENDED"
+  },
+  {
+   "estimated": true,
+   "flightToken": "medium",
+   "fromAirport": "GRU",
+   "layoverMinutes": 130,
+   "marginMinutes": 56,
+   "minRequired": 119,
+   "riskLevel": "MEDIUM",
+   "toAirport": "CGH",
+   "transferMinutes": 74,
+   "warning": "⚠️ ATTENTION: Tight airport change GRU→CGH. Transfer: ~74min, margin: 56min. Only viable without checked bags."
+  },
+  {
+   "estimated": true,
+   "flightToken": "low",
+   "fromAirport": "GRU",
+   "layoverMinutes": 149,
+   "marginMinutes": 75,
+   "minRequired": 119,
+   "riskLevel": "LOW",
+   "toAirport": "CGH",
+   "transferMinutes": 74,
+   "warning": "ℹ️ Airport change: GRU→CGH. Transfer ~74min (Google Maps). Layover: 149min, margin: 75min - OK"
+  },
+  {
+   "estimated": true,
+   "flightToken": "unknown",
+   "fromAirport": "JFK",
+   "layoverMinutes": 150,
+   "marginMinutes": 60,
+   "minRequired": 135,
+   "riskLevel": "MEDIUM",
+   "toAirport": "LGA",
+   "transferMinutes": 90,
+   "warning": "⚠️ ATTENTION: Tight airport change JFK→LGA. Transfer: ~90min, margin: 60min. Only viable without checked bags."
+  }
+ ],
+ "summary": {
+  "highRisk": 1,
+  "lowRisk": 1,
+  "mediumRisk": 2,
+  "total": 4
+ }
+}

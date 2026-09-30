@@ -1,0 +1,98 @@
+# backoffice-000 (RFC-0006): one clinic agent the patients and the team both
+# talk to, written with what Tessera has today: caller.role, authorize, and
+# queues without members.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata: { name: clinica, namespace: clinica-bo }
+spec:
+  description: Recepção e assistente da equipe de uma clínica.
+  messages:
+    notUnderstood: "Não entendi."
+    notAllowed: "Desculpe, não posso fazer isso por você."
+    failed: "Algo deu errado. Alguém da recepção vai te responder por aqui."
+  humanInTheLoop: { queue: recepcao }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: HumanQueue
+metadata: { name: recepcao, namespace: clinica-bo }
+spec:
+  description: A recepção aprova exceções simples.
+  sla: { escalate: 2h, escalateTo: gerencia }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: HumanQueue
+metadata: { name: gerencia, namespace: clinica-bo }
+spec: { description: A gerência. }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: HumanQueue
+metadata: { name: dono, namespace: clinica-bo }
+spec: { description: O dono decide descontos grandes. }
+---
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: clinic, version: 0.1.0 }
+spec:
+  actions:
+    discount: { input: { patientId: string, percent: int }, output: map, effect: irreversible }
+    block: { input: { dentistId: string, day: string }, output: map, effect: irreversible }
+    schedule: { input: { dentistId: string }, output: list, effect: read }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: pedir-desconto, namespace: clinica-bo }
+spec:
+  description: A patient asks for a discount; the reception approves.
+  authorize: "caller.role == 'patient'"
+  selector: { intent: pedir-desconto, description: "O paciente pede um desconto." }
+  inputs:
+    percent:
+      type: int
+      description: the discount asked, in percent
+      resolve: [ { id: said, extract: {} } ]
+  steps:
+    - id: ok
+      escalate: { queue: recepcao, task: approve, message: "Desconto de {{ inputs.percent }}% para o paciente {{ caller.patientId }}?" }
+  action:
+    act: clinic/discount
+    with: { patientId: "${ caller.patientId }", percent: "${ inputs.percent }" }
+    idempotencyKey: "caller.patientId + ':' + string(inputs.percent)"
+  output: { template: "Desconto de {{ inputs.percent }}% aprovado." }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: bloquear-agenda, namespace: clinica-bo }
+spec:
+  description: A dentist blocks a day of their own schedule.
+  authorize: "caller.role == 'dentist'"
+  selector: { intent: bloquear-agenda, description: "Bloquear um dia da agenda de um dentista." }
+  inputs:
+    day:
+      type: string
+      description: the weekday to block
+      resolve: [ { id: said, extract: {} } ]
+  action:
+    act: clinic/block
+    with: { dentistId: "${ caller.dentistId }", day: "${ inputs.day }" }
+    confirm: "Posso bloquear sua agenda de {{ inputs.day }}? Responda sim."
+    idempotencyKey: "caller.dentistId + ':' + inputs.day"
+  output: { template: "Agenda de {{ inputs.day }} bloqueada." }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: ver-agenda, namespace: clinica-bo }
+spec:
+  description: A dentist reads a schedule; only their own.
+  authorize: "caller.role == 'dentist'"
+  selector: { intent: ver-agenda, description: "Ver a agenda de um dentista." }
+  inputs:
+    dentist:
+      type: string
+      description: the dentist whose schedule, as an id like D1
+      resolve: [ { id: said, extract: {} } ]
+  preconditions:
+    - cel: "inputs.dentist == caller.dentistId"
+      message: "Você só pode ver a sua própria agenda."
+  steps:
+    - { id: agenda, act: clinic/schedule, with: { dentistId: "${ inputs.dentist }" } }
+  output: { template: "Sua agenda: {{ steps.agenda.output.join(', ') }}" }

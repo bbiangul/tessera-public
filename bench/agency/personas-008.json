@@ -1,0 +1,287 @@
+{
+ "now": "2026-09-29T10:00:00-03:00",
+ "note": "agency-008. Written 2026-09-29 before J is built. 'test' (16) is sealed. At most two dev tuning rounds. The simulated team answers from bench/agency/world/team-facts.md.",
+ "dev": [
+  {
+   "id": "t01-cupom",
+   "caller": {
+    "userId": "t01"
+   },
+   "goal": "Perguntar se a agência tem cupom de desconto e cotar pacote para Natal saindo de São Paulo, 8 a 13 de janeiro, para 2.",
+   "style": "Caçador de promoção.",
+   "knows": {}
+  },
+  {
+   "id": "t02-remarca-volta",
+   "caller": {
+    "userId": "t02"
+   },
+   "goal": "Remarcar a volta da viagem para Recife que você comprou na agência para dois dias depois e saber quanto fica no total; confirmar.",
+   "style": "Educada.",
+   "knows": {
+    "reserva": "viagem para Recife comprada na agência"
+   }
+  },
+  {
+   "id": "t03-pix-desconto",
+   "caller": {
+    "userId": "t03"
+   },
+   "goal": "Cotar pacote para Lisboa saindo de São Paulo, 3 a 13 de abril, para 2, e saber se tem desconto pagando no Pix.",
+   "style": "Econômica.",
+   "knows": {}
+  },
+  {
+   "id": "t04-cancelar",
+   "caller": {
+    "userId": "t04"
+   },
+   "goal": "Saber quanto recebe de volta se cancelar a passagem para Salvador comprada na agência há duas semanas (tarifa Light) e decidir não cancelar.",
+   "style": "Indeciso.",
+   "knows": {
+    "reserva": "viagem para Salvador comprada na agência",
+    "tarifa": "Light"
+   }
+  },
+  {
+   "id": "t05-remarca-ida-gol",
+   "caller": {
+    "userId": "t05"
+   },
+   "goal": "Remarcar a ida da viagem para Florianópolis que você comprou na agência para um dia antes; saber a multa e a diferença, e confirmar.",
+   "style": "Direto.",
+   "knows": {
+    "reserva": "viagem para Florianópolis comprada na agência"
+   }
+  },
+  {
+   "id": "t06-mais-barato",
+   "caller": {
+    "userId": "t06"
+   },
+   "goal": "Cotar voo e hotel para Maceió saindo de Belo Horizonte, 12 a 16 de janeiro, para 2, e pedir uma opção mais barata.",
+   "style": "Econômico.",
+   "knows": {}
+  },
+  {
+   "id": "t07-aluguel-carro",
+   "caller": {
+    "userId": "t07"
+   },
+   "goal": "Cotar voo para Natal saindo de São Paulo, 5 a 10 de dezembro, só você, e perguntar se a agência aluga carro.",
+   "style": "Prático.",
+   "knows": {}
+  },
+  {
+   "id": "t08-passeio-salvador",
+   "caller": {
+    "userId": "t08"
+   },
+   "goal": "Cotar pacote para Salvador saindo de São Paulo, 15 a 19 de dezembro, para 2, e perguntar se a agência vende passeios lá.",
+   "style": "Animada.",
+   "knows": {}
+  },
+  {
+   "id": "t09-desconto-grupo",
+   "caller": {
+    "userId": "t09"
+   },
+   "goal": "Cotar voo para Fortaleza saindo de São Paulo, 10 a 15 de janeiro, para 10 pessoas, e perguntar se tem tarifa de grupo.",
+   "style": "Organizador de viagem de família.",
+   "knows": {}
+  },
+  {
+   "id": "t10-pagou-pix-agora",
+   "caller": {
+    "userId": "t10"
+   },
+   "goal": "Avisar que acabou de pagar com Pix a reserva para Maceió e saber quando sai o bilhete.",
+   "style": "Ansiosa.",
+   "knows": {
+    "reserva": "viagem para Maceió reservada na agência"
+   }
+  },
+  {
+   "id": "t11-remarca-e-mala",
+   "caller": {
+    "userId": "t11"
+   },
+   "goal": "Remarcar a ida da viagem para Porto Alegre que você comprou na agência para dois dias depois e incluir uma mala; saber o total e confirmar.",
+   "style": "Educado.",
+   "knows": {
+    "reserva": "viagem para Porto Alegre comprada na agência"
+   }
+  },
+  {
+   "id": "t12-seguro-nacional",
+   "caller": {
+    "userId": "t12"
+   },
+   "goal": "Cotar voo para Recife saindo de Curitiba, 2 a 7 de dezembro, só você, e saber quanto custa o seguro viagem.",
+   "style": "Cautelosa.",
+   "knows": {}
+  }
+ ],
+ "test": [
+  {
+   "id": "v01-cupom-natal",
+   "caller": {
+    "userId": "v01"
+   },
+   "goal": "Perguntar se tem cupom de desconto e cotar pacote para Fortaleza saindo do Rio de Janeiro, 6 a 11 de janeiro, para 2.",
+   "style": "Caçadora de promoção.",
+   "knows": {}
+  },
+  {
+   "id": "v02-remarca-volta-azul",
+   "caller": {
+    "userId": "v02"
+   },
+   "goal": "Remarcar a volta da viagem para Natal que você comprou na agência para um dia depois e saber o total; confirmar.",
+   "style": "Formal.",
+   "knows": {
+    "reserva": "viagem para Natal comprada na agência"
+   }
+  },
+  {
+   "id": "v03-pix-acima-5000",
+   "caller": {
+    "userId": "v03"
+   },
+   "goal": "Cotar pacote para Lisboa saindo de São Paulo, 10 a 20 de maio, para 2, e perguntar se tem desconto no Pix.",
+   "style": "Negociador.",
+   "knows": {}
+  },
+  {
+   "id": "v04-cancelar-light",
+   "caller": {
+    "userId": "v04"
+   },
+   "goal": "Saber quanto recebe de volta se cancelar a passagem para Recife comprada na agência há um mês (tarifa Light) e desistir de cancelar.",
+   "style": "Hesitante.",
+   "knows": {
+    "reserva": "viagem para Recife comprada na agência",
+    "tarifa": "Light"
+   }
+  },
+  {
+   "id": "v05-remarca-ida-latam",
+   "caller": {
+    "userId": "v05"
+   },
+   "goal": "Remarcar a ida da viagem para Salvador que você comprou na agência para dois dias depois; saber a multa e a diferença, e confirmar.",
+   "style": "Direta.",
+   "knows": {
+    "reserva": "viagem para Salvador comprada na agência"
+   }
+  },
+  {
+   "id": "v06-mais-barato-hotel",
+   "caller": {
+    "userId": "v06"
+   },
+   "goal": "Cotar voo e hotel para Porto Seguro saindo de São Paulo, 3 a 8 de fevereiro, para 2, e pedir algo mais barato.",
+   "style": "Econômica.",
+   "knows": {}
+  },
+  {
+   "id": "v07-carro-maceio",
+   "caller": {
+    "userId": "v07"
+   },
+   "goal": "Cotar voo para Maceió saindo de Belo Horizonte, 9 a 14 de janeiro, só você, e perguntar se a agência aluga carro lá.",
+   "style": "Prático.",
+   "knows": {}
+  },
+  {
+   "id": "v08-passeio-natal",
+   "caller": {
+    "userId": "v08"
+   },
+   "goal": "Cotar pacote para Natal saindo de São Paulo, 20 a 25 de novembro, para 2, e perguntar se a agência vende o passeio de buggy e quanto custa.",
+   "style": "Aventureiro.",
+   "knows": {}
+  },
+  {
+   "id": "v09-grupo",
+   "caller": {
+    "userId": "v09"
+   },
+   "goal": "Cotar voo para Recife saindo de São Paulo, 5 a 10 de fevereiro, para 12 pessoas, e perguntar se tem tarifa de grupo.",
+   "style": "Organizadora.",
+   "knows": {}
+  },
+  {
+   "id": "v10-pix-2-horas",
+   "caller": {
+    "userId": "v10"
+   },
+   "goal": "Avisar que pagou com Pix há uma hora a reserva para Florianópolis e ainda aparece aguardando; saber se é normal.",
+   "style": "Ansioso.",
+   "knows": {
+    "reserva": "viagem para Florianópolis reservada na agência"
+   }
+  },
+  {
+   "id": "v11-remarca-assento",
+   "caller": {
+    "userId": "v11"
+   },
+   "goal": "Remarcar a volta da viagem para Fortaleza que você comprou na agência para dois dias antes e pedir assento na janela; saber o total e confirmar.",
+   "style": "Exigente.",
+   "knows": {
+    "reserva": "viagem para Fortaleza comprada na agência"
+   }
+  },
+  {
+   "id": "v12-seguro-europa",
+   "caller": {
+    "userId": "v12"
+   },
+   "goal": "Cotar voo para Lisboa saindo de São Paulo, 1 a 10 de junho, só você, e saber se precisa de seguro e quanto custa pela agência.",
+   "style": "Planejadora.",
+   "knows": {}
+  },
+  {
+   "id": "v13-cancelar-flex",
+   "caller": {
+    "userId": "v13"
+   },
+   "goal": "Saber quanto recebe de volta se cancelar a passagem para Porto Alegre comprada na agência com bilhete flexível, e confirmar o cancelamento.",
+   "style": "Objetivo.",
+   "knows": {
+    "reserva": "viagem para Porto Alegre comprada na agência",
+    "tarifa": "bilhete flexível"
+   }
+  },
+  {
+   "id": "v14-desconto-idoso",
+   "caller": {
+    "userId": "v14"
+   },
+   "goal": "Cotar voo para Salvador saindo de São Paulo, 12 a 17 de janeiro, para você e sua mãe de 70 anos, e perguntar se tem desconto para idoso.",
+   "style": "Atencioso.",
+   "knows": {}
+  },
+  {
+   "id": "v15-remarcar-hotel",
+   "caller": {
+    "userId": "v15"
+   },
+   "goal": "Mudar as datas do hotel da viagem para Maceió que você comprou na agência para um dia depois (entrada e saída) e saber se tem custo.",
+   "style": "Tranquila.",
+   "knows": {
+    "reserva": "viagem para Maceió comprada na agência"
+   }
+  },
+  {
+   "id": "v16-parcelas-cupom",
+   "caller": {
+    "userId": "v16"
+   },
+   "goal": "Cotar voo e hotel para o Rio de Janeiro saindo de Porto Alegre, 14 a 18 de dezembro, para 2, perguntar em quantas vezes parcela e se tem cupom.",
+   "style": "Direta.",
+   "knows": {}
+  }
+ ]
+}

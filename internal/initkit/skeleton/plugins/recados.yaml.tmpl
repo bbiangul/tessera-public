@@ -1,0 +1,26 @@
+# The agent's own storage, as the built-in sql plugin (one SQLite file per
+# plugin under --data-dir). Replace it or add http plugins for your
+# systems: .tessera/guides/authoring.md, section 1.
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata:
+  name: recados
+  version: 0.1.0
+spec:
+  sql:
+    migrations:
+      - CREATE TABLE recados (key TEXT NOT NULL UNIQUE, author TEXT NOT NULL, text TEXT NOT NULL, at TEXT NOT NULL)
+  actions:
+    anotar:
+      input: { author: string, text: string, at: timestamp }
+      effect: idempotent-write
+      sql:
+        query: "INSERT INTO recados (key, author, text, at) VALUES (:idempotencyKey, :a, :t, :at) ON CONFLICT (key) DO NOTHING"
+        params: { a: "${ inputs.author }", t: "${ inputs.text }", at: "${ inputs.at }" }
+    listar:
+      input: { author: string }
+      output: list
+      effect: read
+      sql:
+        query: "SELECT text, at FROM recados WHERE author = :a ORDER BY at DESC LIMIT 5"
+        params: { a: "${ inputs.author }" }

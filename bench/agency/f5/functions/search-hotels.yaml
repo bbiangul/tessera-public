@@ -1,0 +1,250 @@
+# Hotel search: the original's 07_hotel_search + 08_hotel_analysis in one
+# Function. One Generate call extracts the stay; the destination choice,
+# the kind of lodging for the length of the stay, the scoring (parity with
+# the legacy platform's scoreHotels) and the message are Starlark.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: search-hotels
+  namespace: traveler
+spec:
+  description: Searches places to stay in a city for a check-in and check-out date and recommends the best ones.
+  selector:
+    intent: hotel-search
+    description: "Um pedido para eu procurar hospedagem: o usuário quer ver opções de hotel, pousada, apartamento ou lugar para ficar em uma cidade (com ou sem datas). Não inclui perguntas de opinião ou comparação, que eu respondo sem buscar (pousada ou hotel?, hotel ou flat, qual compensa?, qual bairro é melhor?, o lugar é caro?), nem o total da viagem com voo (pacote, cotação completa)."
+  inputs:
+    profile:
+      type: map
+      description: the traveler's saved preferences (plugins/profile.yaml)
+      resolve:
+        - { id: saved, fromAction: profile/get, with: { user: "${ has(caller.userId) ? caller.userId : conversation.id }" } }
+        - { id: none, value: "{}" }
+    trip:
+      type: map
+      description: the trip being planned in this conversation, when it was touched in the last 14 days
+      resolve:
+        - { id: saved, fromAction: trip/get, with: { conversation: "${ conversation.id }" } }
+        - id: fresh
+          when: "sources.saved.output != null && timestamp(sources.saved.output.updated_at) > event.time - duration('336h')"
+          value: "sources.saved.output"
+        - { id: none, value: "{}" }
+    newDates:
+      type: bool
+      description: whether the message gives a new departure day or a new period for the trip
+      resolve:
+        - { id: said, extract: { instructions: "true when the message gives a departure or check-in day, a month, a holiday or another period for the trip (dia 15, em dezembro, no feriado, semana que vem); false when it gives no date, gives only the return or check-out day, or refers to dates already given (nas mesmas datas, nessas datas, no mesmo período)" } }
+        - { id: default, value: "false" }
+    accepts:
+      type: bool
+      description: whether the message only accepts what the agent just offered (sim, pode ver, pode sim, quero), without naming a destination
+      resolve:
+        - { id: said, extract: { instructions: "true only when the message accepts an offer without naming a destination; false otherwise" } }
+        - { id: default, value: "false" }
+    destination:
+      type: string
+      description: "the city where the user wants to stay (when the message names two cities, the first one), its full name (Rio → Rio de Janeiro, Floripa → Florianópolis)"
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "the city as written, even one you do not know; a neighborhood or area goes in area" } }
+        - { id: offered, when: "inputs.accepts && has(inputs.trip.other) && inputs.trip.other != null && inputs.trip.other != ''", value: "inputs.trip.other" }
+        - { id: trip, when: "has(inputs.trip.destination) && inputs.trip.destination != null", value: "inputs.trip.destination" }
+        - id: asked
+          ask: { text: "Em qual cidade você quer se hospedar?", minConfidence: 0.7, onLowConfidence: ask-user }
+    otherDestination:
+      type: string
+      description: the second city, when the user compares two or asks for both (Salvador e Porto Seguro), its full name
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message names two cities to compare or asks for both" } }
+        - { id: none, value: "''" }
+    area:
+      type: string
+      description: a neighborhood or area of the city the user names (Ponta Negra, Copacabana, Pajuçara)
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "null unless the message names a neighborhood or area of a city it also names or that was named before; a place named alone is the city, not the area; 'perto da praia' is not one" } }
+        - { id: none, value: "''" }
+    checkIn:
+      type: date
+      description: the day of check-in
+      resolve:
+        - id: said
+          extract: { conversation: true, future: true, instructions: "the check-in day as YYYY-MM-DD: 'dia 20 de outubro', '15/11' and 'amanhã' each give a day; resolve relative days from STATE.now; a day without a year is its next occurrence; null only when the message gives no day (only a month, or nothing)" }
+        - id: trip
+          when: "!inputs.newDates && has(inputs.trip.depart) && inputs.trip.depart != null && date(inputs.trip.depart, 'America/Sao_Paulo') >= startOfDay(event.time, 'America/Sao_Paulo')"
+          value: "inputs.trip.depart"
+        - id: asked
+          ask: { text: "Qual o dia do check-in e o do check-out?", minConfidence: 0.7, onLowConfidence: ask-user }
+    checkOutDay:
+      type: int
+      description: "the day of the month of the check-out, when the message gives only the day, without a month (volta no dia 11: 11)"
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message gives the check-out as a day of the month without a month" } }
+      onUnresolved:
+        - fallback: { useNull: true }
+    checkOut:
+      type: date
+      description: the day of check-out
+      resolve:
+        - id: said
+          extract: { conversation: true, future: true, instructions: "a stay (3 noites, uma semana) counts from the check-in; null when the end of the stay is not given, or when only a day of the month is given without a month" }
+        - id: trip
+          when: "has(inputs.trip.return_date) && inputs.trip.return_date != null && inputs.trip.return_date > inputs.checkIn && has(inputs.trip.depart) && inputs.trip.depart == inputs.checkIn"
+          value: "inputs.trip.return_date"
+        - id: asked
+          ask: { text: "E o check-out, em que dia?", minConfidence: 0.7, onLowConfidence: ask-user }
+    childrenAges:
+      type: list<int>
+      description: ages of the children staying; a baby under 1 year is 0
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "null when the message mentions no child" } }
+        - id: day
+          when: "inputs.checkOutDay != null && inputs.checkOutDay >= 1 && inputs.checkOutDay <= 31"
+          value: "inputs.checkIn.substring(0, 8) + (inputs.checkOutDay < 10 ? '0' : '') + string(inputs.checkOutDay) > inputs.checkIn ? inputs.checkIn.substring(0, 8) + (inputs.checkOutDay < 10 ? '0' : '') + string(inputs.checkOutDay) : (int(inputs.checkIn.substring(5, 7)) == 12 ? string(int(inputs.checkIn.substring(0, 4)) + 1) + '-01-' : inputs.checkIn.substring(0, 5) + (int(inputs.checkIn.substring(5, 7)) < 9 ? '0' : '') + string(int(inputs.checkIn.substring(5, 7)) + 1) + '-') + (inputs.checkOutDay < 10 ? '0' : '') + string(inputs.checkOutDay)"
+        - { id: trip, when: "has(inputs.trip.children) && inputs.trip.children != null", value: "inputs.trip.children" }
+        - { id: default, value: "[]" }
+    partySize:
+      type: int
+      description: "how many people stay in total, when the message counts them (nós 3, somos 4, 2 pessoas, pra dois)"
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "null unless the message gives a number of people" } }
+      onUnresolved:
+        - fallback: { useNull: true }
+    adults:
+      type: int
+      description: "adults staying, including the user, when the message says who goes (eu e minha esposa: 2; só eu: 1)"
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "count only adults; null unless the message says how many adults or who the adults are" } }
+        - { id: counted, when: "inputs.partySize != null && inputs.partySize - size(inputs.childrenAges) >= 1", value: "inputs.partySize - size(inputs.childrenAges)" }
+        - { id: trip, when: "has(inputs.trip.adults) && inputs.trip.adults != null", value: "inputs.trip.adults" }
+        - { id: default, value: "1" }
+    rooms:
+      type: int
+      description: rooms wanted
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message says how many rooms" } }
+        - { id: default, value: "1" }
+    lodging:
+      type: string
+      description: the kind of lodging asked for, hotel or apartment (flat, apartamento, airbnb, studio are apartment)
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message asks for a kind of lodging" } }
+        - { id: none, value: "''" }
+    cheap:
+      type: bool
+      description: whether the user asks for something cheap, cheaper or economical
+      resolve:
+        - { id: said, extract: { instructions: "true when the message asks for cheaper, the cheapest or low prices; false otherwise" } }
+        - { id: default, value: "false" }
+  preconditions:
+    - cel: "date(inputs.checkIn, 'America/Sao_Paulo') >= startOfDay(event.time, 'America/Sao_Paulo')"
+      message: "Entendi o check-in como {{ inputs.checkIn.substring(8, 10) + '/' + inputs.checkIn.substring(5, 7) + '/' + inputs.checkIn.substring(0, 4) }}, que já passou. Para quando é a hospedagem?"
+    - cel: "inputs.checkOut > inputs.checkIn"
+      message: "O check-out precisa ser depois do check-in."
+  steps:
+    - id: previous
+      act: memo/last-shown
+      with: { conversation: "${ conversation.id }", kind: hotels }
+    - id: places
+      act: booking/search-hotel-destination
+      with: { query: "${ inputs.area != '' ? inputs.area + ' ' + inputs.destination : inputs.destination }" }
+    - id: place
+      compute:
+        starlark:
+          script: ../scripts/hotels.star
+          function: pick_destination
+          with: { places: "${ steps.places.output }" }
+      onError:
+        - fallback: { useNull: true }   # not found: the team looks for it (agency-002)
+    - id: notFound
+      when: "steps.place.output == null"
+      escalate:
+        queue: atendimento
+        task: answer
+        message: "Cliente quer hospedagem em {{ inputs.destination }}, de {{ inputs.checkIn }} a {{ inputs.checkOut }}, {{ inputs.adults }} adulto(s){{ size(inputs.childrenAges) > 0 ? ' e ' + string(size(inputs.childrenAges)) + ' criança(s)' : '' }}: a busca não encontrou a cidade."
+        whileWaiting: { template: "Não encontrei {{ inputs.destination }} no nosso sistema de hospedagem. Passei para uma agente da equipe procurar para você; ela te responde por aqui." }
+    - id: stay
+      when: "steps.place.output != null"
+      compute:
+        starlark:
+          script: ../scripts/hotels.star
+          function: property_type
+          with: { check_in: "${ inputs.checkIn }", check_out: "${ inputs.checkOut }", wanted: "${ inputs.lodging }" }
+    - id: currency
+      when: "steps.place.output != null"
+      compute:
+        starlark:
+          script: ../scripts/currency.star
+          function: currency
+          with:
+            home_city: "${ has(inputs.profile.home_city) && inputs.profile.home_city != null ? inputs.profile.home_city : has(caller.homeCity) ? caller.homeCity : '' }"
+    - id: hotels
+      when: "steps.place.output != null"
+      act: booking/search-hotels
+      with:
+        destId: "${ steps.place.output.destId }"
+        searchType: "${ steps.place.output.searchType }"
+        checkIn: "${ inputs.checkIn }"
+        checkOut: "${ inputs.checkOut }"
+        adults: "${ inputs.adults }"
+        childrenAges: "${ size(inputs.childrenAges) == 0 ? dyn(null) : dyn(inputs.childrenAges.map(a, string(a)).join(',')) }"
+        rooms: "${ inputs.rooms }"
+        currency: "${ steps.currency.output }"
+      onError:
+        - respond: { template: "Não consegui buscar hospedagens agora. Quer que eu tente de novo?" }
+    - id: ranked
+      when: "steps.place.output != null"
+      compute:
+        starlark:
+          script: ../scripts/hotels.star
+          function: score_hotels
+          with:
+            hotels: "${ steps.hotels.output }"
+            prefs: "${ {'time_value': inputs.cheap ? 'price' : has(inputs.profile.time_value) && inputs.profile.time_value != null ? inputs.profile.time_value : 'balanced'} }"
+            property_type: "${ steps.stay.output.kind }"
+            nights: "${ steps.stay.output.nights }"
+    - id: view
+      when: "steps.place.output != null"
+      compute:
+        starlark:
+          script: ../scripts/present.star
+          function: hotels_view
+          with:
+            ranked: "${ steps.ranked.output }"
+            place: "${ steps.place.output }"
+            check_in: "${ inputs.checkIn }"
+            check_out: "${ inputs.checkOut }"
+            adults: "${ inputs.adults }"
+            children: "${ inputs.childrenAges }"
+            kind: "${ steps.stay.output.kind }"
+            reused: "${ has(inputs.trip.depart) && !inputs.newDates && inputs.trip.depart == inputs.checkIn }"
+            raw: "${ steps.hotels.output }"
+            cheap: "${ inputs.cheap }"
+            previous: "${ steps.previous.output }"
+            other: "${ inputs.otherDestination }"
+    - id: withAreas
+      when: "steps.place.output != null"
+      compute:
+        starlark:
+          script: ../scripts/present.star
+          function: with_districts
+          with: { ranked: "${ steps.ranked.output }", raw: "${ steps.hotels.output }" }
+    - id: remember
+      when: "steps.place.output != null && (size(steps.view.output.shown) > 0)"
+      act: memo/save-shown
+      with: { conversation: "${ conversation.id }", kind: hotels, items: "${ steps.view.output.shown }", destination: "${ steps.place.output.name }", at: "${ event.time }" }
+      idempotencyKey: "'hotels/' + conversation.id + '/' + steps.place.output.name + '/' + inputs.area + '/' + inputs.checkIn + '/' + inputs.checkOut + '/' + string(inputs.adults) + '/' + string(inputs.cheap) + '@' + string(event.time)"
+    - id: keepTrip
+      when: "steps.place.output != null"
+      act: trip/save
+      with:
+        conversation: "${ conversation.id }"
+        destination: "${ steps.place.output.name }"
+        origin: null
+        depart: "${ inputs.checkIn }"
+        returnDate: "${ inputs.checkOut }"
+        adults: "${ inputs.adults }"
+        children: "${ inputs.childrenAges }"
+        other: "${ inputs.otherDestination != '' ? inputs.otherDestination : has(inputs.trip.other) && inputs.trip.other != steps.place.output.name ? inputs.trip.other : null }"
+        at: "${ event.time }"
+      idempotencyKey: "'trip-hotel/' + conversation.id + '/' + steps.place.output.name + '/' + inputs.area + '/' + inputs.checkIn + '/' + inputs.checkOut + '/' + string(inputs.adults) + '/' + string(inputs.cheap) + '@' + string(event.time)"
+  output:
+    template: "{{ steps.place.output == null ? string(steps.notFound.output) : steps.view.output.message }}"
+    value: "steps.place.output == null ? {'topHotels': [], 'summary': {}} : steps.withAreas.output"

@@ -1,0 +1,27 @@
+{"id": "h2-search-flights-01", "message": "quanto ta pra ir pra recife?", "want": "search-flights"}
+{"id": "h2-search-flights-02", "message": "passagem pra mim e meu marido pra roma", "want": "search-flights"}
+{"id": "h2-search-flights-03", "message": "to em lisboa e preciso voltar pro brasil dia 30", "want": "search-flights"}
+{"id": "h2-search-flights-04", "message": "vcs acham voo pra cancun?", "want": "search-flights"}
+{"id": "h2-search-flights-05", "message": "e saindo de campinas?", "want": "search-flights", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h2-search-flights-06", "message": "sdu cgh amanha cedo", "want": "search-flights"}
+{"id": "h2-flight-details-01", "message": "a azul inclui despachada?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h2-flight-details-02", "message": "o de 890 tem o que de bagagem?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h2-flight-details-03", "message": "e o segundo, qual tarifa?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h2-flight-details-04", "message": "esse das 12h40 é light?", "want": "flight-details", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h2-search-hotels-01", "message": "casa de temporada em buzios no reveillon", "want": "search-hotels"}
+{"id": "h2-search-hotels-02", "message": "quero um quarto em curitiba amanha", "want": "search-hotels"}
+{"id": "h2-search-hotels-03", "message": "apart hotel em sp pro mes que vem", "want": "search-hotels"}
+{"id": "h2-search-hotels-04", "message": "chale em campos do jordao pro inverno", "want": "search-hotels"}
+{"id": "h2-search-hotels-05", "message": "e onde eu durmo la?", "want": "search-hotels", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto, 3h15) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto, 3h25) — R$ 720, mala despachada inclusa\n3. LATAM GRU → REC, 12/10 07:10–10:25 (direto, 3h15) — R$ 890", "after": "search-flights"}
+{"id": "h2-search-hotels-06", "message": "tem algum com nota melhor?", "want": "search-hotels", "agentSaid": "Hotéis em Lisboa, 12/10–15/10 (3 noites):\n1. Hotel Avenida Palace — nota 9.0 (2100 avaliações), R$ 3.000 no total (R$ 1.000/noite)\n2. Lisboa Stay Apartments — nota 8.8 (900 avaliações), R$ 1.800 no total (R$ 600/noite), cancelamento grátis", "after": "search-hotels"}
+{"id": "h2-set-preferences-01", "message": "sou smiles ouro", "want": "set-preferences"}
+{"id": "h2-set-preferences-02", "message": "latam nunca mais", "want": "set-preferences"}
+{"id": "h2-set-preferences-03", "message": "moro em recife", "want": "set-preferences"}
+{"id": "h2-set-preferences-04", "message": "gosto de janela", "want": "set-preferences"}
+{"id": "h2-set-preferences-05", "message": "barulho me incomoda muito em hotel", "want": "set-preferences"}
+{"id": "h2-none-01", "message": "tudo bem?", "want": "none"}
+{"id": "h2-none-02", "message": "qual o melhor bairro de lisboa pra turista?", "want": "none"}
+{"id": "h2-none-03", "message": "como faço check-in online na gol?", "want": "none"}
+{"id": "h2-none-04", "message": "meu voo atrasou, o que eu faço?", "want": "none"}
+{"id": "h2-none-05", "message": "show, valeu", "want": "none", "agentSaid": "Hotéis em Lisboa, 12/10–15/10 (3 noites):\n1. Hotel Avenida Palace — nota 9.0 (2100 avaliações), R$ 3.000 no total (R$ 1.000/noite)\n2. Lisboa Stay Apartments — nota 8.8 (900 avaliações), R$ 1.800 no total (R$ 600/noite), cancelamento grátis", "after": "search-hotels"}
+{"id": "h2-none-06", "message": "vcs tem cupom de desconto?", "want": "none"}

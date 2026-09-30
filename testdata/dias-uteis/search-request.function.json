@@ -1,0 +1,125 @@
+{
+  "apiVersion": "agents.tessera.dev/v1alpha1",
+  "kind": "Function",
+  "metadata": {
+    "name": "search-request",
+    "namespace": "clinica-bench"
+  },
+  "spec": {
+    "inputs": {
+      "message": {
+        "type": "string",
+        "resolve": [
+          {
+            "id": "initial",
+            "value": "event.message"
+          }
+        ]
+      }
+    },
+    "steps": [
+      {
+        "id": "first",
+        "call": "parse-request",
+        "with": {
+          "message": "${ inputs.message }"
+        }
+      },
+      {
+        "id": "question",
+        "when": "steps.first.output.week.known && steps.first.output.fromDate == null && !steps.first.output.week.restricted",
+        "respond": {
+          "template": "Para remarcar, qual dia ou intervalo você prefere? Pode indicar dias da semana, período e horário."
+        }
+      },
+      {
+        "id": "reply",
+        "when": "steps.first.output.week.known && steps.first.output.fromDate == null && !steps.first.output.week.restricted",
+        "wait": {
+          "for": "24h",
+          "orReply": true,
+          "includeSideMessages": true
+        }
+      },
+      {
+        "id": "second",
+        "when": "steps.first.output.week.known && steps.first.output.fromDate == null && !steps.first.output.week.restricted && steps.reply.output.reply != null",
+        "call": "parse-request",
+        "with": {
+          "message": "${ inputs.message + '\\n' + steps.reply.output.sideMessages.join('\\n') + '\\n' + steps.reply.output.reply }"
+        }
+      },
+      {
+        "id": "reask2",
+        "when": "steps.second.status == 'succeeded' && !(steps.second.output.week.known && (steps.second.output.week.restricted || steps.second.output.fromDate != null))",
+        "respond": {
+          "template": "Ainda preciso de um dia ou intervalo para consultar vagas. Qual você prefere? Pode indicar dias da semana, período e horário."
+        }
+      },
+      {
+        "id": "reply2",
+        "when": "steps.second.status == 'succeeded' && !(steps.second.output.week.known && (steps.second.output.week.restricted || steps.second.output.fromDate != null))",
+        "wait": {
+          "for": "24h",
+          "orReply": true,
+          "includeSideMessages": true
+        }
+      },
+      {
+        "id": "third",
+        "when": "steps.second.status == 'succeeded' && !(steps.second.output.week.known && (steps.second.output.week.restricted || steps.second.output.fromDate != null)) && steps.reply2.output.reply != null",
+        "call": "parse-request",
+        "with": {
+          "message": "${ inputs.message + '\\n' + steps.reply.output.sideMessages.join('\\n') + '\\n' + steps.reply.output.reply + '\\n' + steps.reply2.output.sideMessages.join('\\n') + '\\n' + steps.reply2.output.reply }"
+        }
+      },
+      {
+        "id": "reask3",
+        "when": "steps.third.status == 'succeeded' && !(steps.third.output.week.known && (steps.third.output.week.restricted || steps.third.output.fromDate != null))",
+        "respond": {
+          "template": "Ainda preciso de um dia ou intervalo para consultar vagas. Qual você prefere? Pode indicar dias da semana, período e horário."
+        }
+      },
+      {
+        "id": "reply3",
+        "when": "steps.third.status == 'succeeded' && !(steps.third.output.week.known && (steps.third.output.week.restricted || steps.third.output.fromDate != null))",
+        "wait": {
+          "for": "24h",
+          "orReply": true,
+          "includeSideMessages": true
+        }
+      },
+      {
+        "id": "fourth",
+        "when": "steps.third.status == 'succeeded' && !(steps.third.output.week.known && (steps.third.output.week.restricted || steps.third.output.fromDate != null)) && steps.reply3.output.reply != null",
+        "call": "parse-request",
+        "with": {
+          "message": "${ inputs.message + '\\n' + steps.reply.output.sideMessages.join('\\n') + '\\n' + steps.reply.output.reply + '\\n' + steps.reply2.output.sideMessages.join('\\n') + '\\n' + steps.reply2.output.reply + '\\n' + steps.reply3.output.sideMessages.join('\\n') + '\\n' + steps.reply3.output.reply }"
+        }
+      },
+      {
+        "id": "candidate",
+        "compute": {
+          "cel": "steps.fourth.status == 'succeeded' ? steps.fourth.output : steps.third.status == 'succeeded' ? steps.third.output : steps.second.status == 'succeeded' ? steps.second.output : steps.first.output"
+        }
+      },
+      {
+        "id": "chosen",
+        "compute": {
+          "cel": "steps.candidate.output"
+        }
+      },
+      {
+        "id": "disclose",
+        "when": "steps.chosen.output.week.known && steps.chosen.output.week.restricted && steps.chosen.output.fromDate == null",
+        "respond": {
+          "template": "Vou consultar os 31 dias de {{ formatDate(event.time, 'America/Sao_Paulo') }} a {{ formatDate(event.time + duration('720h'), 'America/Sao_Paulo') }}, respeitando os dias da semana pedidos."
+        }
+      }
+    ],
+    "output": {
+      "value": "steps.chosen.output.week.known && steps.chosen.output.week.restricted && steps.chosen.output.fromDate == null ? {'fromDate': formatDate(event.time, 'America/Sao_Paulo'), 'endDate': formatDate(event.time + duration('720h'), 'America/Sao_Paulo'), 'period': steps.chosen.output.period, 'clockTime': steps.chosen.output.clockTime, 'week': steps.chosen.output.week} : steps.chosen.output"
+    },
+    "description": "Resolução de preferências de remarcação preservando texto real e restrições."
+  }
+}

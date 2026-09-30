@@ -1,0 +1,57 @@
+# The trip being planned in a conversation (RFC-0009), as the built-in sql
+# plugin: where, from where, when and who. Every search reads it and saves
+# what it searched, so "e hotel nessas datas?" and "tem mais barato?" need
+# nothing said again. The Functions use it only when it was touched in the
+# last 14 days, and every answer says what it assumed.
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata:
+  name: trip
+  version: 0.1.0
+spec:
+  sql:
+    migrations:
+      - >-
+        CREATE TABLE trips (conversation TEXT PRIMARY KEY, destination TEXT, origin TEXT, depart TEXT,
+        return_date TEXT, adults INTEGER, children TEXT, updated_at TEXT NOT NULL)
+      # The second destination the agent offered to look at ("Quer que eu
+      # veja Porto Seguro também?"), so a plain "pode sim" gets it.
+      - ALTER TABLE trips ADD COLUMN other TEXT
+  actions:
+    get:
+      input: { conversation: string }
+      output: any
+      effect: read
+      sql:
+        query: "SELECT destination, origin, depart, return_date, adults, children, other, updated_at FROM trips WHERE conversation = :c"
+        params: { c: "${ inputs.conversation }" }
+        result: row
+        json: [children]
+    save:
+      input: { conversation: string, destination: string, origin: any, depart: string, returnDate: any, adults: int, children: any, other: any, at: timestamp }
+      effect: idempotent-write
+      sql:
+        # What was searched replaces the trip; a hotel search, which has no
+        # origin, keeps the one a flight search saved.
+        query: >-
+          INSERT INTO trips (conversation, destination, origin, depart, return_date, adults, children, other, updated_at)
+          VALUES (:c, :dest, :origin, :depart, :ret, :adults, :children, :other, :at)
+          ON CONFLICT (conversation) DO UPDATE SET
+          destination = excluded.destination,
+          origin = COALESCE(excluded.origin, trips.origin),
+          depart = excluded.depart,
+          return_date = excluded.return_date,
+          adults = excluded.adults,
+          children = excluded.children,
+          other = excluded.other,
+          updated_at = excluded.updated_at
+        params:
+          c: "${ inputs.conversation }"
+          dest: "${ inputs.destination }"
+          origin: "${ inputs.origin }"
+          depart: "${ inputs.depart }"
+          ret: "${ inputs.returnDate }"
+          adults: "${ inputs.adults }"
+          children: "${ inputs.children }"
+          other: "${ inputs.other }"
+          at: "${ inputs.at }"

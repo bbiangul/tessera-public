@@ -1,0 +1,100 @@
+# Booking.com flight search through RapidAPI, as the built-in http plugin.
+# The API key is a secret reference (TESSERA_SECRET_BOOKING_RAPIDAPI_KEY when
+# self-hosted); it never appears in a definition.
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata:
+  name: booking
+  version: 0.1.0
+spec:
+  egress:
+    hosts: [booking-com15.p.rapidapi.com]
+  connection:
+    baseUrl: https://booking-com15.p.rapidapi.com/api/v1
+    auth: { header: x-rapidapi-key, secret: BOOKING_RAPIDAPI_KEY }
+  actions:
+    search-flight-destination:
+      input: { query: string }
+      output: list<booking.Place>
+      effect: read
+      http:
+        method: GET
+        path: /flights/searchDestination
+        query: { query: "${ inputs.query }" }
+        headers: { x-rapidapi-host: booking-com15.p.rapidapi.com }
+        output: "sources.response.body.data"
+    search-flights:
+      input:
+        fromId: string
+        toId: string
+        departDate: date
+        returnDate: any
+        adults: int
+        children: any
+        cabinClass: string
+        currency: string
+      output: list<booking.Offer>
+      effect: read
+      http:
+        method: GET
+        path: /flights/searchFlights
+        query:
+          fromId: "${ inputs.fromId }"
+          toId: "${ inputs.toId }"
+          departDate: "${ inputs.departDate }"
+          returnDate: "${ inputs.returnDate }"
+          adults: "${ inputs.adults }"
+          children: "${ inputs.children }"
+          cabinClass: "${ inputs.cabinClass }"
+          currency_code: "${ inputs.currency }"
+          sort: BEST
+        headers: { x-rapidapi-host: booking-com15.p.rapidapi.com }
+        output: "sources.response.body.data.flightOffers"
+    search-hotel-destination:
+      input: { query: string }
+      output: list<booking.HotelPlace>
+      effect: read
+      http:
+        method: GET
+        path: /hotels/searchDestination
+        query: { query: "${ inputs.query }" }
+        headers: { x-rapidapi-host: booking-com15.p.rapidapi.com }
+        output: "sources.response.body.data"
+    search-hotels:
+      input:
+        destId: string
+        searchType: string
+        checkIn: date
+        checkOut: date
+        adults: int
+        childrenAges: any
+        rooms: int
+        currency: string
+      output: list<booking.Hotel>
+      effect: read
+      http:
+        method: GET
+        path: /hotels/searchHotels
+        query:
+          dest_id: "${ inputs.destId }"
+          search_type: "${ inputs.searchType }"
+          arrival_date: "${ inputs.checkIn }"
+          departure_date: "${ inputs.checkOut }"
+          adults: "${ inputs.adults }"
+          children_age: "${ inputs.childrenAges }"
+          room_qty: "${ inputs.rooms }"
+          currency_code: "${ inputs.currency }"
+          units: metric
+          languagecode: pt-br
+        headers: { x-rapidapi-host: booking-com15.p.rapidapi.com }
+        output: "sources.response.body.data.hotels"
+    seat-map:
+      input: { offerToken: string, currency: string }
+      output: booking.SeatMap
+      effect: read
+      http:
+        method: GET
+        path: /flights/getSeatMap
+        query: { offerToken: "${ inputs.offerToken }", currency_code: "${ inputs.currency }" }
+        headers: { x-rapidapi-host: booking-com15.p.rapidapi.com }
+        output: "sources.response.body.data"

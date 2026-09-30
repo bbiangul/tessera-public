@@ -1,0 +1,68 @@
+{
+ "airportChangeData": {
+  "airportChanges": [
+   {
+    "arrivalTime": "2026-10-12T14:00:00",
+    "departureTime": "2026-10-12T15:30:00",
+    "flightToken": "high",
+    "fromAirport": "GRU",
+    "layoverMinutes": 90,
+    "legIndex": 0,
+    "segmentIndex": 0,
+    "toAirport": "CGH"
+   },
+   {
+    "arrivalTime": "2026-10-12T14:00:00",
+    "departureTime": "2026-10-12T15:30:00",
+    "flightToken": "medium",
+    "fromAirport": "GRU",
+    "layoverMinutes": 130,
+    "legIndex": 0,
+    "segmentIndex": 0,
+    "toAirport": "CGH"
+   },
+   {
+    "arrivalTime": "2026-10-12T14:00:00",
+    "departureTime": "2026-10-12T15:30:00",
+    "flightToken": "low",
+    "fromAirport": "GRU",
+    "layoverMinutes": 149,
+    "legIndex": 0,
+    "segmentIndex": 0,
+    "toAirport": "CGH"
+   },
+   {
+    "arrivalTime": "2026-10-12T14:00:00",
+    "departureTime": "2026-10-12T15:30:00",
+    "flightToken": "unknown",
+    "fromAirport": "JFK",
+    "layoverMinutes": 150,
+    "legIndex": 0,
+    "segmentIndex": 0,
+    "toAirport": "LGA"
+   }
+  ]
+ },
+ "rawFlights": {
+  "data": {
+   "flightOffers": []
+  },
+  "status": true
+ },
+ "transferTimeData": {
+  "transferTimes": [
+   {
+    "estimated": false,
+    "from": "GRU",
+    "to": "CGH",
+    "transferMinutes": 74
+   },
+   {
+    "estimated": false,
+    "from": "LHR",
+    "to": "LGW",
+    "transferMinutes": 95
+   }
+  ]
+ }
+}

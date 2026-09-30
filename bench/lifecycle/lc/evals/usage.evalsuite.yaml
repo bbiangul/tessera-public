@@ -1,0 +1,43 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: usage, namespace: learn }
+spec:
+  description: learn-001 usage; transcripts only, judged outside.
+  now: "2026-09-27T09:00:00-03:00"
+  scenarios:
+    - id: h1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs atendem bebê de 1 ano?"
+        - user: "liguei aí e me disseram que só a partir de 3 anos, essa informação tá errada"
+    - id: h2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "minha filha tem 2 anos, atendem?"
+        - user: "não é verdade, a recepção falou que é só a partir de 3"
+    - id: h3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "com quantos anos a criança pode consultar?"
+        - user: "hmm a dentista disse outra coisa, que é a partir dos 3 anos"
+    - id: g1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs fazem sedação?"
+        - user: "ótimo, obrigada!"
+    - id: g2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto custa a sedação consciente?"
+        - user: "beleza, vou marcar então"
+    - id: g3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem gás pra relaxar?"
+        - user: "perfeito, valeu"

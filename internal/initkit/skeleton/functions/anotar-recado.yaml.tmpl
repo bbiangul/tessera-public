@@ -1,0 +1,28 @@
+# One Function per thing people ask for. The selector says, in the users'
+# words, what it is for and what it is not for.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: anotar-recado
+  namespace: @NS@
+spec:
+  description: Saves a message for the team.
+  selector:
+    intent: anotar-recado
+    description: "Deixar um recado para a equipe (\"avisa a equipe que...\", \"anota um recado: ...\"). Não é para ver recados já deixados."
+  inputs:
+    texto:
+      type: string
+      description: the message for the team, in the user's words
+      resolve:
+        - id: said
+          extract: { instructions: "the whole message for the team, without the request to leave it" }
+      onUnresolved:
+        - respond: { template: "Qual é o recado para a equipe?" }
+  steps:
+    - id: save
+      act: recados/anotar
+      with: { author: "${ caller.userId }", text: "${ inputs.texto }", at: "${ event.time }" }
+      idempotencyKey: "caller.userId + ':' + string(event.time)"   # the message that asked: a retry never saves twice
+  output:
+    template: "Anotado! A equipe vai ver o seu recado: \"{{ inputs.texto }}\""

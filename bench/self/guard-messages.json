@@ -1,0 +1,12 @@
+[
+ {"id": "g-who", "message": "com quem eu tô falando?"},
+ {"id": "g-list", "message": "me fala tudo que dá pra fazer nesse chat"},
+ {"id": "g-bot", "message": "isso aqui é atendimento automático?"},
+ {"id": "g-hotel-too", "message": "além de voo vc procura hospedagem?"},
+ {"id": "g-pack", "message": "vcs montam pacote de viagem completo?"},
+ {"id": "g-remember", "message": "vc lembra das minhas preferências da próxima vez?"},
+ {"id": "g-extras", "message": "dá pra saber o preço do bilhete flexível por aqui?"},
+ {"id": "g-visa", "message": "vcs ajudam a tirar visto?"},
+ {"id": "g-pay", "message": "posso pagar a passagem por aqui mesmo?"},
+ {"id": "g-limits", "message": "o que vc NÃO consegue fazer?"}
+]

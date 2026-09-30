@@ -1,0 +1,65 @@
+{
+  "instructions": "Extract the flight search from the user's message. STATE.today is today's date and weekday. Dates are YYYY-MM-DD: resolve relative dates (amanhã, sexta, semana que vem) against today; a date without a year is its next occurrence from today; a return given as a duration counts from the departure. Use null when the message has no specific day (only a month, or nothing). adults counts the adults traveling, including the user (default 1). childrenAges lists the ages of children under 18; a baby under 1 year is 0. cabinClass is ECONOMY unless the message asks for another. Keep place names as the user wrote them; null when absent.",
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "destination",
+      "origin",
+      "departDate",
+      "returnDate",
+      "adults",
+      "childrenAges",
+      "cabinClass"
+    ],
+    "properties": {
+      "destination": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "origin": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "departDate": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "returnDate": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "adults": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 9
+      },
+      "childrenAges": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 17
+        }
+      },
+      "cabinClass": {
+        "enum": [
+          "ECONOMY",
+          "PREMIUM_ECONOMY",
+          "BUSINESS",
+          "FIRST"
+        ]
+      }
+    }
+  }
+}

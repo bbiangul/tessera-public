@@ -1,0 +1,17 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: ver-recados
+  namespace: @NS@
+spec:
+  description: Shows the user's latest messages to the team.
+  selector:
+    intent: ver-recados
+    description: "Ver os recados que a pessoa já deixou (\"quais recados eu deixei?\", \"mostra meus recados\"). Não é para deixar um recado novo."
+  steps:
+    - id: list
+      act: recados/listar
+      with: { author: "${ caller.userId }" }
+  output:
+    template: |-
+      {{ steps.list.output.size() == 0 ? 'Você ainda não deixou recados.' : 'Seus últimos recados:\n' + steps.list.output.map(r, '• ' + r.text).join('\n') }}

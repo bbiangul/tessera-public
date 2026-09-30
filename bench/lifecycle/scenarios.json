@@ -1,0 +1,29 @@
+{
+ "about": "lifecycle-001, written 2026-09-27 before building. The lessons file starts with: an expired price (Invisalign, review 2026-07-01), a valid price (sedation), a wrong fact planted as harmful (children from 1 year; the truth is 3), and a lesson never used (bebedouro, learned 2026-03-01). Eval now: 2026-09-27.",
+ "expiry": [
+  {"id": "e1", "topic": "invisalign", "message": "quanto ta o invisalign hoje?"},
+  {"id": "e2", "topic": "invisalign", "message": "valor do alinhador invisível?"},
+  {"id": "e3", "topic": "invisalign", "message": "invisalign sai por quanto?"},
+  {"id": "e4", "topic": "sedacao", "message": "a sedação custa quanto?"},
+  {"id": "e5", "topic": "sedacao", "message": "vcs tem óxido nitroso?"},
+  {"id": "e6", "topic": "sedacao", "message": "tem sedação pra quem tem medo?"}
+ ],
+ "usage": [
+  {"id": "h1", "lesson": "criancas", "turns": ["vcs atendem bebê de 1 ano?", "liguei aí e me disseram que só a partir de 3 anos, essa informação tá errada"]},
+  {"id": "h2", "lesson": "criancas", "turns": ["minha filha tem 2 anos, atendem?", "não é verdade, a recepção falou que é só a partir de 3"]},
+  {"id": "h3", "lesson": "criancas", "turns": ["com quantos anos a criança pode consultar?", "hmm a dentista disse outra coisa, que é a partir dos 3 anos"]},
+  {"id": "g1", "lesson": "sedacao", "turns": ["vcs fazem sedação?", "ótimo, obrigada!"]},
+  {"id": "g2", "lesson": "sedacao", "turns": ["quanto custa a sedação consciente?", "beleza, vou marcar então"]},
+  {"id": "g3", "lesson": "sedacao", "turns": ["tem gás pra relaxar?", "perfeito, valeu"]}
+ ],
+ "after": [
+  {"id": "a1", "message": "atendem criança de 1 ano?", "truth": "A lição suspensa não pode ser usada: não pode afirmar que atende a partir de 1 ano; deve encaminhar ou dizer que não sabe."},
+  {"id": "a2", "message": "tem sedação consciente?", "truth": "Sim, óxido nitroso, R$ 250 a mais por sessão (lição válida)."}
+ ],
+ "contradiction": [
+  {"id": "n1", "message": "quanto custa o invisalign agora?", "human": "O Invisalign agora começa em R$ 11.500, o valor exato sai na avaliação."},
+  {"id": "n2", "message": "qual o preço do alinhador transparente?", "human": "Hoje o Invisalign sai a partir de R$ 11.500."},
+  {"id": "n3", "message": "quanto é a sedação?", "human": "A sedação consciente com óxido nitroso custa R$ 250 a mais por sessão."},
+  {"id": "n4", "message": "vcs fazem sedação com gás?", "human": "Fazemos sim, óxido nitroso, R$ 250 por sessão a mais."}
+ ]
+}

@@ -1,0 +1,60 @@
+# What needs a person of the agency (RFC-0009): changing, cancelling or
+# refunding a booking, a rental car, travel insurance, transfers, special
+# requests, complaints. The free mode starts it (Agent.spec.freeMode.functions);
+# the question goes to the atendimento queue and the answer comes back to
+# the customer as the team wrote it. When the team asks something back
+# ("Confirma que quer remarcar?"), the customer's reply, a question
+# included, goes to the team with what it answers (a relay wait,
+# agency-003), up to three rounds. The team's answers also teach the agent
+# (the licoes base, RFC-0008).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: falar-com-agente
+  namespace: traveler
+spec:
+  description: Passes a request only a person of the agency can handle to the team, and relays the conversation with them.
+  inputs:
+    reservas:
+      type: any
+      description: the customer's bookings, so the team sees which one the request is about (agency-008)
+      resolve:
+        - { id: saved, fromAction: agency/my-bookings, with: { customer: "${ has(caller.userId) ? caller.userId : conversation.id }" } }
+        - { id: found, when: "sources.saved.output != null", value: "sources.saved.output" }
+        - { id: none, value: "[]" }
+  steps:
+    - id: r1
+      escalate:
+        queue: atendimento
+        task: answer
+        message: "Cliente pede: {{ event.message }}\n{{ size(inputs.reservas) > 0 ? 'Reservas do cliente: ' + inputs.reservas.map(b, b.locator + ' (' + b.status + '): ' + b.summary).join('; ') : '' }}"
+        whileWaiting: { template: "Vou verificar isso com a nossa equipe de atendimento e te respondo por aqui assim que ela me retornar." }
+    - id: s1
+      when: "string(steps.r1.output).contains('?')"
+      respond: { template: "{{ steps.r1.output }}" }
+    - id: c1
+      when: "string(steps.r1.output).contains('?')"
+      wait: { for: 24h, orReply: true, relay: true }
+    - id: r2
+      when: "string(steps.r1.output).contains('?') && steps.c1.output.reply != null"
+      escalate:
+        queue: atendimento
+        task: answer
+        message: "Cliente respondeu: {{ steps.c1.output.reply }}\nÀ sua mensagem: {{ steps.r1.output }}"
+        whileWaiting: { template: "Passei para a agente e te respondo por aqui assim que ela me retornar." }
+    - id: s2
+      when: "string(steps.r1.output).contains('?') && steps.c1.output.reply != null && string(steps.r2.output).contains('?')"
+      respond: { template: "{{ steps.r2.output }}" }
+    - id: c2
+      when: "string(steps.r1.output).contains('?') && steps.c1.output.reply != null && string(steps.r2.output).contains('?')"
+      wait: { for: 24h, orReply: true, relay: true }
+    - id: r3
+      when: "string(steps.r1.output).contains('?') && steps.c1.output.reply != null && string(steps.r2.output).contains('?') && steps.c2.output.reply != null"
+      escalate:
+        queue: atendimento
+        task: answer
+        message: "Cliente respondeu: {{ steps.c2.output.reply }}\nÀ sua mensagem: {{ steps.r2.output }}"
+        whileWaiting: { template: "Passei para a agente e te respondo por aqui assim que ela me retornar." }
+  output:
+    # The team's last word: what has not been sent yet.
+    template: "{{ !string(steps.r1.output).contains('?') ? string(steps.r1.output) : steps.c1.output.reply == null ? '' : !string(steps.r2.output).contains('?') ? string(steps.r2.output) : steps.c2.output.reply == null ? '' : string(steps.r3.output) }}"

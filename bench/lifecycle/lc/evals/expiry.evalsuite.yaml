@@ -1,0 +1,37 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: expiry, namespace: learn }
+spec:
+  description: learn-001 expiry; transcripts only, judged outside.
+  now: "2026-09-27T09:00:00-03:00"
+  scenarios:
+    - id: e1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto ta o invisalign hoje?"
+    - id: e2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "valor do alinhador invisível?"
+    - id: e3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "invisalign sai por quanto?"
+    - id: e4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a sedação custa quanto?"
+    - id: e5
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs tem óxido nitroso?"
+    - id: e6
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem sedação pra quem tem medo?"

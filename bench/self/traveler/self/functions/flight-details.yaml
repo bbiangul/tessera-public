@@ -1,0 +1,37 @@
+# Follow-up questions about a flight the agent already showed: "e a
+# bagagem do segundo?", "o da Azul tem mala?". Decide picks the flight from
+# the last search (measured: docs/research/decide-followups-001.md); the
+# answer comes from what was stored, with no new search.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: flight-details
+  namespace: traveler
+spec:
+  description: Answers questions about a flight from the last search (baggage, fare).
+  selector:
+    after: [search-flights, flight-details, flight-extras]   # follow-ups: only after flights were shown
+    intent: flight-details
+    description: "Perguntas curtas sobre um dos voos que acabei de mostrar (\"e o da LATAM?\", \"o segundo tem mala?\", \"e o mais barato?\"): bagagem, tarifa, detalhes."
+  inputs:
+    last:
+      type: map
+      description: the last flight search of this conversation
+      resolve:
+        - id: saved
+          fromAction: memo/last-search
+          with: { conversation: "${ conversation.id }" }
+      onUnresolved:
+        - respond: { template: "Ainda não mostrei voos nesta conversa. Para onde você quer voar?" }
+    flight:
+      type: map
+      description: the flight the user asks about
+      resolve:
+        - id: pick
+          ask:
+            text: "Sobre qual voo? {{ inputs.last.results.map(f, f.label).join(' / ') }}"
+            choices: "inputs.last.results"
+            minConfidence: 0.7
+            onLowConfidence: ask-user
+  output:
+    template: "{{ inputs.flight.label }}\n{{ inputs.flight.baggage }}"

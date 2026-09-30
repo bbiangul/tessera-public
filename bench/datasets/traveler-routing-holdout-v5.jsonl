@@ -1,0 +1,22 @@
+{"id": "h5-01", "message": "loft em sp pra 3 semanas", "want": "search-hotels"}
+{"id": "h5-02", "message": "chale com lareira em campos do jordao", "want": "search-hotels"}
+{"id": "h5-03", "message": "airbnb em porto de galinhas pro reveillon", "want": "search-hotels"}
+{"id": "h5-04", "message": "kitnet mobiliada em curitiba por um mes", "want": "search-hotels"}
+{"id": "h5-05", "message": "pousada pet friendly em paraty", "want": "search-hotels"}
+{"id": "h5-06", "message": "algum lugar pra dormir em fortaleza amanha", "want": "search-hotels"}
+{"id": "h5-07", "message": "apart hotel em brasilia de segunda a sexta", "want": "search-hotels"}
+{"id": "h5-08", "message": "quarto de hotel perto do aeroporto de guarulhos", "want": "search-hotels"}
+{"id": "h5-09", "message": "glamping na serra gaucha", "want": "search-hotels"}
+{"id": "h5-10", "message": "hospedagem em natal pra familia de 5", "want": "search-hotels"}
+{"id": "h5-11", "message": "quero passar 2 semanas em natal, saindo de bh", "want": "search-flights"}
+{"id": "h5-12", "message": "bora pra recife em dezembro, uns 7 dias", "want": "search-flights"}
+{"id": "h5-13", "message": "preciso chegar em manaus terca", "want": "search-flights"}
+{"id": "h5-14", "message": "ida e volta pro rio, fico 4 dias", "want": "search-flights"}
+{"id": "h5-15", "message": "to pensando em ir pra buenos aires 1 semana", "want": "search-flights"}
+{"id": "h5-16", "message": "voo pra porto seguro no carnaval", "want": "search-flights"}
+{"id": "h5-17", "message": "e hospedagem pra essas datas?", "want": "search-hotels", "agentSaid": "Encontrei estas opções:\n1. GOL GRU → REC, 12/10 12:40–15:55 (direto) — R$ 640\n2. Azul GRU → REC, 12/10 16:05–19:30 (direto) — R$ 720", "after": "search-flights"}
+{"id": "h5-18", "message": "e um voo pra la tambem?", "want": "search-flights", "agentSaid": "Encontrei estas hospedagens:\n1. Hotel Atlântico, Boa Viagem — R$ 380/noite\n2. Pousada do Farol — R$ 290/noite", "after": "search-hotels"}
+{"id": "h5-19", "message": "o segundo aceita pet?", "want": "none", "agentSaid": "Encontrei estas hospedagens:\n1. Hotel Atlântico, Boa Viagem — R$ 380/noite\n2. Pousada do Farol — R$ 290/noite", "after": "search-hotels"}
+{"id": "h5-20", "message": "qual a melhor epoca pra ir pra jericoacoara?", "want": "none"}
+{"id": "h5-21", "message": "hotel ou flat, qual compensa mais em sp?", "want": "none"}
+{"id": "h5-22", "message": "quanto tempo de voo de sp pra lisboa?", "want": "none"}

@@ -1,0 +1,123 @@
+# The travel agency (RFC-0009): what the platform says on its own, in
+# Portuguese, the voice, the free mode (documents, the web, the customer's
+# bookings, a person for what only a person does), the team and its
+# queues, and the business numbers of a sale.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata:
+  name: traveler
+  namespace: traveler
+spec:
+  description: Agência de viagens (passagens, hospedagem, cotação completa, reserva com a equipe e acompanhamento até o check-in).
+  timezone: America/Sao_Paulo
+  messages:
+    notUnderstood: "Desculpe, não entendi. Posso buscar passagens e hospedagem, montar a cotação da viagem completa e reservar com a nossa equipe. Para onde você quer ir?"
+    unsure: "Essa eu não consigo te confirmar com segurança por aqui. Se quiser, peço para uma agente da nossa equipe verificar e te responder."
+    withAPerson: "Alguém da equipe está vendo isso e responde por aqui."
+    notAllowed: "Desculpe, não posso fazer isso por você."
+    cancelled: "Tudo bem, não mudei nada."
+    failed: "Algo deu errado do meu lado. Alguém da equipe vai te responder por aqui."
+  humanInTheLoop: { queue: atendimento }
+  voice:
+    persona: "Agente de viagens da Tessera Viagens: calorosa e prática, escreve como uma pessoa no WhatsApp, frases curtas, sem exageros."
+    keep: [reserv, emiti, emissão, total, localizador]
+  routing:
+    # From tessera bench route on 6 sets: with follow-ups guarded by
+    # selector.after, 0.5 routed 2 points more of the holdouts than 0.6 and
+    # added no wrong or out-of-scope route (docs/research/router-002.md).
+    minConfidence: 0.5
+  audiences:
+    - name: equipe
+      who: "has(caller.roles) && ('agente' in caller.roles || 'emissor' in caller.roles)"
+      functions: []
+      sees: [ { audience: viajante, conversation: masked } ]
+      voice: { persona: "Assistente da equipe da agência: direto e objetivo." }
+      freeMode:
+        instructions: "Você ajuda a equipe da agência com as tarefas abertas: quantas são, de quem, o que pedem. As tarefas são respondidas pelos botões ou pelo link que cada pessoa recebeu."
+        tasks: true
+    - name: viajante
+      functions: [search-flights, search-hotels, quote-trip, compare-trips, book-trip, minha-reserva, flight-details, flight-extras, set-preferences]
+      freeMode:
+        instructions: "Você é a agente de viagens da Tessera Viagens no chat. Você conversa como uma agente experiente: tira dúvidas sobre destinos, documentos, bagagem e como a agência funciona, com as fontes que tem (os documentos da agência e páginas da web, citando o site). Pelos processos da agência você busca passagens e hospedagem, monta a cotação completa e reserva com a equipe. Não decide o caso da pessoa (se o documento dela vale, se a mala dela passa): diz a regra, a fonte e o que conferir. Preço e disponibilidade só saem de uma busca: ofereça buscar com o destino e as datas. Ao responder, puxe o próximo passo da viagem."
+        reads:
+          - { act: agency/my-bookings, with: { customer: "${ has(caller.userId) ? caller.userId : '' }" } }
+        runReads: [booking/seat-map]
+        whenUnsure: falar-com-agente   # no answer stands: ask the team (agency-003)
+        agent: { maxSteps: 5 }        # agency-004 variant E (RFC-0010)
+        search:
+          act: web/search
+          when: "a resposta depende de informação pública de fora da agência: destinos, bairros, onde fica um hotel ou uma atração e o que há perto, passeios, clima e época, documentos e vistos, vacinas, regras de companhias aéreas e de bagagem, aeroportos, preços gerais"
+        knowledge: { bases: [agencia, licoes] }
+        functions:
+          - function: falar-com-agente
+            when: "o pedido precisa de uma pessoa da agência: alterar, remarcar ou cancelar uma reserva ou uma passagem, reembolso, aluguel de carro, seguro viagem, transfer, passeios contratados, pedidos especiais (assento, necessidades especiais, animal), reenviar bilhete, voucher ou e-mail, reclamação, ou qualquer serviço que a agência faz e eu não faço neste chat; ou o usuário pede para falar com uma pessoa, ou aceita que eu pergunte para a equipe o que eu não soube responder"
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: KnowledgeBase
+metadata: { name: agencia, namespace: traveler }
+spec:
+  description: Como a agência funciona, pagamento, taxas, remarcação, cancelamento e serviços extras.
+  sources: [ { files: ["docs/agencia.md"] } ]
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: KnowledgeBase
+metadata: { name: licoes, namespace: traveler }
+spec:
+  description: Lições aprendidas com as respostas da equipe de atendimento.
+  lessons: { queue: atendimento, every: 168h }
+---
+# Who answers the agency's tasks. The contacts are illustrative; the
+# channels (WhatsApp, Slack, Teams, e-mail) are set per queue when the
+# credentials exist (docs/guides/authoring.md, "Approving on WhatsApp").
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Team
+metadata: { name: agencia, namespace: traveler }
+spec:
+  members:
+    - { id: bia, name: Bia, roles: [agente], contact: "bia@tessera-viagens.test" }
+    - { id: caio, name: Caio, roles: [emissor, agente], contact: "caio@tessera-viagens.test" }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: HumanQueue
+metadata: { name: atendimento, namespace: traveler }
+spec:
+  roles: [agente]
+  sla: { remind: 1h }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: HumanQueue
+metadata: { name: emissao, namespace: traveler }
+spec:
+  roles: [emissor]
+  sla: { remind: 30m, escalate: 2h, escalateTo: atendimento }
+---
+# The payment provider reports an approved payment: POST
+# /v1/hooks/pagamento with {"bookingId": "..."}, signed with
+# TESSERA_SECRET_PAYMENT_HOOK. It reaches the booking waiting for it.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Trigger
+metadata: { name: pagamento, namespace: traveler }
+spec:
+  webhook: { secret: PAYMENT_HOOK }
+  event: { name: pagamento-aprovado, key: "event.payload.bookingId" }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Subject
+metadata: { name: viajante, namespace: traveler }
+spec:
+  description: Um cliente da agência, pelo seu identificador no canal.
+  id: "has(caller.userId) ? caller.userId : conversation.id"
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Funnel
+metadata: { name: vendas, namespace: traveler }
+spec:
+  description: Da cotação à emissão.
+  subject: viajante
+  cohort: week
+  stages:
+    - { name: cotacao, milestone: cotou }
+    - { name: pedido, milestone: pediu-reserva, expected: 2d }
+    - { name: reserva, milestone: reservou, expected: 1d }
+    - { name: pagamento, milestone: pagou, expected: 1d }
+    - { name: emissao, milestone: emitiu, expected: 1d }

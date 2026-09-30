@@ -1,0 +1,20 @@
+{"id":"ad-01","message":"compensa mais ficar em pousada ou resort em Porto Seguro?","want":"none"}
+{"id":"ad-02","message":"flat ou hotel em Curitiba, qual você indica?","want":"none"}
+{"id":"ad-03","message":"qual bairro de Salvador é melhor pra ficar?","want":"none"}
+{"id":"ad-04","message":"é caro se hospedar em Gramado?","want":"none"}
+{"id":"ad-05","message":"Jericoacoara ou Fernando de Noronha, qual é mais bonito?","want":"none"}
+{"id":"ad-06","message":"melhor ir pra Bariloche em julho ou em agosto?","want":"none"}
+{"id":"ad-07","message":"vocês fazem pacote de navio?","want":"none"}
+{"id":"ad-08","message":"vocês vendem ingresso da Disney?","want":"none"}
+{"id":"ad-09","message":"qual a melhor época pra ir a Maceió?","want":"none"}
+{"id":"ad-10","message":"Buenos Aires ou Santiago, qual tem mais coisa pra fazer?","want":"none"}
+{"id":"ad-11","message":"quanto fica um pacote pra Salvador com hotel, de 10 a 15 de janeiro, saindo de SP?","want":"quote-trip"}
+{"id":"ad-12","message":"me passa o total com passagem e hotel pra Foz do Iguaçu, 3 a 6 de dezembro","want":"quote-trip"}
+{"id":"ad-13","message":"Maceió ou Natal, quanto fica cada um com hotel, 20 a 23/11 saindo de BH?","want":"compare-trips"}
+{"id":"ad-14","message":"compara pra mim o preço de Floripa e Porto Alegre de 5 a 8 de dezembro, saindo do Rio","want":"compare-trips"}
+{"id":"ad-15","message":"hotel em Gramado de 10 a 12 de julho","want":"search-hotels"}
+{"id":"ad-16","message":"quero reservar hotel em Fortaleza, 3 noites a partir de 5/12","want":"search-hotels"}
+{"id":"ad-17","message":"quero comprar passagem pra Manaus","want":"search-flights"}
+{"id":"ad-18","message":"pode fechar o da Azul pra mim","after":"search-flights","agentSaid":"✈️ São Paulo → Recife · só ida, 20/10 · 1 adulto\n1. GOL ... R$ 640\n2. Azul ... R$ 720","want":"book-trip"}
+{"id":"ad-19","message":"vamos com a opção 2","after":"quote-trip","agentSaid":"🧳 Cotação São Paulo → Natal ...\n1. Recomendada ...\n2. Mais econômica ...","want":"book-trip"}
+{"id":"ad-20","message":"tem algo mais barato?","after":"search-hotels","agentSaid":"🏨 Hotéis em Natal · 15/11–22/11 ...","want":"search-hotels"}

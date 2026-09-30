@@ -1,0 +1,56 @@
+# A booking's state, from the agency's system (agency-003). The free mode
+# wrote it too, but its grounding check dropped two of three answers; a
+# booking's state is a system fact, said by a template: the locator, the
+# state, the flight, the next step.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: minha-reserva
+  namespace: traveler
+spec:
+  description: Tells the customer the state of a booking they made (locator, paid, issued, flight times, e-ticket, payment link).
+  selector:
+    intent: my-booking
+    description: "O cliente pergunta sobre uma reserva ou viagem que já comprou ou pediu: se foi paga ou emitida, o localizador, o horário do voo, o e-ticket, o link de pagamento, ou diz que não recebeu o bilhete por e-mail. Não é alterar, remarcar ou cancelar, nem pedir que a equipe reenvie algo (isso é com a equipe), nem uma busca nova."
+  inputs:
+    bookings:
+      type: any
+      description: the customer's bookings in the agency's system
+      resolve:
+        - { id: saved, fromAction: agency/my-bookings, with: { customer: "${ has(caller.userId) ? caller.userId : conversation.id }" } }
+        - { id: found, when: "sources.saved.output != null", value: "sources.saved.output" }
+        - { id: none, value: "[]" }
+    booking:
+      type: map
+      description: the booking the customer asks about
+      resolve:
+        - { id: only, when: "size(inputs.bookings) == 1", value: "inputs.bookings[0]" }
+        - id: pick
+          when: "size(inputs.bookings) > 1"
+          ask:
+            text: "Sobre qual reserva? {{ inputs.bookings.map(b, (has(b.locator) ? b.locator + ': ' : '') + b.summary).join(' / ') }}"
+            choices: "inputs.bookings"
+            minConfidence: 0.6
+            onLowConfidence: ask-user
+      onUnresolved:
+        - respond: { template: "Não encontrei nenhuma reserva no seu cadastro por aqui. Se ela foi feita com outro número ou e-mail, me diga qual, ou eu passo para a equipe localizar." }
+    noEmail:
+      type: bool
+      description: whether the customer says they did not receive the e-mail with the ticket or the booking
+      resolve:
+        - { id: said, extract: { instructions: "true only when the message says an e-mail did not arrive" } }
+        - { id: default, value: "false" }
+  steps:
+    - id: resend
+      when: "inputs.noEmail"
+      respond:
+        to: "queue:atendimento"
+        template: "Reenviar o e-mail com o bilhete da reserva {{ has(inputs.booking.locator) ? inputs.booking.locator : inputs.booking.id }}: o cliente diz que não recebeu."
+    - id: text
+      compute:
+        starlark:
+          script: ../scripts/present.star
+          function: booking_status
+          with: { booking: "${ inputs.booking }", no_email: "${ inputs.noEmail }" }
+  output:
+    template: "{{ steps.text.output }}"

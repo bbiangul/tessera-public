@@ -1,0 +1,288 @@
+{
+  "apiVersion": "agents.tessera.dev/v1alpha1",
+  "kind": "EvalSuite",
+  "metadata": {
+    "name": "availability-regression",
+    "namespace": "clinica-bench"
+  },
+  "spec": {
+    "description": "Own synthetic conversations covering ownership, confirmation, correction, discovery, side questions and failure verification.",
+    "now": "2026-10-02T08:00:00-03:00",
+    "sandboxes": [
+      {
+        "plugin": "clinic",
+        "script": "clinic.sandbox.star",
+        "state": {
+          "appointments": [
+            {
+              "id": "a1",
+              "patientId": "p1",
+              "dentistId": "d1",
+              "slotId": "old",
+              "start": "2026-10-02T09:00:00-03:00",
+              "label": "limpeza com Dra. Ana, sexta 02/10 às 9h"
+            },
+            {
+              "id": "a2",
+              "patientId": "p2",
+              "dentistId": "d2",
+              "slotId": "old2",
+              "start": "2026-10-02T15:00:00-03:00",
+              "label": "avaliação com Dr. Pedro, sexta 02/10 às 15h"
+            }
+          ],
+          "slots": [
+            {
+              "id": "s17",
+              "dentistId": "d1",
+              "start": "2026-10-08T17:00:00-03:00",
+              "label": "quinta 08/10 às 17h"
+            }
+          ],
+          "attempts": 0,
+          "info": {
+            "name": "Clínica Sorriso Exemplo",
+            "address": "Rua das Flores, 120, Centro",
+            "parking": "Estacionamento gratuito na Rua das Flores, 124.",
+            "hours": "Segunda a sábado, das 8h às 18h.",
+            "prices": {
+              "limpeza": "R$ 180",
+              "avaliação": "R$ 100"
+            },
+            "insurance": [
+              "Plano Sorriso",
+              "Dental Exemplo"
+            ],
+            "phone": "(11) 4000-1234"
+          }
+        }
+      }
+    ],
+    "scenarios": [
+      {
+        "id": "hour-alone",
+        "simulator": "scripted",
+        "caller": {
+          "role": "patient",
+          "patientId": "p1"
+        },
+        "turns": [
+          {
+            "user": "Quero remarcar para 8 de outubro às 17h.",
+            "expect": {
+              "status": "Confirming",
+              "says": [
+                "08/10",
+                "17h"
+              ]
+            }
+          },
+          {
+            "user": "Sim, confirmo.",
+            "expect": {
+              "status": "Succeeded",
+              "says": [
+                "remarcada",
+                "17h"
+              ]
+            }
+          }
+        ],
+        "expect": {
+          "status": "Succeeded",
+          "effects": [
+            {
+              "action": "clinic/reschedule",
+              "count": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "greeting",
+        "simulator": "scripted",
+        "caller": {
+          "role": "patient",
+          "patientId": "p1"
+        },
+        "turns": [
+          {
+            "user": "Boa noite! Quero remarcar para 8 de outubro às 17h.",
+            "expect": {
+              "status": "Confirming",
+              "says": [
+                "08/10",
+                "17h"
+              ]
+            }
+          },
+          {
+            "user": "Sim, confirmo.",
+            "expect": {
+              "status": "Succeeded",
+              "says": [
+                "remarcada",
+                "17h"
+              ]
+            }
+          }
+        ],
+        "expect": {
+          "status": "Succeeded",
+          "effects": [
+            {
+              "action": "clinic/reschedule",
+              "count": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "old-period",
+        "simulator": "scripted",
+        "caller": {
+          "role": "patient",
+          "patientId": "p1"
+        },
+        "turns": [
+          {
+            "user": "Minha consulta é de manhã. Quero remarcar para 8 de outubro às 17h.",
+            "expect": {
+              "status": "Confirming",
+              "says": [
+                "08/10",
+                "17h"
+              ]
+            }
+          },
+          {
+            "user": "Sim, confirmo.",
+            "expect": {
+              "status": "Succeeded",
+              "says": [
+                "remarcada",
+                "17h"
+              ]
+            }
+          }
+        ],
+        "expect": {
+          "status": "Succeeded",
+          "effects": [
+            {
+              "action": "clinic/reschedule",
+              "count": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "explicit-period",
+        "simulator": "scripted",
+        "caller": {
+          "role": "patient",
+          "patientId": "p1"
+        },
+        "turns": [
+          {
+            "user": "Quero remarcar para 8 de outubro à tarde, às 17h.",
+            "expect": {
+              "status": "Confirming",
+              "says": [
+                "08/10",
+                "17h"
+              ]
+            }
+          },
+          {
+            "user": "Sim, confirmo.",
+            "expect": {
+              "status": "Succeeded",
+              "says": [
+                "remarcada",
+                "17h"
+              ]
+            }
+          }
+        ],
+        "expect": {
+          "status": "Succeeded",
+          "effects": [
+            {
+              "action": "clinic/reschedule",
+              "count": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "unavailable",
+        "simulator": "scripted",
+        "caller": {
+          "role": "patient",
+          "patientId": "p1"
+        },
+        "turns": [
+          {
+            "user": "Quero remarcar para 8 de outubro às 17h30.",
+            "expect": {
+              "status": "Failed",
+              "says": [
+                "Não encontrei"
+              ],
+              "notSays": [
+                "foi remarcada"
+              ]
+            }
+          }
+        ],
+        "expect": {
+          "status": "Failed",
+          "effects": [
+            {
+              "action": "clinic/reschedule",
+              "count": 0
+            }
+          ],
+          "never": [
+            "clinic/reschedule"
+          ]
+        }
+      },
+      {
+        "id": "conflicting",
+        "simulator": "scripted",
+        "caller": {
+          "role": "patient",
+          "patientId": "p1"
+        },
+        "turns": [
+          {
+            "user": "Quero remarcar para 8 de outubro de manhã, às 17h.",
+            "expect": {
+              "status": "Failed",
+              "says": [
+                "Não encontrei"
+              ],
+              "notSays": [
+                "foi remarcada"
+              ]
+            }
+          }
+        ],
+        "expect": {
+          "status": "Failed",
+          "effects": [
+            {
+              "action": "clinic/reschedule",
+              "count": 0
+            }
+          ],
+          "never": [
+            "clinic/reschedule"
+          ]
+        }
+      }
+    ]
+  }
+}

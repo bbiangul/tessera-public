@@ -1,0 +1,125 @@
+{
+ "rawFlights": {
+  "data": {
+   "flightOffers": [
+    {
+     "segments": [
+      {
+       "legs": [
+        {
+         "arrivalAirport": {
+          "code": "LHR"
+         },
+         "arrivalTime": "2026-10-13T10:00:00.000",
+         "departureAirport": {
+          "code": "GRU"
+         },
+         "departureTime": "2026-10-12T18:00:00.000"
+        },
+        {
+         "arrivalAirport": {
+          "code": "LIS"
+         },
+         "arrivalTime": "2026-10-13T17:45:00.000",
+         "departureAirport": {
+          "code": "LGW"
+         },
+         "departureTime": "2026-10-13T15:00:00.000"
+        }
+       ]
+      }
+     ],
+     "token": "a"
+    },
+    {
+     "segments": [
+      {
+       "legs": [
+        {
+         "arrivalAirport": {
+          "code": "JFK"
+         },
+         "arrivalTime": "2026-10-13T06:30:00",
+         "departureAirport": {
+          "code": "GIG"
+         },
+         "departureTime": "2026-10-12T22:00:00"
+        },
+        {
+         "arrivalAirport": {
+          "code": "ORD"
+         },
+         "arrivalTime": "2026-10-13T10:15:00",
+         "departureAirport": {
+          "code": "LGA"
+         },
+         "departureTime": "2026-10-13T08:30:00"
+        }
+       ]
+      }
+     ],
+     "token": "b"
+    },
+    {
+     "segments": [
+      {
+       "legs": [
+        {
+         "arrivalAirport": {
+          "code": "LHR"
+         },
+         "arrivalTime": "2026-10-13T10:00:00",
+         "departureAirport": {
+          "code": "GRU"
+         },
+         "departureTime": "2026-10-12T18:00:00"
+        },
+        {
+         "arrivalAirport": {
+          "code": "LIS"
+         },
+         "arrivalTime": "2026-10-13T14:45:00",
+         "departureAirport": {
+          "code": "LGW"
+         },
+         "departureTime": "2026-10-13T12:00:00"
+        }
+       ]
+      }
+     ],
+     "token": "c"
+    },
+    {
+     "segments": [
+      {
+       "legs": [
+        {
+         "arrivalAirport": {
+          "code": "BBB"
+         },
+         "arrivalTime": "2026-10-12T09:00:00",
+         "departureAirport": {
+          "code": "AAA"
+         },
+         "departureTime": "2026-10-12T08:00:00"
+        },
+        {
+         "arrivalAirport": {
+          "code": "DDD"
+         },
+         "arrivalTime": "2026-10-12T12:00:00",
+         "departureAirport": {
+          "code": "CCC"
+         },
+         "departureTime": "2026-10-12T11:00:00"
+        }
+       ]
+      }
+     ],
+     "token": "d"
+    }
+   ]
+  },
+  "status": true
+ }
+}

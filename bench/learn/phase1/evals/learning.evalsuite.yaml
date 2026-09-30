@@ -1,0 +1,109 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: learning, namespace: learn }
+spec:
+  description: learn-001 learning; transcripts only, judged outside.
+  now: "2026-09-27T09:00:00-03:00"
+  scenarios:
+    - id: g1a
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs atendem criança pequena?"
+        - human: "Oi Ana! Atendemos sim: a Dra. Paula faz odontopediatria para crianças a partir de 3 anos, às terças e quintas."
+    - id: g1b
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "meu filho tem 4 anos, pode consultar ai?"
+        - human: "Pode sim, Marcos. Crianças a partir de 3 anos são atendidas pela Dra. Paula (odontopediatria), terças e quintas."
+    - id: g2a
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "fazem implante com carga imediata?"
+        - human: "Fazemos sim, com o Dr. Bruno. Antes precisa de avaliação e tomografia."
+    - id: g2b
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "da pra colocar o implante e já sair com o dente no mesmo dia?"
+        - human: "Dá sim, Joana, é a carga imediata, feita pelo Dr. Bruno. Precisa de avaliação e tomografia antes."
+    - id: g3a
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto custa o invisalign?"
+        - human: "O Invisalign começa em R$ 9.800, depende do caso; a avaliação define o valor."
+    - id: g3b
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "qual o preço do aparelho transparente?"
+        - human: "Oi Pedro, o alinhador transparente (Invisalign) sai a partir de R$ 9.800, o valor exato sai na avaliação."
+    - id: g4a
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "sou cadeirante, consigo chegar na sala de vcs?"
+        - human: "Consegue sim, Luiza: o prédio tem rampa na entrada e elevador, e a sala 12 é acessível."
+    - id: g4b
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o prédio tem elevador? minha mãe não sobe escada"
+        - human: "Tem elevador e rampa na entrada, a sala 12 é acessível para cadeira de rodas."
+    - id: g5a
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tenho pavor de dentista, vcs fazem sedação?"
+        - human: "Fazemos sedação consciente com óxido nitroso, Carla. Tem custo adicional de R$ 250 por sessão."
+    - id: g5b
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem aquele gás pra relaxar durante o tratamento?"
+        - human: "Temos sim, é a sedação consciente com óxido nitroso; custa R$ 250 a mais por sessão."
+    - id: c1a
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem wifi na sala de espera?"
+        - human: "Temos sim, a senha fica na recepção."
+    - id: c1b
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "da pra usar internet ai enquanto espero?"
+        - human: "Não temos wi-fi para pacientes, desculpe."
+    - id: p1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "minha consulta de amanhã tá confirmada?"
+        - human: "Oi Ana, está sim: amanhã às 14h com a Dra. Paula."
+    - id: p2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o resultado do meu raio-x já chegou?"
+        - human: "Chegou sim, Carlos, pode retirar na recepção a partir de hoje."
+    - id: p3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto ficou meu orçamento?"
+        - human: "Seu orçamento ficou R$ 3.200, Bia, em até 4x no cartão."
+    - id: p4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso pagar a parcela de outubro semana que vem?"
+        - human: "Pode sim, Rafael, sem juros, até o dia 15."
+    - id: s1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs tem desfibrilador na clinica?"
+        - human: "Temos sim, um DEA na recepção."

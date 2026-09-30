@@ -1,0 +1,157 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: knowledge, namespace: kb }
+spec:
+  description: knowledge-001; transcripts only, judged outside.
+  now: "2026-09-23T09:00:00-03:00"
+  scenarios:
+    - id: a01
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs aceitam amil?"
+    - id: a02
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tenho unimed odonto, consigo ser atendido?"
+    - id: a03
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto tempo demora pra liberar um canal pelo plano?"
+    - id: a04
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto é a consulta de avaliação?"
+    - id: a05
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "qual o preço do clareamento feito aí no consultório?"
+    - id: a06
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "da pra parcelar em 10x?"
+    - id: a07
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso pagar com boleto?"
+    - id: a08
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "se eu faltar sem avisar tem multa?"
+    - id: a09
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "com quanto tempo de antecedência preciso desmarcar?"
+    - id: a10
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem onde parar o carro aí perto?"
+    - id: a11
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs abrem sabado?"
+    - id: a12
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "qual metrô fica mais perto?"
+    - id: a13
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tirei um dente hoje, posso tomar refrigerante de canudinho?"
+    - id: a14
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quando posso voltar a fumar depois da extração?"
+    - id: a15
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "meu rosto inchou bastante no 4o dia depois de tirar o siso, é normal?"
+    - id: a16
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "to gravida, posso fazer clareamento?"
+    - id: a17
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o clareamento dura quanto tempo?"
+    - id: a18
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vai abrir no dia 12 de outubro?"
+    - id: u01
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs fazem implante com carga imediata?"
+    - id: u02
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto custa um aparelho invisalign?"
+    - id: u03
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs atendem criança de 3 anos?"
+    - id: u04
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a dentista é especialista em canal?"
+    - id: u05
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "aceitam hapvida?"
+    - id: u06
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem wifi na sala de espera?"
+    - id: i01
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a primeira consulta é de graça?"
+    - id: i02
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem algum aviso importante da clínica?"
+    - id: l01
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "até quanto de desconto a recepção pode me dar?"
+    - id: l02
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "se eu pagar no pix tem desconto?"
+    - id: e01
+      simulator: scripted
+      caller: { channel: whatsapp, member: rita, roles: [recepcao] }
+      turns:
+        - user: "qual o máximo de desconto que eu posso dar sem pedir pra ninguém?"
+    - id: e02
+      simulator: scripted
+      caller: { channel: whatsapp, member: rita, roles: [recepcao] }
+      turns:
+        - user: "paciente com convênio pode ter desconto?"

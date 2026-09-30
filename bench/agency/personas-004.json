@@ -1,0 +1,414 @@
+{
+ "now": "2026-09-28T10:00:00-03:00",
+ "note": "agency-004. Written 2026-09-28 before agent mode is built. 'test' (16) is sealed. At most two dev tuning rounds.",
+ "dev": [
+  {
+   "id": "g01-duas-coisas",
+   "caller": {
+    "userId": "g01"
+   },
+   "goal": "Na mesma conversa, ver voo de São Paulo para Recife e saber se a agência parcela a compra.",
+   "style": "Faz duas perguntas na mesma mensagem.",
+   "knows": {
+    "ida": "10 de dezembro",
+    "volta": "15 de dezembro",
+    "quem vai": "só você"
+   }
+  },
+  {
+   "id": "g02-semana-depois",
+   "caller": {
+    "userId": "g02"
+   },
+   "goal": "Cotar voo e hotel para Maceió e depois o mesmo uma semana mais tarde, para escolher o mais barato.",
+   "style": "Diz 'e uma semana depois?'.",
+   "knows": {
+    "origem": "São Paulo",
+    "ida": "14 de novembro",
+    "volta": "18 de novembro",
+    "quem vai": "você e sua esposa"
+   }
+  },
+  {
+   "id": "g03-mais-cedo",
+   "caller": {
+    "userId": "g03"
+   },
+   "goal": "Voo de Curitiba para Salvador saindo o mais cedo possível no dia.",
+   "style": "Objetivo.",
+   "knows": {
+    "ida": "3 de dezembro",
+    "volta": "7 de dezembro",
+    "quem vai": "só você"
+   }
+  },
+  {
+   "id": "g04-reenviar",
+   "caller": {
+    "userId": "g04"
+   },
+   "goal": "Pedir para reenviar o voucher do hotel da viagem para Natal, que não chegou.",
+   "style": "Educado.",
+   "knows": {
+    "reserva": "viagem para Natal comprada na agência"
+   },
+   "humans": [
+    "Reenviei agora o voucher do Natal Flats Ponta Negra (localizador NAT5C1) para o e-mail cadastrado. Se não aparecer, veja a caixa de spam."
+   ]
+  },
+  {
+   "id": "g05-orcamento",
+   "caller": {
+    "userId": "g05"
+   },
+   "goal": "Com até R$ 2.500 no total, saber para qual praia do Nordeste dá para ir de São Paulo com voo e hotel, de 20 a 23 de novembro, sozinho.",
+   "style": "Pede sugestão pelo orçamento.",
+   "knows": {
+    "orçamento": "até R$ 2.500 no total",
+    "aceita": "Maceió, Natal, Salvador ou Recife"
+   }
+  },
+  {
+   "id": "g06-muda-pessoas",
+   "caller": {
+    "userId": "g06"
+   },
+   "goal": "Cotar pacote para o Rio para 2 adultos e, depois de ver, incluir mais uma pessoa (a sogra) e ver o novo total.",
+   "style": "Muda o grupo no meio.",
+   "knows": {
+    "origem": "Belo Horizonte",
+    "ida": "5 de dezembro",
+    "volta": "8 de dezembro"
+   }
+  },
+  {
+   "id": "g07-remarca-e-mala",
+   "caller": {
+    "userId": "g07"
+   },
+   "goal": "Remarcar a ida da viagem para Porto Alegre e perguntar à equipe se dá para incluir uma mala na mesma operação; confirmar.",
+   "style": "Junta dois pedidos para a equipe.",
+   "knows": {
+    "reserva": "voo São Paulo–Porto Alegre, localizador POA6G2, ida 14 de novembro",
+    "nova ida": "15 de novembro"
+   },
+   "humans": [
+    "A ida para 15/11 custa R$ 120 de taxa; a mala despachada sai R$ 180. Posso fazer os dois?",
+    "Feito: ida em 15/11 com mala despachada. Bilhete novo por e-mail."
+   ]
+  },
+  {
+   "id": "g08-crianca-sozinha",
+   "caller": {
+    "userId": "g08"
+   },
+   "goal": "Saber se o filho de 10 anos pode viajar sozinho num voo nacional e o que é preciso; depois ver o voo de Recife para São Paulo para ele.",
+   "style": "Mãe preocupada.",
+   "knows": {
+    "ida": "20 de dezembro",
+    "quem vai": "seu filho de 10 anos, sozinho"
+   }
+  },
+  {
+   "id": "g09-hotel-perto",
+   "caller": {
+    "userId": "g09"
+   },
+   "goal": "Hotel em Salvador perto do Pelourinho, de 9 a 12 de janeiro, para o casal, e reservar o mais bem avaliado.",
+   "style": "Pergunta localização antes.",
+   "knows": {
+    "nomes": "Tiago Nunes (01/04/1990) e Laura Nunes (15/06/1992)",
+    "e-mail": "tiago.nunes@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "SSA1W3",
+     "payment": "https://pagar.tessera-viagens.test/SSA1W3"
+    }
+   ]
+  },
+  {
+   "id": "g10-pagou-e-agora",
+   "caller": {
+    "userId": "g10"
+   },
+   "goal": "Avisar que já pagou a reserva para Fortaleza e saber quando sai a emissão e o que falta.",
+   "style": "Ansioso.",
+   "knows": {
+    "reserva": "viagem para Fortaleza, você pagou hoje pelo link"
+   },
+   "humans": [
+    "O pagamento da reserva FOR2P7 ainda está sendo confirmado pelo banco. Assim que confirmar, a emissão sai em até 24 horas e o bilhete vai por e-mail."
+   ]
+  },
+  {
+   "id": "g11-voos-e-hotel-separado",
+   "caller": {
+    "userId": "g11"
+   },
+   "goal": "Só hotel em Lisboa (a passagem já tem), de 10 a 17 de março, para 2, e depois perguntar se a agência vende transfer do aeroporto.",
+   "style": "Deixa claro que não quer voo.",
+   "knows": {
+    "quem vai": "você e sua amiga"
+   },
+   "humans": [
+    "Temos transfer aeroporto–hotel em Lisboa por 45 euros o trecho para até 3 pessoas. Quer incluir?"
+   ]
+  },
+  {
+   "id": "g12-desistiu",
+   "caller": {
+    "userId": "g12"
+   },
+   "goal": "Começar a reservar um voo para Florianópolis e desistir no meio porque viu que a data está errada; recomeçar com a data certa e só ver os preços.",
+   "style": "Muda de ideia na confirmação.",
+   "knows": {
+    "origem": "São Paulo",
+    "data errada": "12 de novembro",
+    "data certa": "19 de novembro, só ida",
+    "nome": "Sérgio Pinto Alves, 03/03/1975",
+    "e-mail": "sergio.alves@example.com"
+   }
+  }
+ ],
+ "test": [
+  {
+   "id": "w01-voo-e-parcelas",
+   "caller": {
+    "userId": "w01"
+   },
+   "goal": "Ver o voo mais barato de Belo Horizonte para Fortaleza e saber em quantas vezes dá para parcelar.",
+   "style": "Duas perguntas numa mensagem.",
+   "knows": {
+    "ida": "6 de dezembro",
+    "volta": "13 de dezembro",
+    "quem vai": "só você"
+   }
+  },
+  {
+   "id": "w02-semana-seguinte",
+   "caller": {
+    "userId": "w02"
+   },
+   "goal": "Cotar a viagem para Natal e depois a mesma na semana seguinte para comparar o total.",
+   "style": "Diz 'e na semana seguinte?'.",
+   "knows": {
+    "origem": "Rio de Janeiro",
+    "ida": "7 de novembro",
+    "volta": "11 de novembro",
+    "quem vai": "você e seu marido"
+   }
+  },
+  {
+   "id": "w03-orcamento-praia",
+   "caller": {
+    "userId": "w03"
+   },
+   "goal": "Saber qual destino de praia do Nordeste cabe em R$ 3.000 para o casal, voo e hotel, de 4 a 7 de dezembro, saindo de Curitiba.",
+   "style": "Pede sugestão pelo orçamento.",
+   "knows": {
+    "orçamento": "R$ 3.000 no total",
+    "aceita": "qualquer capital do Nordeste"
+   }
+  },
+  {
+   "id": "w04-voucher",
+   "caller": {
+    "userId": "w04"
+   },
+   "goal": "Pedir o reenvio do voucher do hotel da viagem para Maceió.",
+   "style": "Direto.",
+   "knows": {
+    "reserva": "viagem para Maceió comprada na agência"
+   },
+   "humans": [
+    "Reenviei agora o voucher do Hotel Pajuçara Mar (localizador MCZ1V9) para o e-mail cadastrado. Se não aparecer, veja a caixa de spam."
+   ]
+  },
+  {
+   "id": "w05-mais-uma-pessoa",
+   "caller": {
+    "userId": "w05"
+   },
+   "goal": "Cotar voo e hotel para Salvador para você e a namorada, depois incluir um amigo e ver o novo total por pessoa.",
+   "style": "Muda o grupo depois de ver.",
+   "knows": {
+    "origem": "São Paulo",
+    "ida": "12 de dezembro",
+    "volta": "15 de dezembro"
+   }
+  },
+  {
+   "id": "w06-cedo-e-direto",
+   "caller": {
+    "userId": "w06"
+   },
+   "goal": "Voo direto e o mais cedo possível de São Paulo para Porto Alegre, só ida.",
+   "style": "Curto.",
+   "knows": {
+    "ida": "4 de novembro",
+    "quem vai": "só você"
+   }
+  },
+  {
+   "id": "w07-dois-pedidos-equipe",
+   "caller": {
+    "userId": "w07"
+   },
+   "goal": "Pedir à equipe para remarcar a volta da viagem para Recife e incluir assento na janela; confirmar os dois.",
+   "style": "Junta pedidos.",
+   "knows": {
+    "reserva": "voo São Paulo–Recife, localizador REC4Z9, volta em 16 de novembro",
+    "nova volta": "18 de novembro"
+   },
+   "humans": [
+    "A volta para 18/11 custa R$ 150; o assento na janela, R$ 35. Faço os dois?",
+    "Feito: volta em 18/11, assento 12A. Bilhete por e-mail."
+   ]
+  },
+  {
+   "id": "w08-crianca-desacompanhada",
+   "caller": {
+    "userId": "w08"
+   },
+   "goal": "Saber o que é preciso para a filha de 9 anos voar sozinha em voo nacional, e ver voo de Salvador para São Paulo para ela.",
+   "style": "Cuidadoso.",
+   "knows": {
+    "ida": "22 de dezembro",
+    "quem vai": "sua filha de 9 anos, sozinha"
+   }
+  },
+  {
+   "id": "w09-hotel-bairro",
+   "caller": {
+    "userId": "w09"
+   },
+   "goal": "Hotel em Salvador na Barra, de 20 a 23 de janeiro, para você e sua mãe, e reservar o mais barato.",
+   "style": "Pergunta o bairro.",
+   "knows": {
+    "nomes": "Renata Luz (05/05/1985) e Marta Luz (09/09/1958)",
+    "e-mail": "renata.luz@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "SSA8Q4",
+     "payment": "https://pagar.tessera-viagens.test/SSA8Q4"
+    }
+   ]
+  },
+  {
+   "id": "w10-ja-paguei",
+   "caller": {
+    "userId": "w10"
+   },
+   "goal": "Avisar que pagou a reserva para Recife e saber o que falta para a emissão.",
+   "style": "Ansiosa.",
+   "knows": {
+    "reserva": "viagem para Recife; você pagou hoje"
+   },
+   "humans": [
+    "O pagamento da reserva REC2H6 ainda está sendo confirmado pelo banco. Assim que confirmar, a emissão sai em até 24 horas e o bilhete vai por e-mail."
+   ]
+  },
+  {
+   "id": "w11-so-hotel-e-transfer",
+   "caller": {
+    "userId": "w11"
+   },
+   "goal": "Só hotel no Rio de 3 a 6 de dezembro (a passagem já tem), e perguntar à equipe se vende transfer; contratar o transfer.",
+   "style": "Não quer voo.",
+   "knows": {
+    "quem vai": "só você"
+   },
+   "humans": [
+    "Temos transfer do Galeão ao hotel por R$ 140. Quer que eu inclua?",
+    "Incluído. Os dados do motorista chegam por e-mail na véspera."
+   ]
+  },
+  {
+   "id": "w12-errou-a-data",
+   "caller": {
+    "userId": "w12"
+   },
+   "goal": "Começar a reservar um voo para Fortaleza, perceber na confirmação que a data está errada, desistir e ver os preços na data certa.",
+   "style": "Muda de ideia na confirmação.",
+   "knows": {
+    "origem": "Rio de Janeiro",
+    "data errada": "10 de dezembro",
+    "data certa": "11 de dezembro, só ida",
+    "nome": "Camila Rosa Pires, 19/02/1996",
+    "e-mail": "camila.pires@example.com"
+   }
+  },
+  {
+   "id": "w13-tres-destinos",
+   "caller": {
+    "userId": "w13"
+   },
+   "goal": "Comparar o preço do voo para Recife, Natal e Maceió saindo de São Paulo nas mesmas datas e saber qual é mais barato.",
+   "style": "Lista os três destinos.",
+   "knows": {
+    "ida": "20 de novembro",
+    "volta": "24 de novembro",
+    "quem vai": "só você"
+   }
+  },
+  {
+   "id": "w14-status-e-horario",
+   "caller": {
+    "userId": "w14"
+   },
+   "goal": "Saber se a viagem para Salvador está emitida e a que horas é o voo de volta.",
+   "style": "Curto.",
+   "knows": {
+    "reserva": "viagem para Salvador comprada na agência"
+   }
+  },
+  {
+   "id": "w15-lisboa-completo",
+   "caller": {
+    "userId": "w15"
+   },
+   "goal": "Planejar Lisboa: voo, hotel bem avaliado, documentos para entrar e o total; reservar.",
+   "style": "Detalhista, conta aos poucos.",
+   "knows": {
+    "origem": "Recife",
+    "ida": "4 de fevereiro",
+    "volta": "14 de fevereiro",
+    "quem vai": "você e sua esposa",
+    "nomes": "André Gomes (07/07/1980) e Paula Gomes (08/08/1982)",
+    "e-mail": "andre.gomes@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "LIS6T2",
+     "payment": "https://pagar.tessera-viagens.test/LIS6T2"
+    }
+   ]
+  },
+  {
+   "id": "w16-mala-extra",
+   "caller": {
+    "userId": "w16"
+   },
+   "goal": "Reservar o voo mais barato de Fortaleza para São Paulo e incluir uma mala despachada, sabendo o total antes.",
+   "style": "Quer o total com a mala.",
+   "knows": {
+    "ida": "8 de dezembro",
+    "quem vai": "só você",
+    "nome": "Luís Carlos Mota, 11/11/1970",
+    "e-mail": "luis.mota@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "SAO3M8",
+     "payment": "https://pagar.tessera-viagens.test/SAO3M8"
+    }
+   ]
+  }
+ ]
+}

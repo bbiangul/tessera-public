@@ -1,0 +1,29 @@
+# The traveler's own memory, as the built-in sql plugin: the flights shown
+# in each conversation, so follow-up questions ("e a bagagem do segundo?")
+# find them.
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata:
+  name: memo
+  version: 0.1.0
+spec:
+  sql:
+    migrations:
+      - CREATE TABLE searches (conversation TEXT NOT NULL, key TEXT NOT NULL UNIQUE, results TEXT NOT NULL, at TEXT NOT NULL)
+      - CREATE INDEX searches_by_conversation ON searches (conversation, at)
+  actions:
+    save-search:
+      input: { conversation: string, results: any, at: timestamp }
+      effect: idempotent-write
+      sql:
+        query: "INSERT INTO searches (conversation, key, results, at) VALUES (:c, :idempotencyKey, :r, :at) ON CONFLICT (key) DO NOTHING"
+        params: { c: "${ inputs.conversation }", r: "${ inputs.results }", at: "${ inputs.at }" }
+    last-search:
+      input: { conversation: string }
+      output: map
+      effect: read
+      sql:
+        query: "SELECT results, at FROM searches WHERE conversation = :c ORDER BY at DESC, rowid DESC LIMIT 1"
+        params: { c: "${ inputs.conversation }" }
+        result: row
+        json: [results]

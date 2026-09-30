@@ -1,0 +1,66 @@
+# Whole-conversation tests for reschedule-appointment (RFC-0002, level 4).
+# Run: tessera test testdata/agenda --decide typesafe:jev-1.13.0
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata:
+  name: reschedule
+  namespace: agenda-exemplo
+spec:
+  description: A patient moves an appointment; the clinic is a sandbox.
+  now: "2026-09-23T09:00:00-03:00"
+  sandboxes:
+    - plugin: agenda
+      script: agenda.sandbox.star
+      state:
+        appointments:
+          - { id: a1, patientId: p1, dentistId: d1, slotId: s0, label: "Seg 21/09 às 9h" }
+          - { id: a2, patientId: p1, dentistId: d2, slotId: s0, label: "Ter 22/09 às 14h" }
+        slots:
+          - { id: s1, dentistId: d2, label: "Qui 24/09 às 10h", start: "2026-09-24T10:00:00-03:00" }
+          - { id: s2, dentistId: d2, label: "Qui 24/09 às 16h", start: "2026-09-24T16:00:00-03:00" }
+          - { id: s3, dentistId: d1, label: "Sex 25/09 às 8h", start: "2026-09-25T08:00:00-03:00" }
+  scenarios:
+    - id: happy-path
+      caller: { role: patient, patientId: p1, appointmentIds: [a1, a2] }
+      simulator: scripted
+      turns:
+        - user: "oi, preciso remarcar minha consulta"
+          expect: { routed: reschedule-appointment, status: WaitingForUser, says: ["Qual consulta"] }
+        - user: "a de terça"
+          expect: { status: WaitingForUser, says: ["16h"] }
+        - user: "pode ser a das 16h"
+          expect: { status: Confirming, says: ["Posso remarcar sua consulta de Ter 22/09 às 14h para Qui 24/09 às 16h?"] }
+        - user: "sim"
+          expect: { status: Succeeded, says: ["Pronto"] }
+      expect:
+        effects: [ { action: agenda/reschedule, count: 1 } ]
+        milestones: [ { subject: paciente, name: remarcou, count: 1 } ]
+        budget: { decideCalls: 8 }
+
+    - id: patient-says-no
+      caller: { role: patient, patientId: p1, appointmentIds: [a1, a2] }
+      simulator: scripted
+      turns:
+        - user: "quero remarcar a consulta de segunda"
+          expect: { status: WaitingForUser }
+        - user: "sexta às 8h"
+          expect: { status: Confirming }
+        - user: "não, deixa como está"
+          expect: { status: Succeeded }
+      expect:
+        effects: [ { action: agenda/reschedule, count: 0 } ]
+        milestones: [ { subject: paciente, name: remarcou, count: 0 } ]   # a "no" is not a reschedule
+
+    - id: unclear-choice
+      description: The patient never says which appointment; the agent says so instead of claiming there are none.
+      caller: { role: patient, patientId: p1, appointmentIds: [a1, a2] }
+      simulator: scripted
+      turns:
+        - user: "quero remarcar"
+          expect: { status: WaitingForUser, says: ["Qual consulta"] }
+        - user: "não lembro"
+          expect: { status: WaitingForUser }
+        - user: "sei lá"
+          expect: { status: Failed, says: ["Não consegui entender qual consulta"], notSays: ["Não encontrei"] }
+      expect:
+        never: [agenda/reschedule]

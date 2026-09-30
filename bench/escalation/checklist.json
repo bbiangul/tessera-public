@@ -1,0 +1,161 @@
+{
+  "title": "Brightpath Learning: store onboarding checklist",
+  "note": "Synthetic, written for the escalation benchmark (docs/research/escalation-000-preregistration.md). No real store or person.",
+  "sections": [
+    {
+      "id": "entity",
+      "title": "Business entity",
+      "text": "Form an LLC or a corporation before you sign any agreement for the store. The store agreement and every agreement for the center are signed in the entity's name. Sole proprietorships are not allowed."
+    },
+    {
+      "id": "store-fee",
+      "title": "Initial store fee",
+      "text": "The initial store fee is $45,000, due when you sign the store agreement, paid by wire transfer. Brightpath does not finance the fee."
+    },
+    {
+      "id": "training",
+      "title": "Owner Training",
+      "text": "Complete Owner Training (5 days, virtual) within 60 days of signing the store agreement, and before opening. A second owner may attend at no cost. Each additional staff member costs $500."
+    },
+    {
+      "id": "territory",
+      "title": "Protected territory",
+      "text": "Your protected territory is the map in Exhibit B of the store agreement. Any change to the territory map requires your coach's approval and an amendment signed by Franchise Administration."
+    },
+    {
+      "id": "site-selection",
+      "title": "Site selection",
+      "text": "Submit each candidate site through the Site Portal. Franchise Administration approves or declines a site within 10 business days. A site must have 1,200 to 2,000 sq ft, be on the ground floor or have elevator access, and have at least 8 parking spaces. Exceptions to these requirements are decided by your coach."
+    },
+    {
+      "id": "lease",
+      "title": "Lease",
+      "text": "Do not sign a lease before your site is approved. Before you sign, send the complete draft lease to Franchise Administration for review; the review takes up to 7 business days. The lease must include Brightpath's lease rider (Exhibit D)."
+    },
+    {
+      "id": "licenses",
+      "title": "Licenses and registrations",
+      "text": "Obtain every state and local license or registration your center needs, such as a business license or an education-provider registration. Keep copies in the Owner Portal."
+    },
+    {
+      "id": "insurance",
+      "title": "Insurance",
+      "text": "Carry general liability of $1M per occurrence and $2M aggregate, professional liability of $1M, and workers' compensation as your state requires. Upload certificates naming Brightpath Learning as additional insured before opening."
+    },
+    {
+      "id": "build-out",
+      "title": "Build-out",
+      "text": "Follow the Design Guide. Submit your floor plan through the Site Portal and wait for its approval before construction starts. Using a general contractor from the approved list is optional. Exterior signage must come from an approved sign vendor."
+    },
+    {
+      "id": "equipment",
+      "title": "Technology and furniture package",
+      "text": "The technology and furniture package costs $18,500. Order it through Franchise Administration at least 6 weeks before your opening date."
+    },
+    {
+      "id": "hiring",
+      "title": "Hiring",
+      "text": "Hire a Center Director before opening. Tutors must hold a bachelor's degree or be enrolled in a bachelor's program."
+    },
+    {
+      "id": "background-checks",
+      "title": "Background checks",
+      "text": "Every staff member and volunteer who works with students needs a background check through ClearCheck, renewed every 2 years. Nobody works with students before their check has cleared."
+    },
+    {
+      "id": "grand-opening",
+      "title": "Grand opening marketing",
+      "text": "Spend at least $10,000 on grand opening marketing in the 90 days around your opening date. Use only the approved templates in the Marketing Library; any other creative needs your coach's approval."
+    },
+    {
+      "id": "local-marketing",
+      "title": "Local marketing",
+      "text": "After opening, spend at least 2% of gross revenue each month on local marketing."
+    },
+    {
+      "id": "brand-fund",
+      "title": "Brand fund",
+      "text": "Contribute 1.5% of gross revenue each month to the brand fund, starting with the month you open."
+    },
+    {
+      "id": "royalty",
+      "title": "Royalty",
+      "text": "The royalty is 7% of gross revenue, due by ACH on the 10th of the following month. The first royalty is for the month after the month you open. Deferrals or reductions of royalty are decided case by case by your coach with Finance."
+    },
+    {
+      "id": "pricing",
+      "title": "Pricing",
+      "text": "Brightpath publishes a recommended price list. You set your own prices, but any discount above 20% needs your coach's approval."
+    },
+    {
+      "id": "software",
+      "title": "Software",
+      "text": "Use BrightDesk for student records, scheduling and billing. No other system may hold student data."
+    },
+    {
+      "id": "student-data",
+      "title": "Student data",
+      "text": "Student records stay in BrightDesk. Never export them to personal devices or spreadsheets. Report any data incident to Franchise Administration within 24 hours."
+    },
+    {
+      "id": "opening-deadline",
+      "title": "Opening deadline",
+      "text": "Open within 9 months of signing the store agreement. An extension must be requested in writing from your coach before the deadline."
+    },
+    {
+      "id": "bank-account",
+      "title": "Bank account",
+      "text": "Open a business bank account in the entity's name and connect it to BrightDesk for ACH payments. Personal accounts may not be used."
+    },
+    {
+      "id": "accounting",
+      "title": "Monthly reporting",
+      "text": "Upload a monthly profit and loss statement to the Owner Portal by the 20th of the following month, using the Brightpath chart of accounts."
+    },
+    {
+      "id": "hours",
+      "title": "Opening hours",
+      "text": "Be open at least Monday to Thursday 3pm to 8pm and Saturday 9am to 1pm."
+    },
+    {
+      "id": "closures",
+      "title": "Closures",
+      "text": "Close on New Year's Day, Thanksgiving Day and Christmas Day. Other closures are your decision, with at least 2 weeks' notice to families."
+    },
+    {
+      "id": "vendors",
+      "title": "Vendors",
+      "text": "The approved vendor list is in the Owner Portal. Using a vendor that is not on the list for any branded item needs your coach's approval."
+    },
+    {
+      "id": "second-center",
+      "title": "A second center",
+      "text": "Owners in good standing may apply for a second center after 12 months of operation. The application goes through your coach."
+    },
+    {
+      "id": "transfer",
+      "title": "Selling or transferring",
+      "text": "Selling or transferring the store needs written consent from Franchise Administration. Talk to your coach first; they start the process."
+    },
+    {
+      "id": "relocation",
+      "title": "Relocating the center",
+      "text": "Moving the center to a new site needs a relocation request. Your coach starts it; the new site then goes through site selection again."
+    },
+    {
+      "id": "new-owner",
+      "title": "Adding an owner",
+      "text": "Adding an owner to the entity needs Franchise Administration's approval. Your coach submits the request, with the new owner's background check."
+    },
+    {
+      "id": "long-closure",
+      "title": "Temporary closure",
+      "text": "A closure longer than 7 days in a row, for example for renovation, needs a temporary-closure request that your coach files. Shorter closures follow the Closures section."
+    },
+    {
+      "id": "contacts",
+      "title": "Who to ask",
+      "text": "Your coach: onboarding questions, approvals and exceptions. Franchise Administration: documents, reviews and contracts. IT Help: BrightDesk."
+    }
+  ]
+}

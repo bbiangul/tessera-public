@@ -1,0 +1,76 @@
+{
+ "scoredFlights": {
+  "topFlights": [
+   {
+    "token": "t1",
+    "totalDuration": 20000,
+    "segments": [
+     {
+      "departTime": "2026-10-12T10:00:00"
+     }
+    ]
+   }
+  ],
+  "neverMiddleSeat": true,
+  "summary": {
+   "hasInfants": false
+  }
+ },
+ "seatMaps": [
+  {
+   "status": true,
+   "data": {
+    "seatMap": {
+     "columns": [
+      {
+       "id": "A",
+       "type": "WINDOW"
+      },
+      {
+       "id": "B",
+       "type": "BETWEEN"
+      },
+      {
+       "id": "C",
+       "type": "AISLE"
+      },
+      {
+       "id": "D",
+       "type": "AISLE"
+      },
+      {
+       "id": "E",
+       "type": "BETWEEN"
+      },
+      {
+       "id": "F",
+       "type": "WINDOW"
+      }
+     ],
+     "rows": [
+      {
+       "rowNumber": 20,
+       "seats": [
+        {
+         "colId": "A",
+         "description": "OCCUPIED",
+         "priceBreakdown": null
+        },
+        {
+         "colId": "B",
+         "description": "NORMAL",
+         "priceBreakdown": null
+        },
+        {
+         "colId": "E",
+         "description": "NORMAL",
+         "priceBreakdown": null
+        }
+       ]
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

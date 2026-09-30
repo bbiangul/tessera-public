@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bbiangul/tessera/api/agents/v1alpha1/team",
+  "$ref": "#/$defs/Team",
+  "$defs": {
+    "Member": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "ID is stable (an answer is recorded with it)."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name is shown on task pages."
+        },
+        "roles": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "minItems": 1,
+          "description": "Roles are the queue roles the member holds."
+        },
+        "contact": {
+          "type": "string",
+          "description": "Contact is where the member's one-time codes go (a phone, an\ne-mail), as the verify action expects it."
+        },
+        "whatsapp": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]+$",
+          "description": "WhatsApp is the member's WhatsApp number, E.164 digits without +\n(5511900000001): tasks reach it on queues with channels: [whatsapp],\nand a button tap from it is this member's answer."
+        },
+        "slack": {
+          "type": "string",
+          "pattern": "^[UW][A-Z0-9]+$",
+          "description": "Slack is the member's Slack user ID (U0123ABCD): tasks of queues\nwith channels: [slack] reach its DM, and a click Slack signs from it\nis this member's answer."
+        },
+        "teams": {
+          "type": "string",
+          "description": "Teams is the member's Microsoft Entra object ID (a GUID): tasks of\nqueues with channels: [teams] reach their personal chat with the\nbot, and a click the Bot Framework signs from it, in the configured\ntenant, is this member's answer."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email is the member's e-mail: tasks of queues with channels: [email]\nreach it with a link bound to this member. The e-mail is never read\nback; only the link, with a one-time code, answers."
+        },
+        "attributes": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Attributes are the member's facts a Function may use, such as\ndentistId: D1. A message from the member's attested identity carries\nthem as caller.attributes, never at the caller's top level."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "roles"
+      ],
+      "description": "Member is one person."
+    },
+    "ObjectMeta": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Name of the resource, unique per kind within its namespace. Lowercase\nletters, digits and hyphens, starting and ending with a letter or digit."
+        },
+        "namespace": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Namespace the resource belongs to, usually one per customer."
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Labels are free-form key/value pairs for selecting and grouping."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "namespace"
+      ],
+      "description": "ObjectMeta identifies a resource."
+    },
+    "Team": {
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "enum": [
+            "agents.tessera.dev/v1alpha1"
+          ],
+          "description": "APIVersion must be agents.tessera.dev/v1alpha1."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Team"
+          ],
+          "description": "Kind must be Team."
+        },
+        "metadata": {
+          "$ref": "#/$defs/ObjectMeta",
+          "description": "Metadata names the team."
+        },
+        "spec": {
+          "$ref": "#/$defs/TeamSpec",
+          "description": "Spec lists the members."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ],
+      "description": "Team is who works the agent's queues (RFC-0006): members, their roles,\nand how each is reached to prove who they are. Who may answer a task\ncomes from here and from the queue's roles, never from a model."
+    },
+    "TeamSpec": {
+      "properties": {
+        "members": {
+          "items": {
+            "$ref": "#/$defs/Member"
+          },
+          "type": "array",
+          "minItems": 1,
+          "description": "Members of the team."
+        },
+        "verify": {
+          "$ref": "#/$defs/Verify",
+          "description": "Verify sends a member a one-time code, so an answer on a task page\nis theirs (a forwarded link approves nothing). Its arguments read\ninputs.member (the id), inputs.name, inputs.contact (the member's\ncontact for the channel), inputs.code and inputs.task (the task's\ntext), and inputs.raw: when the contact is an e-mail, the code as an\nRFC 822 message base64url-encoded, for Gmail. An external-message\naction: WhatsApp, e-mail, SMS."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "members"
+      ],
+      "description": "TeamSpec lists the members and how they prove who they are."
+    },
+    "Verify": {
+      "properties": {
+        "act": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+/[a-z0-9-]+$",
+          "description": "Act is plugin/action."
+        },
+        "with": {
+          "type": "object",
+          "description": "With gives its arguments over inputs (member, name, contact, code, task)."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "act"
+      ],
+      "description": "Verify is the action that sends a one-time code."
+    }
+  },
+  "title": "Team"
+}

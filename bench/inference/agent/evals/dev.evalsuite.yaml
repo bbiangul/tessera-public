@@ -1,0 +1,52 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: dev, namespace: kb }
+spec:
+  description: knowledge-003; transcripts only, judged outside.
+  now: "2026-09-28T09:00:00-03:00"
+  scenarios:
+    - id: d-t1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tenho 70 anos, posso fazer clareamento?"
+    - id: d-t2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs abrem na véspera de natal?"
+    - id: d-t3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "depois de tirar o dente posso tomar uma cerveja?"
+    - id: d-t4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o carimbo do estacionamento vale pra 3 horas?"
+    - id: d-t5
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "faceta de porcelana clareia junto?"
+    - id: d-t6
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o Parque Seguro abre no domingo?"
+    - id: d-d1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "gestante pode clarear os dentes?"
+    - id: d-d2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs abrem domingo?"
+    - id: d-d3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso usar canudo depois da extração?"

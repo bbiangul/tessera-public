@@ -1,0 +1,359 @@
+{
+ "now": "2026-09-29T10:00:00-03:00",
+ "note": "agency-006. Written 2026-09-29 before measuring. 'test' (16) is sealed. At most two dev tuning rounds. Every persona whose goal ends in a booking has the team's booking answer; every persona whose goal needs a person has the team's answer.",
+ "dev": [
+  {
+   "id": "n01-voo-e-bagagem",
+   "caller": {
+    "userId": "n01"
+   },
+   "goal": "Ver o voo mais barato de Curitiba para Recife, ida 8/12 e volta 13/12, só você, e saber quanto custa despachar uma mala nele.",
+   "style": "Direto.",
+   "knows": {}
+  },
+  {
+   "id": "n02-casal-reserva",
+   "caller": {
+    "userId": "n02"
+   },
+   "goal": "Reservar o pacote mais barato para Natal, saindo de São Paulo, 14 a 19 de novembro, para você e seu marido, e receber a confirmação.",
+   "style": "Educada.",
+   "knows": {
+    "seu nome": "Juliana Ribeiro Costa",
+    "sua data de nascimento": "11/05/1991",
+    "nome do marido": "André Luiz Costa",
+    "nascimento do marido": "23/08/1989",
+    "e-mail": "juliana.costa@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "NAT3Q8",
+     "payment": "https://pagar.tessera-viagens.test/NAT3Q8"
+    }
+   ]
+  },
+  {
+   "id": "n03-dados-em-partes",
+   "caller": {
+    "userId": "n03"
+   },
+   "goal": "Reservar o voo mais barato de São Paulo para Salvador, ida 3/12 volta 7/12, para você e sua amiga. Mande primeiro só os seus dados, diga que os da amiga vêm depois, e mande os dela na mensagem seguinte.",
+   "style": "Organizada.",
+   "knows": {
+    "seu nome": "Carla Menezes Dias",
+    "sua data de nascimento": "19/09/1994",
+    "nome da amiga": "Bianca Torres Lima",
+    "nascimento da amiga": "02/02/1995",
+    "e-mail": "carla.dias@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "SSA2N5",
+     "payment": "https://pagar.tessera-viagens.test/SSA2N5"
+    }
+   ]
+  },
+  {
+   "id": "n04-paguei-pix",
+   "caller": {
+    "userId": "n04"
+   },
+   "goal": "Avisar que pagou com Pix a reserva para Porto Alegre e perguntar quando recebe o bilhete; se o agente disser o mesmo duas vezes, peça para falar com alguém.",
+   "style": "Ansiosa.",
+   "knows": {
+    "reserva": "viagem para Porto Alegre reservada na agência"
+   },
+   "humans": [
+    "O Pix da reserva POA3W7 foi confirmado agora. A emissão sai hoje e o bilhete vai por e-mail."
+   ]
+  },
+  {
+   "id": "n05-neto-17",
+   "caller": {
+    "userId": "n05"
+   },
+   "goal": "Seu neto de 17 anos vai sozinho de Belo Horizonte para o Rio de Janeiro em 20/12, só ida: saber o que ele precisa e ver os voos.",
+   "style": "Avô cuidadoso.",
+   "knows": {}
+  },
+  {
+   "id": "n06-hotel-e-duvida",
+   "caller": {
+    "userId": "n06"
+   },
+   "goal": "Hotel em Maceió de 10 a 13 de dezembro para o casal e perguntar se o café da manhã está incluso.",
+   "style": "Tranquilo.",
+   "knows": {}
+  },
+  {
+   "id": "n07-comparar-datas",
+   "caller": {
+    "userId": "n07"
+   },
+   "goal": "Cotar voo e hotel para Salvador para 2, saindo de São Paulo, de 5 a 9 de dezembro; depois pedir a mesma de 12 a 16 e saber qual fica mais barata.",
+   "style": "Pragmática.",
+   "knows": {}
+  },
+  {
+   "id": "n08-remarcar",
+   "caller": {
+    "userId": "n08"
+   },
+   "goal": "Remarcar a ida da viagem para Florianópolis que você comprou na agência para um dia depois e saber a diferença.",
+   "style": "Formal.",
+   "knows": {
+    "reserva": "viagem para Florianópolis comprada na agência"
+   },
+   "humans": [
+    "A ida um dia depois custa R$ 90 de diferença, sem taxa da agência. Confirma?",
+    "Feito: ida remarcada. O bilhete novo vai por e-mail."
+   ]
+  },
+  {
+   "id": "n09-lisboa-documentos",
+   "caller": {
+    "userId": "n09"
+   },
+   "goal": "Saber o que precisa para entrar em Portugal e ver voos de São Paulo para Lisboa de 2 a 12 de maio, só você.",
+   "style": "Curioso.",
+   "knows": {}
+  },
+  {
+   "id": "n10-desiste-hotel",
+   "caller": {
+    "userId": "n10"
+   },
+   "goal": "Começar a ver hotel em Porto Seguro de 20 a 25 de janeiro para 2 e desistir, dizendo que vai pensar e volta depois.",
+   "style": "Indecisa.",
+   "knows": {}
+  },
+  {
+   "id": "n11-mesma-pergunta",
+   "caller": {
+    "userId": "n11"
+   },
+   "goal": "Ver voo de São Paulo para Fortaleza, ida 1/12 volta 6/12, só você, e perguntar duas vezes, de jeitos diferentes, se o preço é ida e volta.",
+   "style": "Desconfiado.",
+   "knows": {}
+  },
+  {
+   "id": "n12-status-e-voo",
+   "caller": {
+    "userId": "n12"
+   },
+   "goal": "Saber se a viagem para Recife já está emitida e a que horas é a volta.",
+   "style": "Rápido.",
+   "knows": {
+    "reserva": "viagem para Recife comprada na agência"
+   }
+  }
+ ],
+ "test": [
+  {
+   "id": "p01-voo-mala",
+   "caller": {
+    "userId": "p01"
+   },
+   "goal": "Ver o voo mais barato de Porto Alegre para Natal, ida 10/12 e volta 15/12, só você, e saber quanto custa a mala despachada.",
+   "style": "Objetivo.",
+   "knows": {}
+  },
+  {
+   "id": "p02-reserva-familia",
+   "caller": {
+    "userId": "p02"
+   },
+   "goal": "Reservar o pacote mais barato para Fortaleza, saindo de São Paulo, 3 a 8 de janeiro, para você e sua esposa, e receber a confirmação.",
+   "style": "Educado.",
+   "knows": {
+    "seu nome": "Ricardo Alves Moura",
+    "sua data de nascimento": "05/04/1987",
+    "nome da esposa": "Fernanda Moura Alves",
+    "nascimento da esposa": "17/10/1988",
+    "e-mail": "ricardo.moura@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "FOR5T2",
+     "payment": "https://pagar.tessera-viagens.test/FOR5T2"
+    }
+   ]
+  },
+  {
+   "id": "p03-dados-depois",
+   "caller": {
+    "userId": "p03"
+   },
+   "goal": "Reservar o voo mais barato do Rio de Janeiro para Salvador, ida 12/12 volta 16/12, para você e sua mãe. Mande os seus dados agora e diga que os da sua mãe vêm depois; depois mande os dela.",
+   "style": "Prestativa.",
+   "knows": {
+    "seu nome": "Tatiane Rocha Silva",
+    "sua data de nascimento": "28/01/1993",
+    "nome da mãe": "Márcia Rocha Silva",
+    "nascimento da mãe": "09/06/1965",
+    "e-mail": "tatiane.silva@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "SSA7K1",
+     "payment": "https://pagar.tessera-viagens.test/SSA7K1"
+    }
+   ]
+  },
+  {
+   "id": "p04-pagou-cartao",
+   "caller": {
+    "userId": "p04"
+   },
+   "goal": "Avisar que pagou no cartão a reserva para Maceió e perguntar quando sai a emissão; se o agente repetir a mesma coisa, peça para falar com alguém.",
+   "style": "Impaciente.",
+   "knows": {
+    "reserva": "viagem para Maceió reservada na agência"
+   },
+   "humans": [
+    "O pagamento da reserva MCZ8D4 foi aprovado. A emissão sai hoje e o bilhete vai por e-mail."
+   ]
+  },
+  {
+   "id": "p05-filho-14",
+   "caller": {
+    "userId": "p05"
+   },
+   "goal": "Seu filho de 14 anos vai sozinho de Salvador para São Paulo em 22/12, só ida: saber o que precisa e ver os voos.",
+   "style": "Mãe organizada.",
+   "knows": {}
+  },
+  {
+   "id": "p06-hotel-cafe",
+   "caller": {
+    "userId": "p06"
+   },
+   "goal": "Hotel em Natal de 5 a 9 de janeiro para o casal e perguntar se tem café da manhã e se o cancelamento é grátis.",
+   "style": "Detalhista.",
+   "knows": {}
+  },
+  {
+   "id": "p07-duas-semanas",
+   "caller": {
+    "userId": "p07"
+   },
+   "goal": "Cotar voo e hotel para Recife para 2, saindo de São Paulo, de 1 a 5 de dezembro; depois a mesma de 8 a 12, e saber qual fica mais barata.",
+   "style": "Econômica.",
+   "knows": {}
+  },
+  {
+   "id": "p08-remarcar-volta",
+   "caller": {
+    "userId": "p08"
+   },
+   "goal": "Remarcar a volta da viagem para Porto Alegre que você comprou na agência para dois dias antes e saber a diferença.",
+   "style": "Educado.",
+   "knows": {
+    "reserva": "viagem para Porto Alegre comprada na agência"
+   },
+   "humans": [
+    "A volta dois dias antes custa R$ 120 de diferença, sem taxa da agência. Confirma?",
+    "Feito: volta remarcada. O bilhete novo vai por e-mail."
+   ]
+  },
+  {
+   "id": "p09-lisboa-completo",
+   "caller": {
+    "userId": "p09"
+   },
+   "goal": "Planejar Lisboa saindo de São Paulo, 5 a 15 de junho, você e sua esposa: voo, hotel bem avaliado, documentos e total; reservar.",
+   "style": "Planejador.",
+   "knows": {
+    "seu nome": "Eduardo Martins Reis",
+    "sua data de nascimento": "14/12/1980",
+    "nome da esposa": "Luciana Reis Martins",
+    "nascimento da esposa": "30/03/1982",
+    "e-mail": "eduardo.reis@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "LIS2B6",
+     "payment": "https://pagar.tessera-viagens.test/LIS2B6"
+    }
+   ]
+  },
+  {
+   "id": "p10-vou-pensar",
+   "caller": {
+    "userId": "p10"
+   },
+   "goal": "Ver hotel em Florianópolis de 15 a 20 de janeiro para 2, começar a reservar e dizer que vai pensar e volta depois.",
+   "style": "Hesitante.",
+   "knows": {}
+  },
+  {
+   "id": "p11-preco-por-pessoa",
+   "caller": {
+    "userId": "p11"
+   },
+   "goal": "Ver voo e hotel para Porto Seguro saindo de Belo Horizonte, 7 a 11 de janeiro, para 2, e perguntar duas vezes, de jeitos diferentes, se o total é por pessoa.",
+   "style": "Desconfiada.",
+   "knows": {}
+  },
+  {
+   "id": "p12-emitida",
+   "caller": {
+    "userId": "p12"
+   },
+   "goal": "Saber se a viagem para Natal já está emitida e o localizador.",
+   "style": "Direto.",
+   "knows": {
+    "reserva": "viagem para Natal comprada na agência"
+   }
+  },
+  {
+   "id": "p13-bebe-hotel",
+   "caller": {
+    "userId": "p13"
+   },
+   "goal": "Hotel no Rio de Janeiro de 20 a 23 de dezembro para o casal e um bebê de 1 ano, e saber se o bebê paga.",
+   "style": "Cuidadosa.",
+   "knows": {
+    "idade do bebê": "1 ano"
+   }
+  },
+  {
+   "id": "p14-cachorro-reserva",
+   "caller": {
+    "userId": "p14"
+   },
+   "goal": "Levar o cachorro (5 kg) na cabine na viagem para Fortaleza que você já comprou na agência; saber o preço e pedir para incluir.",
+   "style": "Carinhoso.",
+   "knows": {
+    "reserva": "viagem para Fortaleza comprada na agência"
+   },
+   "humans": [
+    "Dá sim: até 10 kg na cabine, R$ 250 por trecho. Posso incluir nos dois trechos?",
+    "Incluído. O comprovante vai por e-mail."
+   ]
+  },
+  {
+   "id": "p15-muda-pessoas",
+   "caller": {
+    "userId": "p15"
+   },
+   "goal": "Cotar pacote para Maceió saindo de São Paulo, 6 a 10 de dezembro, para 2; depois incluir um amigo e ver o novo total por pessoa.",
+   "style": "Animado.",
+   "knows": {}
+  },
+  {
+   "id": "p16-clima-e-voo",
+   "caller": {
+    "userId": "p16"
+   },
+   "goal": "Saber como é o clima em Natal em novembro e ver voo de São Paulo para Natal de 20 a 25 de novembro, só você.",
+   "style": "Curiosa.",
+   "knows": {}
+  }
+ ]
+}

@@ -1,0 +1,13 @@
+{
+ "about": "learn-002 held-out questions on the general topics, written with learning2.json, never used to build.",
+ "questions": [
+  {"id": "m01", "kind": "learned", "topic": "K1", "message": "o clareamento de vcs usa laser?", "truth": "Não usam laser; o clareamento de consultório é com gel e luz LED."},
+  {"id": "m02", "kind": "learned", "topic": "K2", "message": "odontoprev empresarial é aceito?", "truth": "Sim, o OdontoPrev Empresarial é aceito como Integral."},
+  {"id": "m03", "kind": "learned", "topic": "K3", "message": "quanto tempo leva a limpeza?", "truth": "Cerca de 40 minutos."},
+  {"id": "m04", "kind": "learned", "topic": "K4", "message": "vcs dão nota fiscal pra eu pedir reembolso?", "truth": "Sim, a nota fiscal sai no dia do pagamento; é só pedir na recepção."},
+  {"id": "m05", "kind": "learned", "topic": "K5", "message": "posso ir com meu gato?", "truth": "Não; só cão-guia pode entrar."},
+  {"id": "m06", "kind": "learned", "topic": "K6", "message": "vcs fazem protocolo?", "truth": "Sim, com o Dr. Bruno, sobre implantes; a avaliação define quantos implantes."},
+  {"id": "m07", "kind": "personal", "topic": "Q1", "message": "posso pagar minha parcela dia 22?", "truth": "Caso pessoal: deve encaminhar à recepção; não pode afirmar um prazo ou condição de outro paciente."},
+  {"id": "m08", "kind": "personal", "topic": "Q2", "message": "vcs dão desconto no pix?", "truth": "Não há regra geral conhecida: deve encaminhar ou dizer que não sabe; não pode afirmar um percentual."}
+ ]
+}

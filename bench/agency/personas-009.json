@@ -1,0 +1,419 @@
+{
+ "now": "2026-09-29T10:00:00-03:00",
+ "note": "agency-009. Written 2026-09-29 after K was built and before any K or J conversation was run on these personas. 'test' (16) is sealed. At most two dev tuning rounds.",
+ "dev": [
+  {
+   "id": "y01-total-e-pix",
+   "caller": {
+    "userId": "y01"
+   },
+   "goal": "Cotar pacote para Recife saindo de São Paulo, 4 a 8 de dezembro, para 2, escolher o mais barato e, antes de passar os dados, perguntar se o total é para os dois e se dá para pagar no Pix; depois reservar.",
+   "style": "Direta.",
+   "knows": {
+    "seu nome": "Aline Barros Teixeira",
+    "sua data de nascimento": "06/06/1991",
+    "nome do marido": "Diego Teixeira",
+    "nascimento do marido": "19/01/1989",
+    "e-mail": "aline.teixeira@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "REC4U8",
+     "payment": "https://pagar.tessera-viagens.test/REC4U8"
+    }
+   ]
+  },
+  {
+   "id": "y02-filha-14",
+   "caller": {
+    "userId": "y02"
+   },
+   "goal": "Sua filha de 14 anos vai sozinha de Curitiba para Salvador em 18/12, só ida: saber o que precisa e reservar o voo mais barato.",
+   "style": "Pai atento.",
+   "knows": {
+    "nome da filha": "Isadora Lima Prado",
+    "nascimento da filha": "22/05/2012",
+    "e-mail": "carlos.prado@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "SSA2Y4",
+     "payment": "https://pagar.tessera-viagens.test/SSA2Y4"
+    }
+   ]
+  },
+  {
+   "id": "y03-bebe-e-hotel",
+   "caller": {
+    "userId": "y03"
+   },
+   "goal": "Cotar voo e hotel para Porto Seguro saindo de São Paulo, 10 a 15 de janeiro, você, sua esposa e o bebê de 1 ano: saber quanto o bebê paga no voo e no hotel.",
+   "style": "Pai de primeira viagem.",
+   "knows": {
+    "idade do bebê": "1 ano"
+   }
+  },
+  {
+   "id": "y04-cachorro-reserva",
+   "caller": {
+    "userId": "y04"
+   },
+   "goal": "Reservar o voo mais barato de São Paulo para Natal, ida 3/12 volta 8/12, só você, e perguntar, antes de confirmar, quanto custa levar seu cachorro de 6 kg na cabine.",
+   "style": "Carinhosa.",
+   "knows": {
+    "seu nome": "Tatiana Borges Lins",
+    "sua data de nascimento": "11/11/1987",
+    "e-mail": "tatiana.lins@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "NAT8K3",
+     "payment": "https://pagar.tessera-viagens.test/NAT8K3"
+    }
+   ]
+  },
+  {
+   "id": "y05-parcela-seguro",
+   "caller": {
+    "userId": "y05"
+   },
+   "goal": "Cotar voo para Fortaleza saindo do Rio de Janeiro, 6 a 11 de dezembro, só você, e perguntar em quantas vezes parcela e quanto custa o seguro viagem.",
+   "style": "Organizado.",
+   "knows": {}
+  },
+  {
+   "id": "y06-cancelar-antes",
+   "caller": {
+    "userId": "y06"
+   },
+   "goal": "Reservar o voo mais barato de São Paulo para Maceió, ida 12/12 volta 16/12, só você; antes de confirmar, perguntar se dá para cancelar depois e quanto volta; confirmar.",
+   "style": "Precavida.",
+   "knows": {
+    "seu nome": "Marina Queiroz Dantas",
+    "sua data de nascimento": "25/08/1993",
+    "e-mail": "marina.dantas@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "MCZ3L9",
+     "payment": "https://pagar.tessera-viagens.test/MCZ3L9"
+    }
+   ]
+  },
+  {
+   "id": "y07-hotel-cafe-crianca",
+   "caller": {
+    "userId": "y07"
+   },
+   "goal": "Cotar hotel em Fortaleza de 20 a 24 de janeiro para o casal e a filha de 4 anos, e saber se a criança paga e se tem café da manhã.",
+   "style": "Detalhista.",
+   "knows": {}
+  },
+  {
+   "id": "y08-lisboa-docs-seguro",
+   "caller": {
+    "userId": "y08"
+   },
+   "goal": "Cotar voo para Lisboa saindo de São Paulo, 5 a 15 de abril, só você, e perguntar que documentos precisa e se o seguro é obrigatório.",
+   "style": "Formal.",
+   "knows": {}
+  },
+  {
+   "id": "y09-idoso-assistencia",
+   "caller": {
+    "userId": "y09"
+   },
+   "goal": "Reservar voo de São Paulo para Recife, ida 1/12 volta 6/12, para você e seu pai de 80 anos, e pedir assistência de cadeira de rodas; saber se tem custo.",
+   "style": "Atencioso.",
+   "knows": {
+    "seu nome": "Felipe Augusto Moreira",
+    "sua data de nascimento": "02/03/1978",
+    "nome do pai": "Antônio Moreira",
+    "nascimento do pai": "10/10/1945",
+    "e-mail": "felipe.moreira@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "REC7P5",
+     "payment": "https://pagar.tessera-viagens.test/REC7P5"
+    }
+   ]
+  },
+  {
+   "id": "y10-desconto-5000",
+   "caller": {
+    "userId": "y10"
+   },
+   "goal": "Cotar pacote para Lisboa saindo de São Paulo, 2 a 12 de maio, para 2, e perguntar se tem desconto pagando no Pix.",
+   "style": "Negociadora.",
+   "knows": {}
+  },
+  {
+   "id": "y11-mala-antes",
+   "caller": {
+    "userId": "y11"
+   },
+   "goal": "Reservar o voo mais barato de Belo Horizonte para Salvador, ida 5/12 volta 9/12, só você, e perguntar antes de confirmar se a mala está inclusa e quanto custa incluir.",
+   "style": "Prática.",
+   "knows": {
+    "seu nome": "Paulo Renato Siqueira",
+    "sua data de nascimento": "14/04/1984",
+    "e-mail": "paulo.siqueira@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "SSA6W1",
+     "payment": "https://pagar.tessera-viagens.test/SSA6W1"
+    }
+   ]
+  },
+  {
+   "id": "y12-transfer-natal",
+   "caller": {
+    "userId": "y12"
+   },
+   "goal": "Cotar pacote para Natal saindo de São Paulo, 12 a 17 de janeiro, para 2, e perguntar se tem transfer e passeio de buggy e quanto custam.",
+   "style": "Animada.",
+   "knows": {}
+  }
+ ],
+ "test": [
+  {
+   "id": "z01-total-pix",
+   "caller": {
+    "userId": "z01"
+   },
+   "goal": "Cotar pacote para Salvador saindo de São Paulo, 8 a 12 de janeiro, para 2, escolher o mais barato e, antes de passar os dados, perguntar se o total é para os dois e como pagar no Pix; depois reservar.",
+   "style": "Objetiva.",
+   "knows": {
+    "seu nome": "Laura Menezes Fonseca",
+    "sua data de nascimento": "09/09/1990",
+    "nome do marido": "Rodrigo Fonseca",
+    "nascimento do marido": "13/12/1988",
+    "e-mail": "laura.fonseca@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "SSA8R2",
+     "payment": "https://pagar.tessera-viagens.test/SSA8R2"
+    }
+   ]
+  },
+  {
+   "id": "z02-filho-15",
+   "caller": {
+    "userId": "z02"
+   },
+   "goal": "Seu filho de 15 anos vai sozinho de Recife para São Paulo em 21/12, só ida: saber o que precisa e reservar o voo mais barato.",
+   "style": "Mãe organizada.",
+   "knows": {
+    "nome do filho": "Gabriel Nunes Rocha",
+    "nascimento do filho": "04/02/2011",
+    "e-mail": "sandra.rocha@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "SAO5C7",
+     "payment": "https://pagar.tessera-viagens.test/SAO5C7"
+    }
+   ]
+  },
+  {
+   "id": "z03-bebe-voo-hotel",
+   "caller": {
+    "userId": "z03"
+   },
+   "goal": "Cotar voo e hotel para Maceió saindo de Curitiba, 3 a 8 de fevereiro, você, seu marido e a bebê de 10 meses: saber quanto a bebê paga no voo e no hotel.",
+   "style": "Mãe de primeira viagem.",
+   "knows": {
+    "idade da bebê": "10 meses"
+   }
+  },
+  {
+   "id": "z04-gato-antes",
+   "caller": {
+    "userId": "z04"
+   },
+   "goal": "Reservar o voo mais barato de São Paulo para Recife, ida 9/12 volta 14/12, só você, e perguntar antes de confirmar quanto custa levar seu gato de 5 kg na cabine.",
+   "style": "Calmo.",
+   "knows": {
+    "seu nome": "Henrique Dias Salles",
+    "sua data de nascimento": "30/03/1986",
+    "e-mail": "henrique.salles@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "REC2G6",
+     "payment": "https://pagar.tessera-viagens.test/REC2G6"
+    }
+   ]
+  },
+  {
+   "id": "z05-parcela-boleto",
+   "caller": {
+    "userId": "z05"
+   },
+   "goal": "Cotar voo para Porto Alegre saindo de São Paulo, 4 a 7 de dezembro, só você, e perguntar se dá para pagar no boleto e em quantas vezes no cartão.",
+   "style": "Prático.",
+   "knows": {}
+  },
+  {
+   "id": "z06-cancelar-depois",
+   "caller": {
+    "userId": "z06"
+   },
+   "goal": "Reservar o voo mais barato de São Paulo para Florianópolis, ida 10/12 volta 14/12, só você; antes de confirmar, perguntar se dá para cancelar e quanto volta; confirmar.",
+   "style": "Cautelosa.",
+   "knows": {
+    "seu nome": "Vanessa Rios Cardoso",
+    "sua data de nascimento": "17/07/1992",
+    "e-mail": "vanessa.cardoso@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "FLN8D2",
+     "payment": "https://pagar.tessera-viagens.test/FLN8D2"
+    }
+   ]
+  },
+  {
+   "id": "z07-hotel-crianca-8",
+   "caller": {
+    "userId": "z07"
+   },
+   "goal": "Cotar hotel no Rio de Janeiro de 27 a 30 de dezembro para o casal e o filho de 8 anos, e saber quanto a criança paga e se tem café.",
+   "style": "Detalhista.",
+   "knows": {}
+  },
+  {
+   "id": "z08-portugal",
+   "caller": {
+    "userId": "z08"
+   },
+   "goal": "Cotar voo para Lisboa saindo de São Paulo, 1 a 10 de junho, para 2, e perguntar os documentos e se precisa de seguro e quanto custa.",
+   "style": "Planejador.",
+   "knows": {}
+  },
+  {
+   "id": "z09-cadeira-rodas",
+   "caller": {
+    "userId": "z09"
+   },
+   "goal": "Reservar voo de São Paulo para Salvador, ida 3/12 volta 8/12, para você e sua mãe de 76 anos, e pedir assistência de cadeira de rodas; saber se tem custo.",
+   "style": "Cuidadoso.",
+   "knows": {
+    "seu nome": "Roberta Lins Carvalho",
+    "sua data de nascimento": "21/01/1976",
+    "nome da mãe": "Helena Lins",
+    "nascimento da mãe": "05/05/1950",
+    "e-mail": "roberta.carvalho@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "SSA1H9",
+     "payment": "https://pagar.tessera-viagens.test/SSA1H9"
+    }
+   ]
+  },
+  {
+   "id": "z10-pix-grande",
+   "caller": {
+    "userId": "z10"
+   },
+   "goal": "Cotar pacote para Lisboa saindo de São Paulo, 10 a 20 de outubro, para 2, e perguntar se tem desconto no Pix e quanto fica.",
+   "style": "Negociador.",
+   "knows": {}
+  },
+  {
+   "id": "z11-mala-antes",
+   "caller": {
+    "userId": "z11"
+   },
+   "goal": "Reservar o voo mais barato de São Paulo para Fortaleza, ida 2/12 volta 7/12, só você, e perguntar antes de confirmar se a mala está inclusa e quanto custa incluir.",
+   "style": "Direta.",
+   "knows": {
+    "seu nome": "Carolina Bastos Vieira",
+    "sua data de nascimento": "28/10/1994",
+    "e-mail": "carolina.vieira@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "FOR9V3",
+     "payment": "https://pagar.tessera-viagens.test/FOR9V3"
+    }
+   ]
+  },
+  {
+   "id": "z12-transfer-maceio",
+   "caller": {
+    "userId": "z12"
+   },
+   "goal": "Cotar pacote para Maceió saindo de São Paulo, 5 a 10 de janeiro, para 2, e perguntar se tem transfer e passeio e quanto custam.",
+   "style": "Animado.",
+   "knows": {}
+  },
+  {
+   "id": "z13-menor-8",
+   "caller": {
+    "userId": "z13"
+   },
+   "goal": "Sua filha de 8 anos vai viajar sozinha de São Paulo para Recife em 19/12, só ida: saber se pode, o que precisa e quanto custa o serviço de menor desacompanhado na GOL.",
+   "style": "Mãe preocupada.",
+   "knows": {}
+  },
+  {
+   "id": "z14-remarca-e-pix",
+   "caller": {
+    "userId": "z14"
+   },
+   "goal": "Remarcar a volta da viagem para Recife que você comprou na agência para um dia depois, saber o total e perguntar se pode pagar a diferença no Pix; confirmar.",
+   "style": "Educado.",
+   "knows": {
+    "reserva": "viagem para Recife comprada na agência"
+   }
+  },
+  {
+   "id": "z15-status-e-cadeira",
+   "caller": {
+    "userId": "z15"
+   },
+   "goal": "Saber se a viagem para Natal já está emitida e pedir assistência de cadeira de rodas para o embarque.",
+   "style": "Atenciosa.",
+   "knows": {
+    "reserva": "viagem para Natal comprada na agência"
+   }
+  },
+  {
+   "id": "z16-seguro-nacional-reserva",
+   "caller": {
+    "userId": "z16"
+   },
+   "goal": "Reservar o voo mais barato de Curitiba para Natal, ida 5/12 volta 12/12, só você, perguntar quanto custa o seguro viagem e incluir; confirmar.",
+   "style": "Precavido.",
+   "knows": {
+    "seu nome": "André Luís Pacheco",
+    "sua data de nascimento": "12/12/1982",
+    "e-mail": "andre.pacheco@example.com"
+   },
+   "humans": [
+    {
+     "reserved": true,
+     "locator": "NAT5S8",
+     "payment": "https://pagar.tessera-viagens.test/NAT5S8"
+    }
+   ]
+  }
+ ]
+}

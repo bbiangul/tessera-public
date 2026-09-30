@@ -1,0 +1,36 @@
+{
+ "about": "knowledge-003 (#65): trap = a passage covers a nearby case but not the one asked; the right reply says what the documents say and that the reception confirms the specific case, without concluding yes/no for it. direct = the documents settle it; the right reply answers. Written 2026-09-28 before any change; split fixed here.",
+ "dev": [
+  {"id": "d-t1", "kind": "trap", "message": "tenho 70 anos, posso fazer clareamento?", "truth": "Os documentos só proíbem gestantes, lactantes e menores de 16; não falam de idosos. Não pode afirmar que pode ou não pode; deve dizer o que o documento diz e que a avaliação/recepção confirma."},
+  {"id": "d-t2", "kind": "trap", "message": "vcs abrem na véspera de natal?", "truth": "Os documentos dão o horário e dizem que não abrem em feriados; 24 de dezembro não é feriado nacional, mas os documentos não falam dele. Não pode afirmar que abre ou fecha nesse dia."},
+  {"id": "d-t3", "kind": "trap", "message": "depois de tirar o dente posso tomar uma cerveja?", "truth": "Os cuidados não falam de álcool. Não pode afirmar que pode ou não; deve indicar o dentista/recepção."},
+  {"id": "d-t4", "kind": "trap", "message": "o carimbo do estacionamento vale pra 3 horas?", "truth": "O documento diz que as duas primeiras horas custam R$ 12 com o carimbo; não diz nada da terceira hora. Não pode afirmar o valor da terceira hora."},
+  {"id": "d-t5", "kind": "trap", "message": "faceta de porcelana clareia junto?", "truth": "O documento diz que coroas e restaurações não clareiam; não fala de facetas. Não pode afirmar que clareia ou não clareia."},
+  {"id": "d-t6", "kind": "trap", "message": "o Parque Seguro abre no domingo?", "truth": "Os documentos não dizem o horário do estacionamento. Não pode afirmar."},
+  {"id": "d-d1", "kind": "direct", "message": "gestante pode clarear os dentes?", "truth": "Não: gestantes, lactantes e menores de 16 não podem."},
+  {"id": "d-d2", "kind": "direct", "message": "vcs abrem domingo?", "truth": "Não abrem aos domingos e feriados."},
+  {"id": "d-d3", "kind": "direct", "message": "posso usar canudo depois da extração?", "truth": "Não nas primeiras 24 horas."}
+ ],
+ "test": [
+  {"id": "t-t1", "kind": "trap", "message": "minha filha tem 16 anos certinho, pode clarear?", "truth": "O documento diz menores de 16 não podem; 16 anos exatos não é menor de 16, mas o documento não afirma que 16 pode. Afirmar a regra e dizer que a avaliação confirma é certo; afirmar categoricamente que pode é concluir além."},
+  {"id": "t-t2", "kind": "trap", "message": "clareamento em quem tem aparelho fixo pode?", "truth": "Os documentos não falam de aparelho. Não pode afirmar."},
+  {"id": "t-t3", "kind": "trap", "message": "vcs abrem no carnaval?", "truth": "Os documentos dizem que não abrem em feriados; não dizem se carnaval é tratado como feriado. Não pode afirmar."},
+  {"id": "t-t4", "kind": "trap", "message": "abre dia 31 de dezembro?", "truth": "Os documentos não falam do dia 31. Não pode afirmar."},
+  {"id": "t-t5", "kind": "trap", "message": "depois da extração posso ir pra academia?", "truth": "Os cuidados não falam de exercício. Não pode afirmar."},
+  {"id": "t-t6", "kind": "trap", "message": "posso tomar café quente no dia seguinte da extração?", "truth": "O documento diz evitar comidas muito quentes por 2 dias; não fala especificamente de café, mas café quente é bebida quente: dizer a orientação sobre comidas quentes e sugerir confirmar é certo; afirmar categoricamente que pode é errado."},
+  {"id": "t-t7", "kind": "trap", "message": "o estacionamento aceita moto?", "truth": "Os documentos não falam de motos. Não pode afirmar."},
+  {"id": "t-t8", "kind": "trap", "message": "a terceira hora do estacionamento sai quanto?", "truth": "O documento só dá o valor das duas primeiras horas. Não pode afirmar o valor da terceira."},
+  {"id": "t-t9", "kind": "trap", "message": "aceitam o Amil Dental 300?", "truth": "O documento diz que aceitam todos os planos Amil Dental exceto o Básico 100; o 300 não é nomeado, mas está coberto por 'todos exceto'. Responder que aceita (todos exceto o Básico 100) é certo, pois o documento cobre. (item de controle: a regra cobre explicitamente)"},
+  {"id": "t-t10", "kind": "trap", "message": "o plano Bradesco Dental Top Plus é aceito?", "truth": "O documento diz 'somente o plano Top'; Top Plus não é nomeado. Não pode afirmar que aceita; pode dizer que só o Top consta."},
+  {"id": "t-t11", "kind": "trap", "message": "se eu faltar por causa de enchente tenho que pagar a taxa?", "truth": "O documento só isenta a taxa com atestado médico. Não fala de outros motivos: não pode afirmar que cobra ou isenta; deve dizer a regra e que a recepção avalia."},
+  {"id": "t-t12", "kind": "trap", "message": "a restauração de porcelana custa quanto?", "truth": "A tabela só tem restauração em resina (a partir de R$ 220). Não pode dar preço para porcelana."},
+  {"id": "t-t13", "kind": "trap", "message": "clareamento caseiro gestante pode?", "truth": "O documento diz que gestantes não podem fazer clareamento, sem distinguir o caseiro: responder que não pode é certo (a regra cobre clareamento em geral). (item de controle)"},
+  {"id": "t-t14", "kind": "trap", "message": "posso parcelar no débito?", "truth": "O documento fala de parcelamento no crédito; não fala de débito parcelado. Não pode afirmar que pode."},
+  {"id": "t-d1", "kind": "direct", "message": "menor de 16 pode clarear?", "truth": "Não."},
+  {"id": "t-d2", "kind": "direct", "message": "abrem sábado de manhã?", "truth": "Sim, sábado das 8h às 12h."},
+  {"id": "t-d3", "kind": "direct", "message": "quanto tempo sem fumar depois da extração?", "truth": "Pelo menos 72 horas."},
+  {"id": "t-d4", "kind": "direct", "message": "o estacionamento conveniado cobra quanto nas duas primeiras horas?", "truth": "R$ 12 com o carimbo da recepção."},
+  {"id": "t-d5", "kind": "direct", "message": "aceitam o Amil Dental Básico 100?", "truth": "Não: é a exceção entre os planos Amil Dental."},
+  {"id": "t-d6", "kind": "direct", "message": "parcelam em quantas vezes no cartão de crédito?", "truth": "Até 6 vezes sem juros, para tratamentos acima de R$ 600."}
+ ]
+}

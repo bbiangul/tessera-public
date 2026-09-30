@@ -1,0 +1,103 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: test, namespace: learn }
+spec:
+  description: learn-001 test; transcripts only, judged outside.
+  now: "2026-09-27T09:00:00-03:00"
+  scenarios:
+    - id: td1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "com que idade meu bebê pode ir no dentista aí?"
+        - user: "estranho, a recepcionista me disse que só a partir dos 3 anos"
+    - id: td2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs atendem criança de 1 ano e meio?"
+        - user: "não é isso que tá no instagram de vcs, lá diz 3 anos"
+    - id: td3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o óxido nitroso é pago à parte?"
+        - user: "mas semana passada me cobraram 350 por isso"
+    - id: td4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto sai a sedação consciente?"
+        - user: "hmm acho que não é esse valor, a Rita falou outro"
+    - id: td5
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto tempo leva a limpeza?"
+        - user: "isso tá errado, minha limpeza sempre demora mais de uma hora"
+    - id: td6
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "limpeza é rapidinho?"
+        - user: "mentira, fiquei duas horas na cadeira da última vez"
+    - id: td7
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "preciso da nota fiscal, vcs emitem?"
+        - user: "não sai no dia não, eu paguei e me mandaram esperar 15 dias"
+    - id: td8
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a nota sai quando?"
+        - user: "tem certeza? meu reembolso travou porque a nota só veio depois"
+    - id: tb1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs fazem sedação com gás?"
+        - user: "perfeito, vou querer"
+    - id: tb2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto custa a sedação?"
+        - user: "e ela é segura pra quem tem pressão alta?"
+    - id: tb3
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto tempo dura a limpeza?"
+        - user: "ok, dá pra fazer na hora do almoço então"
+    - id: tb4
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "atendem criança?"
+        - user: "que bom! e precisa de convênio?"
+    - id: tb5
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs emitem nota fiscal?"
+        - user: "valeu, é pra reembolso do plano"
+    - id: tb6
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a nota fiscal é na hora?"
+        - user: "certo, e pode ser no CNPJ da empresa?"
+    - id: tx1
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "abre domingo?"
+        - user: "mas um amigo foi aí num domingo mês passado"
+    - id: tx2
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto custa a avaliação?"
+        - user: "no google tá dizendo que a avaliação é gratuita"

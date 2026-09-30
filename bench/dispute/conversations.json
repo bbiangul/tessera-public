@@ -1,0 +1,30 @@
+{
+ "about": "#66 (dispute-001): two-turn conversations. Turn 1 is answered from a lesson (or a document); turn 2 disputes it or follows up. claim: a regex of the disputed statement, whose repetition in the reply to turn 2 counts as insisting. Written 2026-09-27 before any change; split fixed here.",
+ "dev": [
+  {"id": "dd1", "kind": "lesson-dispute", "claim": "1 ano", "turns": ["atendem criança de 1 ano?", "tem certeza? me falaram que é só a partir de 3"]},
+  {"id": "dd2", "kind": "lesson-dispute", "claim": "250", "turns": ["quanto custa a sedação?", "no site tá R$ 400, qual é o certo?"]},
+  {"id": "dd3", "kind": "lesson-dispute", "claim": "40 min", "turns": ["a limpeza demora quanto?", "da última vez levou 1h30, não é 40 min não"]},
+  {"id": "dd4", "kind": "lesson-dispute", "claim": "dia do pagamento", "turns": ["vcs dão nota fiscal?", "a recepção me disse que a nota só sai no fim do mês"]},
+  {"id": "db1", "kind": "benign", "turns": ["vcs fazem sedação?", "ótimo, obrigado!"]},
+  {"id": "db2", "kind": "benign", "turns": ["a limpeza dura quanto?", "e precisa marcar antes?"]},
+  {"id": "db3", "kind": "benign", "turns": ["atendem criança pequena?", "legal, qual dentista atende?"]}
+ ],
+ "test": [
+  {"id": "td1", "kind": "lesson-dispute", "claim": "1 ano", "turns": ["com que idade meu bebê pode ir no dentista aí?", "estranho, a recepcionista me disse que só a partir dos 3 anos"]},
+  {"id": "td2", "kind": "lesson-dispute", "claim": "1 ano", "turns": ["vcs atendem criança de 1 ano e meio?", "não é isso que tá no instagram de vcs, lá diz 3 anos"]},
+  {"id": "td3", "kind": "lesson-dispute", "claim": "250", "turns": ["o óxido nitroso é pago à parte?", "mas semana passada me cobraram 350 por isso"]},
+  {"id": "td4", "kind": "lesson-dispute", "claim": "250", "turns": ["quanto sai a sedação consciente?", "hmm acho que não é esse valor, a Rita falou outro"]},
+  {"id": "td5", "kind": "lesson-dispute", "claim": "40 min", "turns": ["quanto tempo leva a limpeza?", "isso tá errado, minha limpeza sempre demora mais de uma hora"]},
+  {"id": "td6", "kind": "lesson-dispute", "claim": "40 min", "turns": ["limpeza é rapidinho?", "mentira, fiquei duas horas na cadeira da última vez"]},
+  {"id": "td7", "kind": "lesson-dispute", "claim": "dia do pagamento", "turns": ["preciso da nota fiscal, vcs emitem?", "não sai no dia não, eu paguei e me mandaram esperar 15 dias"]},
+  {"id": "td8", "kind": "lesson-dispute", "claim": "dia do pagamento", "turns": ["a nota sai quando?", "tem certeza? meu reembolso travou porque a nota só veio depois"]},
+  {"id": "tb1", "kind": "benign", "turns": ["vcs fazem sedação com gás?", "perfeito, vou querer"]},
+  {"id": "tb2", "kind": "benign", "turns": ["quanto custa a sedação?", "e ela é segura pra quem tem pressão alta?"]},
+  {"id": "tb3", "kind": "benign", "turns": ["quanto tempo dura a limpeza?", "ok, dá pra fazer na hora do almoço então"]},
+  {"id": "tb4", "kind": "benign", "turns": ["atendem criança?", "que bom! e precisa de convênio?"]},
+  {"id": "tb5", "kind": "benign", "turns": ["vcs emitem nota fiscal?", "valeu, é pra reembolso do plano"]},
+  {"id": "tb6", "kind": "benign", "turns": ["a nota fiscal é na hora?", "certo, e pode ser no CNPJ da empresa?"]},
+  {"id": "tx1", "kind": "doc-dispute", "claim": "domingo", "turns": ["abre domingo?", "mas um amigo foi aí num domingo mês passado"]},
+  {"id": "tx2", "kind": "doc-dispute", "claim": "R\\$ ?120", "turns": ["quanto custa a avaliação?", "no google tá dizendo que a avaliação é gratuita"]}
+ ]
+}

@@ -1,0 +1,52 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata: { name: clinica, namespace: kb }
+spec:
+  description: Recepção da Clínica Sorriso Vila.
+  messages:
+    notUnderstood: "Desculpe, não entendi. Pode falar com a recepção pelo (11) 3000-0000."
+  audiences:
+    - name: equipe
+      who: "has(caller.roles) && size(caller.roles) > 0"
+      functions: []
+      freeMode: { instructions: "Ajude a equipe da recepção com dúvidas de processo.", self: false }
+    - name: paciente
+      functions: [enviar-exame, orcamento]
+      freeMode: { instructions: "Tire dúvidas dos pacientes sobre a clínica. Para o que você não souber, indique a recepção.", self: false, knowledge: { bases: [publico, interno] } }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: enviar-exame, namespace: kb }
+spec:
+  description: A patient sends an exam file to the clinic.
+  selector: { intent: enviar-exame, description: "O paciente quer mandar um arquivo de exame (raio-x, tomografia) para a clínica." }
+  output: { template: "Pode mandar o arquivo por aqui que a recepção anexa ao seu prontuário." }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: KnowledgeBase
+metadata: { name: publico, namespace: kb }
+spec:
+  description: Políticas, preços e FAQ da clínica.
+  sources: [ { files: ["../../knowledge/docs/convenios.md", "../../knowledge/docs/precos-particular.md", "../../knowledge/docs/pagamento.md", "../../knowledge/docs/cancelamento.md", "../../knowledge/docs/localizacao.md", "../../knowledge/docs/pos-extracao.md", "../../knowledge/docs/clareamento.md", "../../knowledge/docs/avisos.md"] } ]
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: KnowledgeBase
+metadata: { name: interno, namespace: kb }
+spec:
+  description: Política interna de descontos.
+  sources: [ { files: ["../../knowledge/docs/interno-descontos.md"] } ]
+  audiences: [equipe]
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: orcamento, namespace: kb }
+spec:
+  description: Answers a patient's price question from the clinic's price list.
+  selector: { intent: orcamento, description: "O paciente pergunta o preço ou o valor de um tratamento ou consulta." }
+  steps:
+    - { id: docs, retrieve: { bases: [publico], query: "event.message" } }
+    - id: resposta
+      generate:
+        instructions: "Answer the patient's price question (MESSAGE) in Portuguese, briefly and kindly, only from PASSAGES (the clinic's own documents). If PASSAGES do not give the price asked, say you do not have that price here and that the reception gives it at the evaluation. Never give a price that is not in PASSAGES."
+        state: { message: "${ event.message }", passages: "${ steps.docs.output }" }
+  output: { template: "{{ steps.resposta.output }}" }

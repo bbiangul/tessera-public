@@ -1,0 +1,86 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: marcar-consulta, namespace: clinica-bench }
+spec:
+  description: Marca uma consulta nova para o próprio paciente, com sinal de R$ 50.
+  selector:
+    intent: marcar-consulta
+    description: "O paciente quer marcar uma consulta nova (não remarcar uma que já existe), ou saber que horários existem para uma consulta nova."
+  authorize: "caller.role == 'patient'"
+  inputs:
+    titular:
+      type: string
+      description: for whom the patient wants the new appointment
+      resolve:
+        - id: said
+          extract: { instructions: "'outro' when the message is about booking for someone else (a relative such as mãe, filho, marido, avó, or another patient id); 'proprio' when it is for the patient or it does not say" }
+        - { id: default, value: "'proprio'" }
+    dentista:
+      type: string
+      description: the dentist the patient wants, as an id like D1, D2 or D3
+      resolve:
+        - id: said
+          when: "inputs.titular != 'outro'"
+          extract: {}
+        - id: ask
+          when: "inputs.titular != 'outro'"
+          ask: { text: "Com qual dentista você quer marcar (D1, D2 ou D3)?", choices: "['D1', 'D2', 'D3']", minConfidence: 0.7, onLowConfidence: ask-user }
+      onUnresolved:
+        - respond:
+            template: "{{ inputs.titular == 'outro' ? 'Só consigo marcar consultas para você mesmo. Para outra pessoa, fale com a recepção pelo telefone da clínica.' : 'Não consegui entender com qual dentista você quer marcar.' }}"
+    periodo:
+      type: string
+      description: the part of the day the patient prefers
+      resolve:
+        - id: said
+          extract: { instructions: "'manha' when the patient asks for the morning, 'tarde' for the afternoon or evening, 'qualquer' when they do not say" }
+        - { id: default, value: "'qualquer'" }
+    dia:
+      type: clinic.Day
+      description: the day, or the day and period, of the new appointment, with its free slots
+      resolve:
+        - id: slots
+          fromAction: clinic/find-slots
+          with:
+            dentistId: "${ inputs.dentista }"
+            from: "2026-10-02"
+            days: 14
+        - id: pick
+          ask:
+            text: "Para qual dia você quer marcar? Tenho horários em: {{ sources.slots.output.filter(s, sources.slots.output.filter(t, t.start.substring(0, 10) == s.start.substring(0, 10))[0].id == s.id).map(s, s.label.split(' às ')[0]).join(', ') }}."
+            choices: "sources.slots.output.filter(s, sources.slots.output.filter(t, t.start.substring(0, 10) == s.start.substring(0, 10))[0].id == s.id).map(s, {'id': s.start.substring(0, 10), 'label': s.label.split(' às ')[0], 'slots': sources.slots.output.filter(t, t.start.substring(0, 10) == s.start.substring(0, 10))})"
+            minConfidence: 0.7
+            onLowConfidence: ask-user
+    opcoes:
+      type: list<clinic.Slot>
+      resolve:
+        - id: periodo
+          value: "(size(inputs.dia.slots.filter(s, inputs.periodo == 'qualquer' || (inputs.periodo == 'manha') == (int(s.start.substring(11, 13)) < 12))) > 0 ? inputs.dia.slots.filter(s, inputs.periodo == 'qualquer' || (inputs.periodo == 'manha') == (int(s.start.substring(11, 13)) < 12)) : inputs.dia.slots)"
+    newSlot:
+      type: clinic.Slot
+      resolve:
+        - id: only
+          when: "size(inputs.opcoes) == 1"
+          value: "inputs.opcoes[0]"
+        - id: pick
+          ask:
+            text: "Em {{ inputs.dia.label }} tenho: {{ inputs.opcoes.map(s, s.label.split(' às ')[1]).join(', ') }}. Qual prefere? Depois eu confirmo com você."
+            choices: "inputs.opcoes"
+            minConfidence: 0.7
+            onLowConfidence: ask-user
+  action:
+    act: clinic/book
+    with:
+      patientId: "${ caller.patientId }"
+      slotId: "${ inputs.newSlot.id }"
+    confirm: "Posso marcar sua consulta com o dentista {{ inputs.dentista }} para {{ inputs.newSlot.label }}? Há um sinal de R$ 50, cobrado agora. Responda sim para confirmar."
+    idempotencyKey: "caller.patientId + ':' + inputs.newSlot.id"
+  output:
+    template: "Pronto! Sua consulta com o dentista {{ inputs.dentista }} está marcada para {{ inputs.newSlot.label }}. O sinal de R$ 50 foi cobrado."
+  onError:
+    - probe: {}
+    - escalate:
+        queue: recepcao
+        task: answer
+        message: "Não consegui marcar a consulta de {{ caller.patientId }} em {{ inputs.newSlot.id }}"
+        whileWaiting: { template: "Vou pedir para a equipe confirmar e te retorno." }

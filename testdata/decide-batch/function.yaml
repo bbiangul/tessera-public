@@ -1,0 +1,23 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: preferences, namespace: travel }
+spec:
+  description: Demonstrates independent preference questions in one Jev request.
+  steps:
+    - id: preferences
+      decideBatch:
+        state: { message: "${ event.message }" }
+        questions:
+          weekend:
+            instructions: Does the user explicitly request a weekend?
+            yesNo: { ifTrue: Requests Saturday or Sunday, ifFalse: Does not request a weekend }
+          period:
+            instructions: Which period does the user explicitly request?
+            choice: { morning: Morning, afternoon: Afternoon, unspecified: No explicit period }
+        minConfidence: 0.7
+        onLowConfidence: continue
+    - id: clarification
+      when: "steps.preferences.output.value == null"
+      respond: { template: "Não consegui identificar todas as preferências com segurança." }
+  output:
+    value: "steps.preferences.output"

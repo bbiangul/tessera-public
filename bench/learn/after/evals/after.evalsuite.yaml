@@ -1,0 +1,82 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: after, namespace: learn }
+spec:
+  description: learn-001 after; transcripts only, judged outside.
+  now: "2026-09-27T09:00:00-03:00"
+  scenarios:
+    - id: h01
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "minha filha tem 5 anos, vcs atendem?"
+    - id: h02
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "tem dentista pra criança ai?"
+    - id: h03
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs trabalham com carga imediata em implante?"
+    - id: h04
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "consigo fazer implante e sair com dente no mesmo dia?"
+    - id: h05
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "invisalign sai por quanto mais ou menos?"
+    - id: h06
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto é o alinhador invisível?"
+    - id: h07
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a clínica tem acessibilidade pra cadeira de rodas?"
+    - id: h08
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "precisa subir escada pra chegar na sala?"
+    - id: h09
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs oferecem sedação pra quem tem medo?"
+    - id: h10
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto custa o óxido nitroso?"
+    - id: h11
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "a sala de espera tem wi-fi?"
+    - id: h12
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs tem desfibrilador?"
+    - id: h13
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "fazem harmonização facial?"
+    - id: h14
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o banheiro é adaptado pra cadeirante?"
+    - id: h15
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "minha consulta de sexta tá mantida?"

@@ -1,0 +1,64 @@
+# Level 4 live: the traveler's conversations on both Decide backends (the
+# phase 1 exit criterion). Skipped when the keys are not configured.
+# Levels 1-2 (unit + replay, $0) run in ci.yml on every push.
+name: evals
+
+on:
+  pull_request:
+    paths:
+      - "bench/datasets/**"
+      - "bench/baselines/**"
+      - "bench/cassettes/**"
+      - "internal/engines/decide/**"
+      - "internal/bench/**"
+      - "internal/ledger/**"
+      - "internal/httpx/**"
+      - "cmd/tessera/bench.go"
+      - "cmd/tessera/gate.go"
+      - "examples/**"
+      - "internal/runtime/**"
+      - "internal/host/**"
+      - "internal/evals/**"
+      - "internal/engines/generate/**"
+  schedule:
+    - cron: "0 6 * * *" # nightly, 03:00 in São Paulo
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: evals-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  conversations:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        decide: ["typesafe:jev-1.13.0", "llm:deepseek/deepseek-v4.1-flash"]
+    env:
+      HAS_KEYS: ${{ secrets.TYPESAFE_API_KEY != '' && secrets.OPENROUTER_API_KEY != '' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: go.mod
+      - name: Skip without keys
+        if: env.HAS_KEYS != 'true'
+        run: echo "TYPESAFE_API_KEY or OPENROUTER_API_KEY is not configured; skipping live conversations." >> "$GITHUB_STEP_SUMMARY"
+      - name: Build
+        if: env.HAS_KEYS == 'true'
+        run: make build
+      - name: Traveler EvalSuite, live (hard budget $0.05)
+        if: env.HAS_KEYS == 'true'
+        shell: bash # -o pipefail: tee must not hide a failure
+        env:
+          TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          DECIDE: ${{ matrix.decide }}
+        run: |
+          ./bin/tessera test examples/traveler --decide "$DECIDE" \
+            --generate openrouter:deepseek/deepseek-v4.1-flash --max-cost-usd 0.05 | tee -a "$GITHUB_STEP_SUMMARY"

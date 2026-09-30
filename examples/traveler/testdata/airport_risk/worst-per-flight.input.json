@@ -1,0 +1,64 @@
+{
+ "airportChangeData": {
+  "airportChanges": [
+   {
+    "arrivalTime": "2026-10-12T14:00:00",
+    "departureTime": "2026-10-12T15:30:00",
+    "flightToken": "x",
+    "fromAirport": "GRU",
+    "layoverMinutes": 300,
+    "legIndex": 0,
+    "segmentIndex": 0,
+    "toAirport": "CGH"
+   },
+   {
+    "arrivalTime": "2026-10-12T14:00:00",
+    "departureTime": "2026-10-12T15:30:00",
+    "flightToken": "x",
+    "fromAirport": "SDU",
+    "layoverMinutes": 60,
+    "legIndex": 0,
+    "segmentIndex": 0,
+    "toAirport": "GIG"
+   },
+   {
+    "arrivalTime": "2026-10-12T14:00:00",
+    "departureTime": "2026-10-12T15:30:00",
+    "flightToken": "y",
+    "fromAirport": "LHR",
+    "layoverMinutes": 200.5,
+    "legIndex": 0,
+    "segmentIndex": 0,
+    "toAirport": "LGW"
+   }
+  ]
+ },
+ "rawFlights": {
+  "data": {
+   "flightOffers": []
+  },
+  "status": true
+ },
+ "transferTimeData": {
+  "transferTimes": [
+   {
+    "estimated": false,
+    "from": "GRU",
+    "to": "CGH",
+    "transferMinutes": 74
+   },
+   {
+    "estimated": false,
+    "from": "SDU",
+    "to": "GIG",
+    "transferMinutes": 40
+   },
+   {
+    "estimated": false,
+    "from": "LHR",
+    "to": "LGW",
+    "transferMinutes": 95
+   }
+  ]
+ }
+}

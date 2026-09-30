@@ -1,0 +1,47 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata: { name: after, namespace: learn }
+spec:
+  description: learn-001 after; transcripts only, judged outside.
+  now: "2026-09-27T09:00:00-03:00"
+  scenarios:
+    - id: m01
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "o clareamento de vcs usa laser?"
+    - id: m02
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "odontoprev empresarial é aceito?"
+    - id: m03
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "quanto tempo leva a limpeza?"
+    - id: m04
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs dão nota fiscal pra eu pedir reembolso?"
+    - id: m05
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso ir com meu gato?"
+    - id: m06
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs fazem protocolo?"
+    - id: m07
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "posso pagar minha parcela dia 22?"
+    - id: m08
+      simulator: scripted
+      caller: { channel: whatsapp }
+      turns:
+        - user: "vcs dão desconto no pix?"

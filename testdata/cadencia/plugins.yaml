@@ -1,0 +1,72 @@
+# WhatsApp Cloud API (Meta) as a channel plugin: the platform applies its
+# rules to every message it carries. Replace the phone number ID in
+# baseUrl with yours; the token is a secret reference
+# (TESSERA_SECRET_WHATSAPP_TOKEN when self-hosted).
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: whatsapp, version: 0.1.0 }
+spec:
+  channel:
+    window: 24h                                   # outside it, only approved templates
+    consent: "has(event.payload) && has(event.payload.optIn) && event.payload.optIn == true"
+  egress: { hosts: [graph.facebook.com] }
+  connection:
+    baseUrl: https://graph.facebook.com/v21.0/100000000000000
+    auth: { header: Authorization, prefix: "Bearer ", secret: WHATSAPP_TOKEN }
+  actions:
+    send-template:
+      input: { to: string, template: string, params: list<string> }
+      output: map
+      effect: external-message
+      http:
+        method: POST
+        path: /messages
+        body:
+          messaging_product: whatsapp
+          to: "${ inputs.to }"
+          type: template
+          template:
+            name: "${ inputs.template }"
+            language: { code: pt_BR }
+            components: "${ [{'type': 'body', 'parameters': inputs.params.map(p, {'type': 'text', 'text': p})}] }"
+    send-text:
+      input: { to: string, text: string }
+      output: map
+      effect: external-message
+      freeText: true
+      http:
+        method: POST
+        path: /messages
+        body:
+          messaging_product: whatsapp
+          to: "${ inputs.to }"
+          type: text
+          text: { body: "${ inputs.text }" }
+---
+# The same API for the sales team: no channel rules (they protect leads),
+# only the template action. Meta refuses template parameters with line
+# breaks, so the queue replaces them.
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: whatsapp-equipe, version: 0.1.0 }
+spec:
+  egress: { hosts: [graph.facebook.com] }
+  connection:
+    baseUrl: https://graph.facebook.com/v21.0/100000000000000
+    auth: { header: Authorization, prefix: "Bearer ", secret: WHATSAPP_TOKEN }
+  actions:
+    send-template:
+      input: { to: string, template: string, params: list<string> }
+      output: map
+      effect: external-message
+      http:
+        method: POST
+        path: /messages
+        body:
+          messaging_product: whatsapp
+          to: "${ inputs.to }"
+          type: template
+          template:
+            name: "${ inputs.template }"
+            language: { code: pt_BR }
+            components: "${ [{'type': 'body', 'parameters': inputs.params.map(p, {'type': 'text', 'text': p})}] }"

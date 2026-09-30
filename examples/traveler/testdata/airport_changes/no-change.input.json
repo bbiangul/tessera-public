@@ -1,0 +1,57 @@
+{
+ "rawFlights": {
+  "data": {
+   "flightOffers": [
+    {
+     "segments": [
+      {
+       "legs": [
+        {
+         "arrivalAirport": {
+          "code": "REC"
+         },
+         "arrivalTime": "2026-10-12T10:25:00",
+         "departureAirport": {
+          "code": "GRU"
+         },
+         "departureTime": "2026-10-12T07:10:00"
+        }
+       ]
+      }
+     ],
+     "token": "direct"
+    },
+    {
+     "segments": [
+      {
+       "legs": [
+        {
+         "arrivalAirport": {
+          "code": "GRU"
+         },
+         "arrivalTime": "2026-10-12T07:40:00",
+         "departureAirport": {
+          "code": "POA"
+         },
+         "departureTime": "2026-10-12T06:00:00"
+        },
+        {
+         "arrivalAirport": {
+          "code": "REC"
+         },
+         "arrivalTime": "2026-10-12T12:15:00",
+         "departureAirport": {
+          "code": "GRU"
+         },
+         "departureTime": "2026-10-12T09:00:00"
+        }
+       ]
+      }
+     ],
+     "token": "same-airport"
+    }
+   ]
+  },
+  "status": true
+ }
+}

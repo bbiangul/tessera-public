@@ -1,0 +1,76 @@
+# Whole-conversation tests for search-hotels, from the hotel cases in
+# the legacy platform's TRAVELER_TESTS.md. Booking.com is a sandbox; extraction uses
+# the Generate engine (live or replayed).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata:
+  name: hotels
+  namespace: traveler
+spec:
+  description: Hotel searches, the kind of lodging for the length of the stay, and price preferences.
+  now: "2026-09-23T09:00:00-03:00"
+  sandboxes:
+    - plugin: booking
+      script: booking.sandbox.star
+      state:
+        hotelSearches: []
+        hotelCities: ["-2167973"]
+        hotelPlaces:
+          - { dest_id: "-2167973", dest_type: city, name: "Lisboa", city_name: "Lisboa" }
+          - { dest_id: "2331", dest_type: district, name: "Baixa", city_name: "Lisboa" }
+          - { dest_id: "-3712125", dest_type: city, name: "Recife", city_name: "Recife" }
+  scenarios:
+    - id: short-stay
+      simulator: scripted
+      turns:
+        - user: "Preciso de hotel em Lisboa de 12 a 15 de outubro"
+          expect:
+            routed: search-hotels
+            status: Succeeded
+            says: ["Hotéis em Lisboa", "12/10–15/10 (3 noites)", "1. Hotel Avenida Palace", "R$ 3.000 no total (R$ 1.000/noite)"]
+      expect:
+        effects: [ { action: booking/search-hotels, count: 1 } ]
+        budget: { generateCalls: 1, decideCalls: 2 }
+
+    - id: long-stay-prefers-apartments
+      description: Over 14 nights the original chose serviced apartments; the port gives them the bonus the original never did.
+      simulator: scripted
+      turns:
+        - user: "Vou passar de 1 a 20 de novembro em Lisboa, onde posso ficar?"
+          expect: { routed: search-hotels, status: Succeeded, says: ["Apartamentos com serviço em Lisboa", "19 noites", "1. Lisboa Stay Apartments"] }
+
+    - id: cheap
+      simulator: scripted
+      turns:
+        - user: "Quero um hotel barato em Lisboa de 12 a 15 de outubro"
+          expect: { status: Succeeded, says: ["1. ibis Lisboa Centro", "R$ 170/noite"] }
+
+    - id: built-over-messages
+      simulator: scripted
+      turns:
+        - user: "preciso de um lugar pra ficar"
+          expect: { routed: search-hotels, status: WaitingForUser, says: ["Em qual cidade"] }
+        - user: "Lisboa"
+          expect: { status: WaitingForUser, says: ["check-in"] }
+        - user: "12 de outubro"
+          expect: { status: WaitingForUser, says: ["check-out"] }
+        - user: "fico 2 noites"
+          expect: { status: Succeeded, says: ["12/10–14/10 (2 noites)"] }
+      expect:
+        effects: [ { action: booking/search-hotels, count: 1 } ]
+
+    - id: check-out-before-check-in
+      simulator: scripted
+      turns:
+        - user: "Hotel em Lisboa com check-in dia 15 de outubro e check-out dia 12 de outubro"
+          expect: { status: Failed, says: ["depois do check-in"] }
+      expect:
+        never: [booking/search-hotels]
+
+    - id: unknown-city
+      simulator: scripted
+      turns:
+        - user: "Hotel em Atlântida de 12 a 15 de outubro"
+          expect: { status: Failed, says: ["Não encontrei Atlântida"] }
+      expect:
+        never: [booking/search-hotels]

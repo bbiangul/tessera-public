@@ -1,0 +1,96 @@
+# Whole-conversation tests for search-flights, written from the cases in
+# the legacy platform's TRAVELER_TESTS.md. Booking.com is a sandbox; extraction uses
+# the Generate engine (live or replayed).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: EvalSuite
+metadata:
+  name: offscript
+  namespace: traveler
+spec:
+  description: Off-script messages (traveler-freemode-001); transcripts only, judged outside.
+  now: "2026-09-23T09:00:00-03:00"
+  sandboxes:
+    - plugin: booking
+      script: booking.sandbox.star
+      state:
+        searches: []
+        routes: [REC.AIRPORT, LIS.AIRPORT, CWB.AIRPORT, LHR.AIRPORT, LON.CITY]
+        places:
+          - { id: SAO.CITY, name: "São Paulo", cityName: "São Paulo", type: CITY }
+          - { id: GRU.AIRPORT, name: "Guarulhos International Airport", cityName: "São Paulo", type: AIRPORT }
+          - { id: CGH.AIRPORT, name: "Congonhas Airport", cityName: "São Paulo", type: AIRPORT }
+          - { id: REC.AIRPORT, name: "Recife International Airport", cityName: "Recife", type: AIRPORT }
+          - { id: LIS.AIRPORT, name: "Humberto Delgado Airport", cityName: "Lisboa", type: AIRPORT }
+          - { id: CWB.AIRPORT, name: "Afonso Pena International Airport", cityName: "Curitiba", type: AIRPORT }
+          - { id: LON.CITY, name: "Londres", cityName: "Londres", type: CITY }
+          - { id: LHR.AIRPORT, name: "Heathrow Airport", cityName: "Londres", type: AIRPORT }
+          - { id: LGW.AIRPORT, name: "Gatwick Airport", cityName: "Londres", type: AIRPORT }
+    - plugin: routes
+      script: routes.sandbox.star
+      state:
+        minutes: { GRU-CGH: 74 }
+  scenarios:
+    - id: bag-general
+      simulator: scripted
+      turns:
+        - user: "qual a franquia de bagagem da gol em geral?"
+    - id: flight-time
+      simulator: scripted
+      turns:
+        - user: "quanto tempo de voo de sp pra lisboa?"
+    - id: best-season
+      simulator: scripted
+      turns:
+        - user: "qual a melhor epoca pra ir pra jericoacoara?"
+    - id: hotel-vs-flat
+      simulator: scripted
+      turns:
+        - user: "hotel ou flat, qual compensa mais em sp?"
+    - id: avg-price
+      simulator: scripted
+      turns:
+        - user: "quanto custa em media uma diaria em gramado?"
+    - id: visa
+      simulator: scripted
+      turns:
+        - user: "preciso de visto pra ir pros eua?"
+    - id: car
+      simulator: scripted
+      turns:
+        - user: "voces alugam carro?"
+    - id: pet
+      simulator: scripted
+      turns:
+        - user: "da pra levar cachorro no aviao?"
+    - id: hello
+      simulator: scripted
+      turns:
+        - user: "oi, tudo bem?"
+    - id: thanks
+      simulator: scripted
+      turns:
+        - user: "obrigado pela ajuda!"
+    - id: neighborhood
+      simulator: scripted
+      turns:
+        - user: "qual o melhor bairro pra ficar em recife?"
+    - id: advance
+      simulator: scripted
+      turns:
+        - user: "vale a pena comprar passagem com antecedencia?"
+    - id: package
+      simulator: scripted
+      turns:
+        - user: "voces vendem pacote com hotel e voo junto?"
+    - id: itinerary
+      simulator: scripted
+      turns:
+        - user: "o que fazer em buenos aires em 3 dias?"
+    - id: insurance
+      simulator: scripted
+      turns:
+        - user: "quanto custa um seguro viagem?"
+    - id: cancel-other
+      simulator: scripted
+      turns:
+        - user: "posso cancelar uma passagem que comprei em outro site?"

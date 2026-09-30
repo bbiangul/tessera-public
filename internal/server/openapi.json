@@ -1,0 +1,671 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "Tessera agent API",
+  "version": "v1",
+  "description": "One agent namespace served by `tessera serve`. For channels (messages, outbox), people (replies), other systems (webhooks) and for coding agents that test and troubleshoot agents (inspection, triggers, dev clock, metrics). Every /v1 call needs `Authorization: Bearer <TESSERA_API_TOKEN>` except webhooks, which are signed. A typical troubleshooting loop: GET /v1/agent, POST /v1/messages, GET /v1/runs?conversation=..., GET /v1/runs/{id} (the timeline explains every decision and call)."
+ },
+ "components": {
+  "securitySchemes": {
+   "bearer": {
+    "type": "http",
+    "scheme": "bearer"
+   }
+  }
+ },
+ "security": [
+  {
+   "bearer": []
+  }
+ ],
+ "paths": {
+  "/health": {
+   "get": {
+    "summary": "Liveness",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "security": []
+   }
+  },
+  "/v1/agent": {
+   "get": {
+    "summary": "What the agent is",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "description": "Namespace, generation, routable Functions (with their routing text and `after`), all Functions, triggers, plugin actions with effect classes, subjects, funnels, experiments, routing threshold."
+   }
+  },
+  "/v1/messages": {
+   "post": {
+    "summary": "A user's message",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "description": "Routes it (or delivers it to the conversation's waiting run) and returns the run's status and messages. The caller is trusted: the holder of the token verified who the user is. Send the channel's messageId: a retried delivery with the same ID in the same conversation is not handled again (the answer is {\"duplicate\": true}).",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "required": [
+         "conversation",
+         "text"
+        ],
+        "additionalProperties": false,
+        "properties": {
+         "conversation": {
+          "type": "string"
+         },
+         "caller": {
+          "type": "object"
+         },
+         "text": {
+          "type": "string"
+         },
+         "messageId": {
+          "type": "string",
+          "description": "the channel's ID of the message; retries with the same ID are ignored"
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/outbox": {
+   "get": {
+    "summary": "Messages not acknowledged yet, by run",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "description": "Includes messages produced in the background (timers, schedules, webhooks). Deliver, then POST .../ack.",
+    "parameters": [
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string"
+      },
+      "description": "1 to 500, default 50"
+     },
+     {
+      "name": "conversationPrefix",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string"
+      },
+      "description": "only conversations starting with it (a channel's own, e.g. wa:), so other channels' unread runs never fill the page"
+     }
+    ]
+   }
+  },
+  "/v1/runs": {
+   "get": {
+    "summary": "List runs, newest first",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "parameters": [
+     {
+      "name": "conversation",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string"
+      },
+      "description": ""
+     },
+     {
+      "name": "function",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string"
+      },
+      "description": ""
+     },
+     {
+      "name": "status",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string"
+      },
+      "description": "e.g. WaitingForUser, Failed, Indeterminate"
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string"
+      },
+      "description": ""
+     },
+     {
+      "name": "before",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string"
+      },
+      "description": "RFC 3339, for paging"
+     }
+    ]
+   }
+  },
+  "/v1/runs/{id}": {
+   "get": {
+    "summary": "One run explained",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "description": "The run and its timeline: every journal record with what it was in the definitions (input source, step, action) and a one-line summary: the router's choice with probabilities, reads, Jev decisions with the question and options, questions and replies, intents before effects, results and failures, milestones, messages.",
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      },
+      "description": ""
+     }
+    ]
+   }
+  },
+  "/v1/runs/{id}/ack": {
+   "post": {
+    "summary": "Acknowledge delivered messages",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "required": [
+         "seq"
+        ],
+        "properties": {
+         "seq": {
+          "type": "integer"
+         }
+        }
+       }
+      }
+     }
+    },
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      },
+      "description": ""
+     }
+    ]
+   }
+  },
+  "/v1/runs/{id}/reply": {
+   "post": {
+    "summary": "Answer a waiting run",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "description": "from: user (the user answered a question) or human (a person answered a task; value may be JSON such as true or {\"happened\": true}).",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "required": [
+         "from"
+        ],
+        "properties": {
+         "from": {
+          "enum": [
+           "user",
+           "human"
+          ]
+         },
+         "text": {
+          "type": "string"
+         },
+         "value": {},
+         "taskHash": {
+          "type": "string",
+          "description": "The task's hash from GET /v1/tasks; required for approvals"
+         },
+         "by": {
+          "type": "string",
+          "description": "Who answers, recorded for audit. When the task's queue has roles (RFC-0006), by must be the id of a Team member holding one of the roles of the queues the task reached; otherwise 403."
+         }
+        }
+       }
+      }
+     }
+    },
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      },
+      "description": ""
+     }
+    ]
+   }
+  },
+  "/v1/runs/{id}/forward": {
+   "post": {
+    "summary": "Forward a waiting task to another queue",
+    "description": "A member of a queue the task reached hands it to another HumanQueue (the receptionist to the manager). The task stays the same (its hash); the new queue's members may then answer it. 403 when by may not answer the task.",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "required": [
+         "queue"
+        ],
+        "properties": {
+         "queue": {
+          "type": "string"
+         },
+         "by": {
+          "type": "string",
+          "description": "the Team member forwarding"
+         }
+        }
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "OK"
+     },
+     "403": {
+      "description": "not allowed"
+     },
+     "409": {
+      "description": "not waiting for a person"
+     }
+    }
+   }
+  },
+  "/v1/conversations/{id}": {
+   "get": {
+    "summary": "A conversation's runs and transcript",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      },
+      "description": ""
+     }
+    ]
+   }
+  },
+  "/v1/triggers/{name}/fire": {
+   "post": {
+    "summary": "Start a schedule trigger now, by hand",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "parameters": [
+     {
+      "name": "name",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      },
+      "description": ""
+     }
+    ]
+   }
+  },
+  "/v1/tick": {
+   "post": {
+    "summary": "Run the scheduler once",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "description": "Wakes due runs, starts due schedules, checks stuck subjects; `tessera serve` also does this every second."
+   }
+  },
+  "/v1/dev/clock": {
+   "post": {
+    "summary": "Move the clock forward (only with tessera serve --dev)",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "description": "Then runs the scheduler, so waits, schedules and deadlines can be tested without waiting.",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "required": [
+         "advance"
+        ],
+        "properties": {
+         "advance": {
+          "type": "string",
+          "description": "Go duration, e.g. 48h"
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/metrics/funnels/{name}": {
+   "get": {
+    "summary": "A Funnel now",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "parameters": [
+     {
+      "name": "name",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      },
+      "description": ""
+     }
+    ]
+   }
+  },
+  "/v1/metrics/experiments/{name}": {
+   "get": {
+    "summary": "An Experiment's verdict now",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "parameters": [
+     {
+      "name": "name",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      },
+      "description": ""
+     }
+    ]
+   }
+  },
+  "/v1/hooks/{trigger}": {
+   "post": {
+    "summary": "A webhook trigger",
+    "responses": {
+     "202": {
+      "description": "Accepted"
+     }
+    },
+    "description": "The JSON body becomes event.payload. Sign it: X-Tessera-Timestamp: <unix seconds, within 5 minutes>, X-Tessera-Signature: sha256=<hex HMAC-SHA256, with the trigger's secret, of timestamp \".\" key \".\" body>, where key is the Idempotency-Key (empty without one). Idempotency-Key (up to 128 of [A-Za-z0-9-_.:]) makes a repeated delivery start nothing. An unknown trigger answers 401, like a bad signature. A trigger with event delivers the payload to the runs waiting for that event with the same key and answers the first of them (runId empty when nobody waited and the trigger starts no Function); a trigger's key expression, when set, identifies the run instead of the Idempotency-Key.",
+    "parameters": [
+     {
+      "name": "trigger",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      },
+      "description": ""
+     },
+     {
+      "name": "X-Tessera-Signature",
+      "in": "header",
+      "required": true,
+      "schema": {
+       "type": "string"
+      },
+      "description": "sha256=<hex HMAC of timestamp.key.body>"
+     },
+     {
+      "name": "Idempotency-Key",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "type": "string"
+      },
+      "description": ""
+     },
+     {
+      "name": "X-Tessera-Timestamp",
+      "in": "header",
+      "required": true,
+      "schema": {
+       "type": "string"
+      },
+      "description": "unix seconds; within 5 minutes of the server's time"
+     }
+    ],
+    "security": []
+   }
+  },
+  "/v1/openapi.json": {
+   "get": {
+    "summary": "This document",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    },
+    "security": []
+   }
+  },
+  "/v1/evals/run": {
+   "post": {
+    "summary": "Run the EvalSuites",
+    "description": "Re-reads the definitions from disk (an edited file is tested without a restart) and plays every scenario, or those whose suite/scenario contains `only`, with the server's models and a budget per scenario (default $0.05, at most $1). Each scenario runs on its own in-memory journal: real runs are never touched. Returns pass/fail, failures, transcripts, plugin calls and cost per scenario.",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "properties": {
+         "only": {
+          "type": "string"
+         },
+         "maxScenarioCostUSD": {
+          "type": "number"
+         }
+        }
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "OK"
+     },
+     "422": {
+      "description": "The definitions do not validate"
+     }
+    }
+   }
+  },
+  "/v1/tasks": {
+   "get": {
+    "summary": "The inbox: tasks waiting for people",
+    "description": "Oldest first, optionally for one queue (?queue=). Each task has its queue, kind (approve, answer, input, takeover), text, options, since, the next SLA stage and a hash. Answer with POST /v1/runs/{id}/reply {\"from\":\"human\", \"value\":..., \"taskHash\":..., \"by\":...}: an answer without the current hash is refused (409), so nobody approves something that changed and a late or retried answer never answers the next task.",
+    "parameters": [
+     {
+      "name": "queue",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    }
+   }
+  },
+  "/tasks/{token}": {
+   "get": {
+    "summary": "A task's page (HTML), from a signed link",
+    "description": "The link in a notification. Shows the task; opening it changes nothing. Works until it expires (7 days) or the task is answered or changes.",
+    "security": [],
+    "parameters": [
+     {
+      "name": "token",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "HTML page"
+     },
+     "410": {
+      "description": "No longer open"
+     }
+    }
+   },
+   "post": {
+    "summary": "Answer a task from its page (HTML form)",
+    "description": "Form fields: by (who answers, recorded), decision (approve|deny) for approvals, answer otherwise. Bound to the task's hash in the link.",
+    "security": [],
+    "parameters": [
+     {
+      "name": "token",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Recorded"
+     },
+     "410": {
+      "description": "No longer open"
+     }
+    }
+   }
+  },
+  "/v1/activity": {
+   "get": {
+    "summary": "Everything the agent does, live: every journal record of every run after a cursor, explained",
+    "description": "Poll it with ?after=<next>: each item has the cursor, the run (id, function, conversation, status now) and the record explained as in GET /v1/runs/{id} (what the definition says, what happened). The order is the order records were written, across runs. For a coding agent: follow a conversation while you talk to the agent, or watch timers, triggers and people's answers as they happen.",
+    "parameters": [
+     {
+      "name": "after",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer"
+      },
+      "description": "the cursor of the last record seen (next of the previous answer, or the SSE id); 0 or absent: from the beginning"
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 500
+      },
+      "description": "default 100"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "{items: [{cursor, runId, function, conversation, status, entry}], next}"
+     }
+    }
+   }
+  },
+  "/v1/activity/stream": {
+   "get": {
+    "summary": "The same as Server-Sent Events",
+    "description": "text/event-stream: an event \"record\" per item (id = the cursor, data = the item as JSON), a comment every 15 seconds while quiet. Resumes after ?after= or the Last-Event-ID header. With curl: curl -N -H 'Authorization: Bearer $TOKEN' .../v1/activity/stream",
+    "parameters": [
+     {
+      "name": "after",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer"
+      },
+      "description": "the cursor of the last record seen (next of the previous answer, or the SSE id); 0 or absent: from the beginning"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "text/event-stream"
+     }
+    }
+   }
+  }
+ }
+}

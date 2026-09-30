@@ -1,0 +1,82 @@
+{
+  "apiVersion": "plugins.tessera.dev/v1alpha1",
+  "kind": "PluginManifest",
+  "metadata": {
+    "name": "clinic",
+    "version": "0.1.0"
+  },
+  "spec": {
+    "egress": {
+      "hosts": [
+        "clinic.bench"
+      ]
+    },
+    "connection": {
+      "baseUrl": "https://clinic.bench"
+    },
+    "actions": {
+      "appointments": {
+        "input": {
+          "patientId": "string"
+        },
+        "output": "list<clinic.Appointment>",
+        "effect": "read",
+        "authorize": "has(caller.role) && caller.role == 'patient' && has(caller.patientId) && caller.patientId != '' && inputs.patientId == caller.patientId",
+        "http": {
+          "method": "GET",
+          "path": "/patients/{{ inputs.patientId }}/appointments"
+        }
+      },
+      "slots": {
+        "input": {
+          "dentistId": "string",
+          "from": "date",
+          "days": "int"
+        },
+        "output": "list<clinic.Slot>",
+        "effect": "read",
+        "http": {
+          "method": "GET",
+          "path": "/dentists/{{ inputs.dentistId }}/slots",
+          "query": {
+            "from": "${ inputs.from }",
+            "days": "${ inputs.days }"
+          }
+        }
+      },
+      "info": {
+        "output": "map",
+        "effect": "read",
+        "http": {
+          "method": "GET",
+          "path": "/clinic/info"
+        }
+      },
+      "reschedule": {
+        "input": {
+          "appointment": "clinic.Appointment",
+          "newSlot": "clinic.Slot"
+        },
+        "output": "clinic.Appointment",
+        "effect": "irreversible",
+        "authorize": "has(caller.role) && caller.role == 'patient' && has(caller.patientId) && caller.patientId != '' && inputs.appointment.patientId == caller.patientId && inputs.appointment.dentistId == inputs.newSlot.dentistId",
+        "http": {
+          "method": "POST",
+          "path": "/appointments/{{ inputs.appointment.id }}/reschedule",
+          "body": {
+            "slotId": "${ inputs.newSlot.id }"
+          }
+        },
+        "verify": {
+          "mode": "probe",
+          "with": "appointments",
+          "args": {
+            "patientId": "${ inputs.appointment.patientId }"
+          },
+          "happened": "sources.probe.output.exists(a, a.id == inputs.appointment.id && a.patientId == inputs.appointment.patientId && a.slotId == inputs.newSlot.id)",
+          "output": "sources.probe.output.filter(a, a.id == inputs.appointment.id)[0]"
+        }
+      }
+    }
+  }
+}

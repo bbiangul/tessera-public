@@ -1,0 +1,206 @@
+# The whole trip in one answer (RFC-0009): the recommended flight and stay,
+# the total and the price per person, and the cheapest combination. It
+# calls the two searches with the trip already resolved, so both use the
+# same dates and group, and what they show is remembered for the booking.
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: quote-trip
+  namespace: traveler
+spec:
+  description: Quotes the whole trip (flight and stay) with the total and the price per person.
+  selector:
+    intent: trip-quote
+    description: "O usuário quer o total da viagem para UM destino com passagem e hospedagem juntos: um pacote de voo e hotel, uma cotação completa, 'quanto fica tudo', 'voo e hotel', ou o total com um hotel ou voo que escolheu ('quanto fica com a Pousada do Morro?'). Não é comparar dois destinos (Natal ou Maceió), nem produtos que não são voo e hotel (cruzeiro, navio, ingressos, excursões), nem só buscar voos ou só hospedagem."
+  inputs:
+    trip:
+      type: map
+      description: the trip being planned in this conversation, when it was touched in the last 14 days
+      resolve:
+        - { id: saved, fromAction: trip/get, with: { conversation: "${ conversation.id }" } }
+        - id: fresh
+          when: "sources.saved.output != null && timestamp(sources.saved.output.updated_at) > event.time - duration('336h')"
+          value: "sources.saved.output"
+        - { id: none, value: "{}" }
+    profile:
+      type: map
+      description: the traveler's saved preferences (plugins/profile.yaml)
+      resolve:
+        - { id: saved, fromAction: profile/get, with: { user: "${ has(caller.userId) ? caller.userId : conversation.id }" } }
+        - { id: none, value: "{}" }
+    newDates:
+      type: bool
+      description: whether the message gives a new departure day or a new period for the trip
+      resolve:
+        - { id: said, extract: { instructions: "true when the message gives a departure or check-in day, a month, a holiday or another period for the trip (dia 15, em dezembro, no feriado, semana que vem); false when it gives no date, gives only the return or check-out day, or refers to dates already given (nas mesmas datas, nessas datas, no mesmo período)" } }
+        - { id: default, value: "false" }
+    destination:
+      type: string
+      description: "the city this message asks the quote for (in 'e o pacote de Porto Seguro?' it is Porto Seguro, not a city it only mentions), its full name (Rio → Rio de Janeiro, Floripa → Florianópolis)"
+      resolve:
+        - { id: said, extract: { conversation: true } }
+        - { id: trip, when: "has(inputs.trip.destination) && inputs.trip.destination != null", value: "inputs.trip.destination" }
+        - id: asked
+          ask: { text: "Para onde é a viagem?", minConfidence: 0.7, onLowConfidence: ask-user }
+    origin:
+      type: string
+      description: "the city the user leaves from, its full name (SP → São Paulo, BH → Belo Horizonte)"
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "null unless the message names where the trip starts" } }
+        - { id: trip, when: "has(inputs.trip.origin) && inputs.trip.origin != null", value: "inputs.trip.origin" }
+        - { id: saved, when: "has(inputs.profile.home_city) && inputs.profile.home_city != null", value: "inputs.profile.home_city" }
+        - { id: home, when: "has(caller.homeCity)", value: "caller.homeCity" }
+        - id: asked
+          ask: { text: "De onde você sai?", minConfidence: 0.7, onLowConfidence: ask-user }
+    departDate:
+      type: date
+      description: the day the trip starts
+      resolve:
+        - id: said
+          extract: { conversation: true, future: true, instructions: "the first day of the trip as YYYY-MM-DD: 'dia 20 de outubro', '15/11' and 'amanhã' each give a day; resolve relative days from STATE.now; a day without a year is its next occurrence; null only when the message gives no day (only a month, or nothing)" }
+        - id: trip
+          when: "!inputs.newDates && has(inputs.trip.depart) && inputs.trip.depart != null && date(inputs.trip.depart, 'America/Sao_Paulo') >= startOfDay(event.time, 'America/Sao_Paulo')"
+          value: "inputs.trip.depart"
+        - id: asked
+          ask: { text: "Qual o dia da ida e o da volta?", minConfidence: 0.7, onLowConfidence: ask-user }
+    returnDay:
+      type: int
+      description: "the day of the month of the return, when the message gives only the day, without a month (volta no dia 11: 11)"
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message gives the return as a day of the month without a month" } }
+      onUnresolved:
+        - fallback: { useNull: true }
+    returnDate:
+      type: date
+      description: the day the trip ends
+      resolve:
+        - { id: said, extract: { conversation: true, future: true, instructions: "a stay (uma semana, 10 dias) counts from the departure; null when not given, or when only a day of the month is given without a month" } }
+        - id: day
+          when: "inputs.returnDay != null && inputs.returnDay >= 1 && inputs.returnDay <= 31"
+          value: "inputs.departDate.substring(0, 8) + (inputs.returnDay < 10 ? '0' : '') + string(inputs.returnDay) > inputs.departDate ? inputs.departDate.substring(0, 8) + (inputs.returnDay < 10 ? '0' : '') + string(inputs.returnDay) : (int(inputs.departDate.substring(5, 7)) == 12 ? string(int(inputs.departDate.substring(0, 4)) + 1) + '-01-' : inputs.departDate.substring(0, 5) + (int(inputs.departDate.substring(5, 7)) < 9 ? '0' : '') + string(int(inputs.departDate.substring(5, 7)) + 1) + '-') + (inputs.returnDay < 10 ? '0' : '') + string(inputs.returnDay)"
+        - id: trip
+          when: "has(inputs.trip.return_date) && inputs.trip.return_date != null && inputs.trip.return_date > inputs.departDate"
+          value: "inputs.trip.return_date"
+        - id: asked
+          ask: { text: "E a volta, em que dia?", minConfidence: 0.7, onLowConfidence: ask-user }
+    childrenAges:
+      type: list<int>
+      description: ages of the children traveling; a baby under 1 year is 0
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "only children who go, under 12 years old; someone aged 12 or more pays as an adult and is not here; null when the message mentions no child who goes" } }
+        - { id: trip, when: "has(inputs.trip.children) && inputs.trip.children != null", value: "inputs.trip.children" }
+        - { id: default, value: "[]" }
+    partySize:
+      type: int
+      description: "how many people travel in total, when the message counts them (nós 3, 2 pessoas)"
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "null unless the message gives a number of people" } }
+      onUnresolved:
+        - fallback: { useNull: true }
+    adults:
+      type: int
+      description: "people aged 12 or more traveling, the user only if the user goes, when the message says who goes (eu e minha esposa: 2)"
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "count who goes aged 12 or more (a 15-year-old counts); the user counts only when the user goes: in 'minha filha de 15 anos vai sozinha' it is 1; null unless the message says who goes" } }
+        - { id: counted, when: "inputs.partySize != null && inputs.partySize - size(inputs.childrenAges) >= 1", value: "inputs.partySize - size(inputs.childrenAges)" }
+        - { id: trip, when: "has(inputs.trip.adults) && inputs.trip.adults != null", value: "inputs.trip.adults" }
+        - { id: default, value: "1" }
+    area:
+      type: string
+      description: a neighborhood or area of the city the user names for the stay (Ponta Negra, Copacabana)
+      resolve:
+        - { id: said, extract: { conversation: true, instructions: "null unless the message names a neighborhood or area" } }
+        - { id: none, value: "''" }
+    hotelChoice:
+      type: string
+      description: the name of a hotel or pousada the user picks for the quote (a Pousada do Morro, o ibis), as written
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message names a specific hotel, pousada or apartment" } }
+        - { id: none, value: "''" }
+    flightChoice:
+      type: string
+      description: the airline or flight the user picks for the quote (o da GOL, o da LATAM das 7h), as written
+      resolve:
+        - { id: said, extract: { instructions: "null unless the message names a specific airline or flight" } }
+        - { id: none, value: "''" }
+    timeConstraint:
+      type: string
+      description: wishes about the flight time, in the user's words (de manhã)
+      resolve:
+        - { id: said, extract: {} }
+        - { id: none, value: "''" }
+    cheap:
+      type: bool
+      description: whether the user asks for the cheapest trip
+      resolve:
+        - { id: said, extract: { instructions: "true when the message asks for cheaper, the cheapest or a low price; false otherwise" } }
+        - { id: default, value: "false" }
+  preconditions:
+    - cel: "date(inputs.departDate, 'America/Sao_Paulo') >= startOfDay(event.time, 'America/Sao_Paulo')"
+      message: "Entendi a ida como {{ inputs.departDate.substring(8, 10) + '/' + inputs.departDate.substring(5, 7) + '/' + inputs.departDate.substring(0, 4) }}, que já passou. Para quando é a viagem?"
+    - cel: "inputs.returnDate > inputs.departDate"
+      message: "A volta precisa ser depois da ida."
+  steps:
+    - id: flights
+      call: search-flights
+      with:
+        destination: "${ inputs.destination }"
+        origin: "${ inputs.origin }"
+        departDate: "${ inputs.departDate }"
+        returnDate: "${ inputs.returnDate }"
+        adults: "${ inputs.adults }"
+        childrenAges: "${ inputs.childrenAges }"
+        partySize: 0
+        newDates: true
+        oneWay: false
+        cabinClass: ECONOMY
+        timeConstraint: "${ inputs.timeConstraint }"
+        cheap: "${ inputs.cheap }"
+        directOnly: false
+        otherDestination: ""
+        accepts: false
+        returnTime: ""
+        returnDay: 0
+    - id: hotels
+      call: search-hotels
+      with:
+        destination: "${ inputs.destination }"
+        area: "${ inputs.area }"
+        checkIn: "${ inputs.departDate }"
+        checkOut: "${ inputs.returnDate }"
+        adults: "${ inputs.adults }"
+        childrenAges: "${ inputs.childrenAges }"
+        partySize: 0
+        newDates: true
+        rooms: 1
+        lodging: ""
+        cheap: "${ inputs.cheap }"
+        otherDestination: ""
+        accepts: false
+        checkOutDay: 0
+    - id: view
+      compute:
+        starlark:
+          script: ../scripts/present.star
+          function: quote
+          with:
+            flights: "${ steps.flights.output }"
+            hotels: "${ steps.hotels.output }"
+            place: "${ {'name': inputs.destination} }"
+            origin: "${ inputs.origin }"
+            destination: "${ inputs.destination }"
+            depart: "${ inputs.departDate }"
+            ret: "${ inputs.returnDate }"
+            adults: "${ inputs.adults }"
+            children: "${ inputs.childrenAges }"
+            hotel_choice: "${ inputs.hotelChoice }"
+            flight_choice: "${ inputs.flightChoice }"
+    - id: remember
+      when: "size(steps.view.output.options) > 0"
+      act: memo/save-shown
+      with: { conversation: "${ conversation.id }", kind: quote, items: "${ steps.view.output.options }", destination: "${ inputs.destination }", at: "${ event.time }" }
+      idempotencyKey: "conversation.id + '/quote/' + inputs.destination + '@' + string(event.time)"
+      milestone: { name: cotou, subject: viajante }
+  output:
+    template: "{{ steps.view.output.message }}"
+    value: "{'destination': inputs.destination, 'options': steps.view.output.options}"

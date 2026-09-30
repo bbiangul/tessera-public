@@ -1,0 +1,22 @@
+{
+ "affectedFlights": 1,
+ "airportChanges": [
+  {
+   "arrivalTime": "2026-10-12T14:00:00",
+   "departureTime": "2026-10-12T15:30:00",
+   "flightToken": "t1",
+   "fromAirport": "GRU",
+   "layoverMinutes": 90,
+   "legIndex": 0,
+   "segmentIndex": 0,
+   "toAirport": "CGH"
+  }
+ ],
+ "totalChanges": 1,
+ "uniquePairs": [
+  {
+   "from": "GRU",
+   "to": "CGH"
+  }
+ ]
+}

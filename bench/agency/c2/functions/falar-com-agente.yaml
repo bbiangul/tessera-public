@@ -1,0 +1,37 @@
+# What needs a person of the agency (RFC-0009): changing, cancelling or
+# refunding a booking, a rental car, travel insurance, transfers, special
+# requests, complaints. The free mode starts it (Agent.spec.freeMode.functions);
+# the question goes to the atendimento queue and the answer comes back to
+# the customer as the team wrote it. When the team asks something back
+# ("Confirma que quer remarcar?"), the customer's reply goes to the team
+# with the question it answers, and their answer comes back (agency-002).
+# The team's answers also teach the agent (the licoes base, RFC-0008).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata:
+  name: falar-com-agente
+  namespace: traveler
+spec:
+  description: Passes a request only a person of the agency can handle to the team, and relays the conversation with them.
+  steps:
+    - id: resposta
+      escalate:
+        queue: atendimento
+        task: answer
+        message: "Cliente pede: {{ event.message }}"
+        whileWaiting: { template: "Isso quem resolve é a nossa equipe de atendimento. Já passei para uma agente e te respondo por aqui assim que ela me retornar." }
+    - id: pergunta
+      when: "string(steps.resposta.output).contains('?')"
+      respond: { template: "{{ steps.resposta.output }}" }
+    - id: replica
+      when: "string(steps.resposta.output).contains('?')"
+      wait: { for: 24h, orReply: true }
+    - id: resposta2
+      when: "string(steps.resposta.output).contains('?') && steps.replica.output.reply != null"
+      escalate:
+        queue: atendimento
+        task: answer
+        message: "Cliente respondeu: {{ steps.replica.output.reply }}\nÀ sua mensagem: {{ steps.resposta.output }}"
+        whileWaiting: { template: "Passei sua resposta para a agente e te aviso por aqui assim que ela concluir." }
+  output:
+    template: "{{ !string(steps.resposta.output).contains('?') ? string(steps.resposta.output) : steps.replica.output.reply != null ? string(steps.resposta2.output) : '' }}"

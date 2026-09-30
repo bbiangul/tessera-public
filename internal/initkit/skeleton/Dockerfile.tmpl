@@ -1,0 +1,4 @@
+# The agent on the Tessera image: the definitions are the only layer.
+FROM @IMAGE@
+COPY . /agent
+CMD ["serve", "/agent", "--namespace", "@NS@", "--db", "/data/runs.db", "--data-dir", "/data/plugins", "--addr", "0.0.0.0:8080"]

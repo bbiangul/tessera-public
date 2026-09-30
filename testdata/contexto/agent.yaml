@@ -1,0 +1,71 @@
+# Share only the slots already read by the current Function (#31).
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata: { name: reception, namespace: contexto }
+spec:
+  timezone: America/Sao_Paulo
+  freeMode:
+    instructions: "Recepção da clínica. Responda sobre os horários disponíveis com os resultados da consulta à agenda. Não reserve nem remaneje nada fora da confirmação do processo."
+    runReads: [context-agenda/slots]
+  voice:
+    persona: "Recepcionista cordial, português brasileiro, frases claras."
+    keep: [remarc]
+---
+apiVersion: plugins.tessera.dev/v1alpha1
+kind: PluginManifest
+metadata: { name: context-agenda, version: 0.1.0 }
+spec:
+  actions:
+    slots:
+      input: { patientId: string }
+      output: list<string>
+      effect: read
+      authorize: "caller.patientId == inputs.patientId"
+    current:
+      input: { patientId: string }
+      output: map
+      effect: read
+      authorize: "caller.patientId == inputs.patientId"
+    reschedule:
+      input: { patientId: string, slot: string }
+      output: map
+      effect: irreversible
+      authorize: "caller.patientId == inputs.patientId"
+      verify:
+        mode: probe
+        with: current
+        args: { patientId: "${ inputs.patientId }" }
+        happened: "sources.probe.output.slot == inputs.slot"
+        output: "sources.probe.output"
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: reschedule, namespace: contexto }
+spec:
+  description: Remarca a consulta do próprio paciente.
+  selector:
+    intent: reschedule
+    description: "O paciente quer remarcar sua consulta ou saber os horários disponíveis para remarcar."
+  authorize: "has(caller.patientId)"
+  inputs:
+    options:
+      type: list<string>
+      resolve:
+        - id: available
+          fromAction: context-agenda/slots
+          with: { patientId: "${ caller.patientId }" }
+    slot:
+      type: string
+      resolve:
+        - id: pick
+          ask:
+            text: "Qual dia prefere? Tenho {{ inputs.options.map(s, s.split(' às ')[0]).join(', ') }}."
+            choices: "inputs.options"
+            minConfidence: 0.7
+            onLowConfidence: ask-user
+  action:
+    act: context-agenda/reschedule
+    with: { patientId: "${ caller.patientId }", slot: "${ inputs.slot }" }
+    confirm: "Posso remarcar a sua consulta para {{ inputs.slot }}? Responda sim para confirmar."
+    idempotencyKey: "conversation.id + ':' + inputs.slot"
+  output: { template: "Sua consulta foi remarcada para {{ inputs.slot }}." }

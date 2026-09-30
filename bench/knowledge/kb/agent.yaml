@@ -1,0 +1,38 @@
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Agent
+metadata: { name: clinica, namespace: kb }
+spec:
+  description: Recepção da Clínica Sorriso Vila.
+  messages:
+    notUnderstood: "Desculpe, não entendi. Pode falar com a recepção pelo (11) 3000-0000."
+  audiences:
+    - name: equipe
+      who: "has(caller.roles) && size(caller.roles) > 0"
+      functions: []
+      freeMode: { instructions: "Ajude a equipe da recepção com dúvidas de processo.", self: false, knowledge: { bases: [publico, interno], check: false } }
+    - name: paciente
+      functions: [enviar-exame]
+      freeMode: { instructions: "Tire dúvidas dos pacientes sobre a clínica. Para o que você não souber, indique a recepção.", self: false, knowledge: { bases: [publico, interno], check: false } }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: Function
+metadata: { name: enviar-exame, namespace: kb }
+spec:
+  description: A patient sends an exam file to the clinic.
+  selector: { intent: enviar-exame, description: "O paciente quer mandar um arquivo de exame (raio-x, tomografia) para a clínica." }
+  output: { template: "Pode mandar o arquivo por aqui que a recepção anexa ao seu prontuário." }
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: KnowledgeBase
+metadata: { name: publico, namespace: kb }
+spec:
+  description: Políticas, preços e FAQ da clínica.
+  sources: [ { files: ["../docs/convenios.md", "../docs/precos-particular.md", "../docs/pagamento.md", "../docs/cancelamento.md", "../docs/localizacao.md", "../docs/pos-extracao.md", "../docs/clareamento.md", "../docs/avisos.md"] } ]
+---
+apiVersion: agents.tessera.dev/v1alpha1
+kind: KnowledgeBase
+metadata: { name: interno, namespace: kb }
+spec:
+  description: Política interna de descontos.
+  sources: [ { files: ["../docs/interno-descontos.md"] } ]
+  audiences: [equipe]

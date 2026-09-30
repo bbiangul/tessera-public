@@ -1,0 +1,481 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bbiangul/tessera/api/agents/v1alpha1/eval-suite",
+  "$ref": "#/$defs/EvalSuite",
+  "$defs": {
+    "EffectCount": {
+      "properties": {
+        "action": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+/[a-z0-9-]+$",
+          "description": "Action is plugin/action."
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Count of successful calls."
+        },
+        "where": {
+          "type": "string",
+          "description": "Where counts only the calls whose arguments meet this CEL condition,\nread as inputs, as in the plugin's manifest: what was sent, not only\nthat something was (\"inputs.children == '5,8'\")."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "action",
+        "count"
+      ],
+      "description": "EffectCount is how many successful calls an action must have."
+    },
+    "EvalSuite": {
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "enum": [
+            "agents.tessera.dev/v1alpha1"
+          ],
+          "description": "APIVersion must be agents.tessera.dev/v1alpha1."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "EvalSuite"
+          ],
+          "description": "Kind must be EvalSuite."
+        },
+        "metadata": {
+          "$ref": "#/$defs/ObjectMeta",
+          "description": "Metadata names the suite; its namespace is the agent under test."
+        },
+        "spec": {
+          "$ref": "#/$defs/EvalSuiteSpec",
+          "description": "Spec lists the scenarios."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ],
+      "description": "EvalSuite tests an agent with whole conversations (RFC-0002, level 4). A\nscenario plays a user against the agent's Functions, with plugins\nreplaced by sandboxes that keep state, and checks what happened: the\neffects, the messages, the invariants every agent must keep, and the cost."
+    },
+    "EvalSuiteSpec": {
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description says what the suite covers."
+        },
+        "now": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Now is the clock of every scenario (RFC 3339 with offset), so dates\nin the conversation mean the same thing on every run. A scenario can\nset its own."
+        },
+        "sandboxes": {
+          "items": {
+            "$ref": "#/$defs/Sandbox"
+          },
+          "type": "array",
+          "description": "Sandboxes replace plugins with stateful fakes written in Starlark.\nEach scenario starts from the sandbox's initial state."
+        },
+        "scenarios": {
+          "items": {
+            "$ref": "#/$defs/Scenario"
+          },
+          "type": "array",
+          "minItems": 1,
+          "description": "Scenarios are the conversations."
+        },
+        "team": {
+          "$ref": "#/$defs/SimTeam",
+          "description": "Team plays the business's team in llm scenarios, for a task the\nscenario's humans have no answer for (team-001). A model answers\nonly from Facts, and says so when they do not settle the task. A\ntask asking for a value gets one, in the task's format."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "now",
+        "scenarios"
+      ],
+      "description": "EvalSuiteSpec describes a suite."
+    },
+    "Expectation": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "WaitingForUser",
+            "WaitingForHuman",
+            "Confirming",
+            "Indeterminate",
+            "Succeeded",
+            "Failed"
+          ],
+          "description": "Status is the final status of the last run."
+        },
+        "effects": {
+          "items": {
+            "$ref": "#/$defs/EffectCount"
+          },
+          "type": "array",
+          "description": "Effects counts successful calls per action."
+        },
+        "milestones": {
+          "items": {
+            "$ref": "#/$defs/MilestoneCount"
+          },
+          "type": "array",
+          "description": "Milestones counts recorded milestones per subject kind and name."
+        },
+        "never": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Never lists actions that must not be called at all."
+        },
+        "says": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Says lists texts that must appear in some message to the user."
+        },
+        "notSays": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "NotSays lists texts no message to the user may contain."
+        },
+        "skipInvariants": {
+          "items": {
+            "type": "string",
+            "enum": [
+              "confirm-before-irreversible",
+              "no-duplicate-effects",
+              "no-lost-messages"
+            ]
+          },
+          "type": "array",
+          "description": "Invariants to skip; every invariant runs unless listed here, with a\nreason in the scenario's description."
+        },
+        "budget": {
+          "$ref": "#/$defs/ScenarioBudget",
+          "description": "Budget fails the scenario when exceeded."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Expectation checks a whole scenario."
+    },
+    "MilestoneCount": {
+      "properties": {
+        "subject": {
+          "type": "string",
+          "description": "Subject is the Subject kind."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name is the milestone."
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Count of milestones recorded in the scenario."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "subject",
+        "name",
+        "count"
+      ],
+      "description": "MilestoneCount expects a number of milestones."
+    },
+    "ObjectMeta": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Name of the resource, unique per kind within its namespace. Lowercase\nletters, digits and hyphens, starting and ending with a letter or digit."
+        },
+        "namespace": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "Namespace the resource belongs to, usually one per customer."
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Labels are free-form key/value pairs for selecting and grouping."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "namespace"
+      ],
+      "description": "ObjectMeta identifies a resource."
+    },
+    "Persona": {
+      "properties": {
+        "goal": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Goal is what the user wants from the conversation."
+        },
+        "style": {
+          "type": "string",
+          "description": "Style is how they write (short WhatsApp messages, typos, formal)."
+        },
+        "knows": {
+          "type": "object",
+          "description": "Knows holds the facts the user can tell: dates, names, preferences."
+        },
+        "language": {
+          "type": "string",
+          "description": "Language of the user's messages (default: Brazilian Portuguese)."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "goal"
+      ],
+      "description": "Persona is a simulated user: what they want, how they write and what\nthey know. The simulator shares what it knows only when it is natural\nor asked, and never invents facts outside it."
+    },
+    "Sandbox": {
+      "properties": {
+        "plugin": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Plugin is the PluginManifest name this sandbox replaces."
+        },
+        "script": {
+          "type": "string",
+          "pattern": "\\.star$",
+          "description": "Script is the .star file, relative to this file."
+        },
+        "state": {
+          "type": "object",
+          "description": "State is the initial state, a map the functions read and change."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "plugin",
+        "script"
+      ],
+      "description": "Sandbox fakes a plugin. The script has one function per action, named\nafter it with \"-\" as \"_\" (list-upcoming-appointments becomes\nlist_upcoming_appointments), taking state and the action's arguments as\nkeyword arguments. It may change state and returns the output; it calls\ndefinite(code, message) or ambiguous(message) to fail like a real system."
+    },
+    "Scenario": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "description": "ID names the scenario in reports."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description says what it checks."
+        },
+        "now": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Now overrides the suite's clock."
+        },
+        "caller": {
+          "type": "object",
+          "description": "Caller is the verified identity of the user."
+        },
+        "state": {
+          "additionalProperties": {
+            "type": "object"
+          },
+          "type": "object",
+          "description": "State changes the sandboxes' state for this scenario, per plugin:\nits top-level keys replace the suite's (an outage, an empty agenda)."
+        },
+        "simulator": {
+          "type": "string",
+          "enum": [
+            "scripted",
+            "llm"
+          ],
+          "description": "Simulator plays the user. scripted replays fixed turns; llm has a\nmodel play the persona until its goal is met (RFC-0002), after the\nturns, when there are any."
+        },
+        "turns": {
+          "items": {
+            "$ref": "#/$defs/Turn"
+          },
+          "type": "array",
+          "description": "Turns are played in order. A scripted scenario needs at least one."
+        },
+        "persona": {
+          "$ref": "#/$defs/Persona",
+          "description": "Persona is the user the llm simulator plays."
+        },
+        "maxTurns": {
+          "type": "integer",
+          "maximum": 40,
+          "minimum": 1,
+          "description": "MaxTurns bounds the llm simulator's messages (default 12)."
+        },
+        "humans": {
+          "items": true,
+          "type": "array",
+          "description": "Humans answer, in order, the tasks the agent hands to a person\nduring an llm scenario: a value such as true, \"o2\" or {\"ok\": true}.\nA question for the team (an answer task) takes the next text, a task\nasking for a value (input) the next non-text. When none fits, the\nscenario ends at that task."
+        },
+        "expect": {
+          "$ref": "#/$defs/Expectation",
+          "description": "Expect is checked after the last turn."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "simulator"
+      ],
+      "description": "Scenario is one conversation."
+    },
+    "ScenarioBudget": {
+      "properties": {
+        "costUSD": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "CostUSD of model calls."
+        },
+        "decideCalls": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "DecideCalls counts Decide calls."
+        },
+        "generateCalls": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "GenerateCalls counts Generate calls."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "ScenarioBudget bounds what a scenario may consume."
+    },
+    "SimTeam": {
+      "properties": {
+        "facts": {
+          "type": "string",
+          "pattern": "\\.md$",
+          "description": "Facts is a Markdown file, relative to the suite, holding everything\nthe team knows about the business and its world."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "facts"
+      ],
+      "description": "SimTeam is the simulated team of an EvalSuite."
+    },
+    "TriggerTurn": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of the Trigger."
+        },
+        "payload": {
+          "type": "object",
+          "description": "Payload is event.payload for a webhook trigger."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "description": "TriggerTurn fires a Trigger in a scenario."
+    },
+    "Turn": {
+      "properties": {
+        "user": {
+          "type": "string",
+          "description": "User is what the user writes."
+        },
+        "advance": {
+          "type": "string",
+          "description": "Advance moves the scenario's clock forward (Go duration, e.g. 48h)\nand runs the scheduler: waits that come due wake, schedules start,\nstuck subjects escalate. The turn's expectations read what they sent."
+        },
+        "trigger": {
+          "$ref": "#/$defs/TriggerTurn",
+          "description": "Trigger fires a Trigger as if it came due (a schedule) or was called\n(a webhook, with this payload, unsigned in tests). A run it starts in\nanother conversation becomes the scenario's conversation, so later\nuser turns reply to it."
+        },
+        "human": {
+          "description": "Human answers the human task the run waits for: a value such as true,\n\"o2\" or {\"happened\": true}."
+        },
+        "expect": {
+          "$ref": "#/$defs/TurnExpect",
+          "description": "Expect is checked right after this turn."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Turn is one event. Exactly one of user, human, advance and trigger must\nbe set."
+    },
+    "TurnExpect": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "WaitingForUser",
+            "WaitingForHuman",
+            "Confirming",
+            "Indeterminate",
+            "Succeeded",
+            "Failed"
+          ],
+          "description": "Status is the run's status after the turn."
+        },
+        "routed": {
+          "type": "string",
+          "description": "Routed is the Function this turn started through the router."
+        },
+        "handoff": {
+          "type": "string",
+          "description": "Handoff is the free mode's decision this turn: \"answer\", or the\nFunction of freeMode.functions it started (such as asking a person)."
+        },
+        "says": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Says lists texts that must each appear (ignoring case) in a message\nsent to the user this turn."
+        },
+        "notSays": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "NotSays lists texts no message to the user may contain this turn."
+        },
+        "queue": {
+          "type": "string",
+          "description": "Queue is a human queue that must receive a task this turn."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "TurnExpect checks one turn."
+    }
+  },
+  "title": "EvalSuite"
+}
